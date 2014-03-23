@@ -1,0 +1,183 @@
+{
+    "project": {
+        "name": "backbone-ui-resizable",
+        "version": "0.0.0"
+    },
+    "files": {
+        "src/__backbone-ui-resizable/handle-resize.js": {
+            "name": "src/__backbone-ui-resizable/handle-resize.js",
+            "modules": {
+                "handle-resize": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__backbone-ui-resizable/movement-data.js": {
+            "name": "src/__backbone-ui-resizable/movement-data.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/index.js": {
+            "name": "src/index.js",
+            "modules": {
+                "backbone-ui-resizable": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "backbone-ui-resizable": {
+            "name": "backbone-ui-resizable",
+            "submodules": {
+                "handle-resize": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src/index.js",
+            "line": 5,
+            "description": "AMD module."
+        },
+        "handle-resize": {
+            "name": "handle-resize",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "backbone-ui-resizable",
+            "namespace": "",
+            "file": "src/__backbone-ui-resizable/handle-resize.js",
+            "line": 1,
+            "description": "AMD module."
+        }
+    },
+    "classes": {},
+    "classitems": [
+        {
+            "file": "src/__backbone-ui-resizable/handle-resize.js",
+            "line": 14,
+            "description": "Handles resizes.",
+            "itemtype": "method",
+            "name": "handleResize",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "",
+                    "type": "Event Object"
+                },
+                {
+                    "name": "ui",
+                    "description": "",
+                    "type": "Jquery-ui ui Object"
+                }
+            ],
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "submodule": "handle-resize"
+        },
+        {
+            "file": "src/__backbone-ui-resizable/handle-resize.js",
+            "line": 41,
+            "description": "get data about the movement",
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "submodule": "handle-resize"
+        },
+        {
+            "file": "src/__backbone-ui-resizable/movement-data.js",
+            "line": 28,
+            "description": "Get metadata from the movement",
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "submodule": "handle-resize"
+        },
+        {
+            "file": "src/__backbone-ui-resizable/movement-data.js",
+            "line": 49,
+            "description": "Returns the difference between the current value and the last value",
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "submodule": "handle-resize"
+        },
+        {
+            "file": "src/__backbone-ui-resizable/movement-data.js",
+            "line": 59,
+            "description": "Infers movement axis",
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "submodule": "handle-resize"
+        },
+        {
+            "file": "src/__backbone-ui-resizable/movement-data.js",
+            "line": 66,
+            "description": "Infers the last action taken on this object: contract or expand\non a given axis",
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "submodule": "handle-resize"
+        },
+        {
+            "file": "src/__backbone-ui-resizable/movement-data.js",
+            "line": 81,
+            "description": "Infers the handle that was moved by examining the attributes.",
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "submodule": "handle-resize"
+        },
+        {
+            "file": "src/__backbone-ui-resizable/movement-data.js",
+            "line": 94,
+            "description": "Infers the direction of the movement of a single handle",
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "submodule": "handle-resize"
+        },
+        {
+            "file": "src/index.js",
+            "line": 74,
+            "description": "No-op.",
+            "itemtype": "method",
+            "name": "handleResize",
+            "class": "",
+            "module": "backbone-ui-resizable"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\nget data about the movement",
+            "line": " src/__backbone-ui-resizable/handle-resize.js:41"
+        },
+        {
+            "message": "Missing item type\nGet metadata from the movement",
+            "line": " src/__backbone-ui-resizable/movement-data.js:28"
+        },
+        {
+            "message": "Missing item type\nReturns the difference between the current value and the last value",
+            "line": " src/__backbone-ui-resizable/movement-data.js:49"
+        },
+        {
+            "message": "Missing item type\nInfers movement axis",
+            "line": " src/__backbone-ui-resizable/movement-data.js:59"
+        },
+        {
+            "message": "Missing item type\nInfers the last action taken on this object: contract or expand\non a given axis",
+            "line": " src/__backbone-ui-resizable/movement-data.js:66"
+        },
+        {
+            "message": "Missing item type\nInfers the handle that was moved by examining the attributes.",
+            "line": " src/__backbone-ui-resizable/movement-data.js:81"
+        },
+        {
+            "message": "Missing item type\nInfers the direction of the movement of a single handle",
+            "line": " src/__backbone-ui-resizable/movement-data.js:94"
+        }
+    ]
+}
