@@ -23,8 +23,6 @@ define(function (require, exports, module) {
 	var resizable = module.exports = modelDock.extend(function resizableDock(options) {
 		modelDock.prototype.initialize.apply(this, arguments);
 
-		console.log('qweqew')
-
 		// bind event handling methods
 		_.bindAll(this, 'handleResize', 'handleResizeStart', 'handleResizeStop');
 

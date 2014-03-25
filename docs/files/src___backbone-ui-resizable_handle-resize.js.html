@@ -124,19 +124,22 @@ define(function (require, exports, module) {
 			height: ui.size.height,
 		};
 
-		this.set(data);
+		var model = this.model;
+
+		this.model.set(data);
 
 		/**
 		 * get data about the movement
 		 */
-		var current = this.model.attributes,
-			previous = this.model.previousAttributes(),
+		var current = model.attributes,
+			previous = model.previousAttributes(),
 
 			// build the movement-data object
 			movement = movementData(current, previous);
 
 		// trigger &#x27;resize&#x27; event on the model.
-		this.trigger(&#x27;resize&#x27;, this, e, ui, movement);
+		this.trigger(&#x27;resize&#x27;, model, movement);
+		model.trigger(&#x27;resize&#x27;, model, movement);
 
 		// call the custom handleResize method.
 		this.handleResize(e, ui, movement);
