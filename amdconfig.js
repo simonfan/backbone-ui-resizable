@@ -15,7 +15,7 @@ require.config({
 		lodash: '../bower_components/lodash/dist/lodash.compat',
 		'lowercase-backbone': '../bower_components/lowercase-backbone/built/lowercase-backbone',
 		'dockable-view': '../bower_components/dockable-view/built/dockable-view',
-		jquery: '../bower_components/jquery/dist/jquery',
+		jquery: '../bower_components/jquery/jquery',
 		qunit: '../bower_components/qunit/qunit/qunit',
 		q: '../bower_components/q/q',
 		'model-dock': '../bower_components/model-dock/built/model-dock',

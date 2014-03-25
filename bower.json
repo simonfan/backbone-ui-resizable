@@ -1,24 +1,17 @@
 {
   "name": "backbone-ui-resizable",
   "main": "built/backbone-ui-resizable.js",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Some module...",
   "dependencies": {
-    "model-dock": "0.2.4",
-    "jquery-ui": "~1.10.4",
-    "dockable-view": "~0.1.4"
+	"model-dock": "~0.2.4",
+	"jquery-ui": "~1.10.4"
   },
   "devDependencies": {
-    "requirejs": "*",
-    "requirejs-text": "*",
-    "underscore": "*",
-    "jquery": "*",
-    "qunit": "*"
-  },
-  "resolutions": {
-    "jquery": "~2.1.0",
-    "model-dock": "0.2.4",
-    "jquery.filler": "0.2.3",
-    "subject": "0.4.1"
+	"requirejs": "*",
+	"requirejs-text": "*",
+	"underscore": "*",
+	"jquery": "*",
+	"qunit": "*"
   }
 }

@@ -6,7 +6,7 @@
 		// browser
 		'backbone-ui-resizable',
 		// dependencies for the test
-		deps = [mod, 'should', 'jquery'];
+		deps = [mod, 'should', 'jquery', 'backbone'];
 
 	if (typeof define !== 'function') {
 		// node
@@ -16,7 +16,7 @@
 		define(deps, factory);
 	}
 
-})('test', function(resizable, should, $) {
+})('test', function(resizable, should, $, Backbone) {
 	'use strict';
 
 	describe('resizable base', function () {
@@ -32,44 +32,33 @@
 
 
 			var squareBuilder = resizable.extend({
-				docks: {
-					css: {
+				map: {
+					'height': ['->css:height', '[data-attribute="height"]'],
+					'width': ['->css:width', '[data-attribute="width"]'],
+					'left': ['->css:left', '[data-attribute="left"]'],
+					'top': ['->css:top', '[data-attribute="top"]'],
 
-						stringifiers: {
-							height: addPx,
-							width: addPx,
-							left: addPx,
-							top: addPx
-						},
+					'bottom': '[data-attribute="bottom"]',
+					'right': '[data-attribute="right"]',
 
-						map: {
-							'height': ['->css:height', '[data-attribute="height"]'],
-							'width': ['->css:width', '[data-attribute="width"]'],
-							'left': ['->css:left', '[data-attribute="left"]'],
-							'top': ['->css:top', '[data-attribute="top"]'],
-
-							'bottom': '[data-attribute="bottom"]',
-							'right': '[data-attribute="right"]',
-
-						}
-					},
-
-					movement: {
-						map: {
-							direction: '[data-attribute="direction"]',
-							axis: '[data-attribute="axis"]',
-							handle: '[data-attribute="handle"]',
-							action: '[data-attribute="action"]',
-						}
-					}
+					'direction': '[data-attribute="direction"]',
+					'axis': '[data-attribute="axis"]',
+					'action': '[data-attribute="action"]',
+					'handle': '[data-attribute="handle"]',
 				},
 
-				handleResize: function (movement, data, ui) {
-					this.docks.movement.set(movement.data());
+				handleResize: function handleResize(e, ui, movement) {
+					this.set(movement.data());
 				}
 			})
 
-			var square = squareBuilder({ el: $('#resizable') });
+			var square = squareBuilder({
+				el: $('#resizable'),
+				model: new Backbone.Model({
+					width: 200,
+					height: 200
+				})
+			});
 		});
 	});
 });

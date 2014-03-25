@@ -111,8 +111,6 @@ define(function (require, exports, module) {
 	 */
 	module.exports = function handleResize(e, ui) {
 
-		var css = this.docks.css;
-
 		var data = {
 			// set position
 			top: ui.position.top,
@@ -126,22 +124,22 @@ define(function (require, exports, module) {
 			height: ui.size.height,
 		};
 
-		css.set(data);
+		this.set(data);
 
 		/**
 		 * get data about the movement
 		 */
-		var current = css.model.attributes,
-			previous = css.model.previousAttributes(),
+		var current = this.model.attributes,
+			previous = this.model.previousAttributes(),
 
 			// build the movement-data object
 			movement = movementData(current, previous);
 
 		// trigger &#x27;resize&#x27; event on the model.
-		this.trigger(&#x27;resize&#x27;, this, movement, ui);
+		this.trigger(&#x27;resize&#x27;, this, e, ui, movement);
 
 		// call the custom handleResize method.
-		this.handleResize(movement, e, ui);
+		this.handleResize(e, ui, movement);
 	};
 });
 

@@ -14,14 +14,16 @@ define(function (require, exports, module) {
 	// require jquery ui resizable
 	require('jquery-ui-resizable');
 
-	var dockable = require('dockable-view'),
+	var modelDock = require('model-dock'),
 		_ = require('lodash');
 
 	// event handlers
-	var handleResize = require('./__backbone-ui-resizable/handle-resize');
+	var _handleResize = require('./__backbone-ui-resizable/handle-resize');
 
-	var resizable = module.exports = dockable.extend(function resizableDock(options) {
-		dockable.prototype.initialize.apply(this, arguments);
+	var resizable = module.exports = modelDock.extend(function resizableDock(options) {
+		modelDock.prototype.initialize.apply(this, arguments);
+
+		console.log('qweqew')
 
 		// bind event handling methods
 		_.bindAll(this, 'handleResize', 'handleResizeStart', 'handleResizeStop');
@@ -30,7 +32,7 @@ define(function (require, exports, module) {
 
 		this.$el
 			.resizable(this.resizableOptions)
-			.on('resize', _.bind(handleResize, this))
+			.on('resize', _.bind(_handleResize, this))
 			.on('resizestart', this.handleResizeStart)
 			.on('resizestop', this.handleResizeStop);
 	});
@@ -49,26 +51,18 @@ define(function (require, exports, module) {
 			handles: 'n,ne,e,se,s,sw,w,nw',
 		},
 
-		docks: {
+		stringifiers: {
+			height: addPx,
+			width: addPx,
+			left: addPx,
+			top: addPx
+		},
 
-			css: {
-				property: false,
-				type: 'model',
-
-				stringifiers: {
-					height: addPx,
-					width: addPx,
-					left: addPx,
-					top: addPx
-				},
-
-				map: {
-					'top': '->css:top',
-					'left': '->css:left',
-					'width': '->css:width',
-					'height': '->css:height',
-				}
-			},
+		map: {
+			'top': '->css:top',
+			'left': '->css:left',
+			'width': '->css:width',
+			'height': '->css:height',
 		},
 
 		/**
