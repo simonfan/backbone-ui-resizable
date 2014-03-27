@@ -114,7 +114,6 @@ define('__backbone-ui-resizable/movement-data',['require','exports','module','su
 define('__backbone-ui-resizable/handle-resize',['require','exports','module','./movement-data'],function (require, exports, module) {
 	
 
-
 	var movementData = require('./movement-data');
 
 	/**

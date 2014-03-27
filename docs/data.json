@@ -62,7 +62,7 @@
     "classitems": [
         {
             "file": "src/__backbone-ui-resizable/handle-resize.js",
-            "line": 14,
+            "line": 13,
             "description": "Handles resizes.",
             "itemtype": "method",
             "name": "handleResize",
@@ -86,7 +86,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle-resize.js",
-            "line": 41,
+            "line": 40,
             "description": "get data about the movement",
             "class": "",
             "module": "backbone-ui-resizable",
@@ -153,7 +153,7 @@
     "warnings": [
         {
             "message": "Missing item type\nget data about the movement",
-            "line": " src/__backbone-ui-resizable/handle-resize.js:41"
+            "line": " src/__backbone-ui-resizable/handle-resize.js:40"
         },
         {
             "message": "Missing item type\nGet metadata from the movement",

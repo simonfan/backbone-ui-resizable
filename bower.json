@@ -4,19 +4,19 @@
   "version": "0.1.1",
   "description": "Some module...",
   "dependencies": {
-	"model-dock": "~0.2.4",
-	"jquery-ui": "~1.10.4",
-	"lodash": "~2.4.1",
-	"subject": "~0.4.1"
+    "model-dock": "0.2.5",
+    "jquery-ui": "~1.10.4",
+    "lodash": "~2.4.1",
+    "subject": "~0.4.1"
   },
   "devDependencies": {
-	"requirejs": "*",
-	"requirejs-text": "*",
-	"underscore": "*",
-	"jquery": "*",
-	"qunit": "*"
+    "requirejs": "*",
+    "requirejs-text": "*",
+    "underscore": "*",
+    "jquery": "*",
+    "qunit": "*"
   },
   "resolutions": {
-	"subject": "~0.4.1"
+    "subject": "~0.4.1"
   }
 }

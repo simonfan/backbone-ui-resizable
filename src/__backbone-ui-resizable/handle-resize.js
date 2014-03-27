@@ -8,7 +8,6 @@
 define(function (require, exports, module) {
 	'use strict';
 
-
 	var movementData = require('./movement-data');
 
 	/**
