@@ -14,29 +14,58 @@ define(function (require, exports, module) {
 	// require jquery ui resizable
 	require('jquery-ui-resizable');
 
-	var modelDock = require('model-dock'),
+	var backbone = require('lowercase-backbone'),
+		modelDock = require('model-dock'),
 		_ = require('lodash');
 
 	// event handlers
 	var _handleResize = require('./__backbone-ui-resizable/handle-resize');
 
-	var resizable = module.exports = modelDock.extend(function resizableDock(options) {
-		modelDock.prototype.initialize.apply(this, arguments);
+	var resizable = module.exports = modelDock.extend({
 
-		// bind event handling methods
-		_.bindAll(this, 'handleResize', 'handleResizeStart', 'handleResizeStop');
+		/**
+		 * Initialization script.
+		 *
+		 * @method initialize
+		 */
+		initialize: function initialize(options) {
 
-		this.resizableOptions = _.assign(this.resizableOptions, options.resizableOptions);
+			backbone.view.prototype.initialize.apply(this, arguments);
 
-		this.$el
-			.resizable(this.resizableOptions)
-			.on('resize', _.bind(_handleResize, this))
-			.on('resizestart', this.handleResizeStart)
-			.on('resizestop', this.handleResizeStop);
+			this.initializeModelDock.apply(this, arguments);
+
+			this.initializeResizableDock.apply(this, arguments);
+		},
+
+		/**
+		 * Holds initialization logic exclusive to resizable-dock.
+		 *
+		 * @method initializeResizableDock
+		 * @param options {Object}
+		 */
+		initializeResizableDock: function resizableDock(options) {
+			modelDock.prototype.initialize.apply(this, arguments);
+
+			// bind event handling methods
+			_.bindAll(this, 'handleResize', 'handleResizeStart', 'handleResizeStop');
+
+			this.resizableOptions = _.assign(this.resizableOptions, options.resizableOptions);
+
+			this.$el
+				.resizable(this.resizableOptions)
+				.on('resize', _.bind(_handleResize, this))
+				.on('resizestart', this.handleResizeStart)
+				.on('resizestop', this.handleResizeStop);
+		}
 	});
 
 
-
+	/**
+	 * Just adds 'px' string to numerical values.
+	 *
+	 * @method addPx
+	 * @private
+	 */
 	function addPx(v) {
 		return v + 'px';
 	}

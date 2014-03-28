@@ -142,7 +142,43 @@
         },
         {
             "file": "src/index.js",
-            "line": 66,
+            "line": 26,
+            "description": "Initialization script.",
+            "itemtype": "method",
+            "name": "initialize",
+            "class": "",
+            "module": "backbone-ui-resizable"
+        },
+        {
+            "file": "src/index.js",
+            "line": 40,
+            "description": "Holds initialization logic exclusive to resizable-dock.",
+            "itemtype": "method",
+            "name": "initializeResizableDock",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "",
+            "module": "backbone-ui-resizable"
+        },
+        {
+            "file": "src/index.js",
+            "line": 63,
+            "description": "Just adds 'px' string to numerical values.",
+            "itemtype": "method",
+            "name": "addPx",
+            "access": "private",
+            "tagname": "",
+            "class": "",
+            "module": "backbone-ui-resizable"
+        },
+        {
+            "file": "src/index.js",
+            "line": 95,
             "description": "No-op.",
             "itemtype": "method",
             "name": "handleResize",

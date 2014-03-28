@@ -104,29 +104,58 @@ define(function (require, exports, module) {
 	// require jquery ui resizable
 	require(&#x27;jquery-ui-resizable&#x27;);
 
-	var modelDock = require(&#x27;model-dock&#x27;),
+	var backbone = require(&#x27;lowercase-backbone&#x27;),
+		modelDock = require(&#x27;model-dock&#x27;),
 		_ = require(&#x27;lodash&#x27;);
 
 	// event handlers
 	var _handleResize = require(&#x27;./__backbone-ui-resizable/handle-resize&#x27;);
 
-	var resizable = module.exports = modelDock.extend(function resizableDock(options) {
-		modelDock.prototype.initialize.apply(this, arguments);
+	var resizable = module.exports = modelDock.extend({
 
-		// bind event handling methods
-		_.bindAll(this, &#x27;handleResize&#x27;, &#x27;handleResizeStart&#x27;, &#x27;handleResizeStop&#x27;);
+		/**
+		 * Initialization script.
+		 *
+		 * @method initialize
+		 */
+		initialize: function initialize(options) {
 
-		this.resizableOptions = _.assign(this.resizableOptions, options.resizableOptions);
+			backbone.view.prototype.initialize.apply(this, arguments);
 
-		this.$el
-			.resizable(this.resizableOptions)
-			.on(&#x27;resize&#x27;, _.bind(_handleResize, this))
-			.on(&#x27;resizestart&#x27;, this.handleResizeStart)
-			.on(&#x27;resizestop&#x27;, this.handleResizeStop);
+			this.initializeModelDock.apply(this, arguments);
+
+			this.initializeResizableDock.apply(this, arguments);
+		},
+
+		/**
+		 * Holds initialization logic exclusive to resizable-dock.
+		 *
+		 * @method initializeResizableDock
+		 * @param options {Object}
+		 */
+		initializeResizableDock: function resizableDock(options) {
+			modelDock.prototype.initialize.apply(this, arguments);
+
+			// bind event handling methods
+			_.bindAll(this, &#x27;handleResize&#x27;, &#x27;handleResizeStart&#x27;, &#x27;handleResizeStop&#x27;);
+
+			this.resizableOptions = _.assign(this.resizableOptions, options.resizableOptions);
+
+			this.$el
+				.resizable(this.resizableOptions)
+				.on(&#x27;resize&#x27;, _.bind(_handleResize, this))
+				.on(&#x27;resizestart&#x27;, this.handleResizeStart)
+				.on(&#x27;resizestop&#x27;, this.handleResizeStop);
+		}
 	});
 
 
-
+	/**
+	 * Just adds &#x27;px&#x27; string to numerical values.
+	 *
+	 * @method addPx
+	 * @private
+	 */
 	function addPx(v) {
 		return v + &#x27;px&#x27;;
 	}
