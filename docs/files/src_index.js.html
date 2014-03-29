@@ -134,7 +134,6 @@ define(function (require, exports, module) {
 		 * @param options {Object}
 		 */
 		initializeResizableDock: function resizableDock(options) {
-			modelDock.prototype.initialize.apply(this, arguments);
 
 			// bind event handling methods
 			_.bindAll(this, &#x27;handleResize&#x27;, &#x27;handleResizeStart&#x27;, &#x27;handleResizeStop&#x27;);
