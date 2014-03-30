@@ -137,7 +137,7 @@ define(function (require, exports, module) {
 			movement = movementData(current, previous);
 
 		// trigger &#x27;resize&#x27; event on the model.
-		this.trigger(&#x27;resize&#x27;, model, movement);
+		this.trigger(&#x27;resize&#x27;, this, movement);
 		model.trigger(&#x27;resize&#x27;, model, movement);
 
 		// call the custom handleResize method.

@@ -102,7 +102,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 49,
+            "line": 52,
             "description": "Returns the difference between the current value and the last value",
             "class": "",
             "module": "backbone-ui-resizable",
@@ -110,7 +110,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 59,
+            "line": 62,
             "description": "Infers movement axis",
             "class": "",
             "module": "backbone-ui-resizable",
@@ -118,7 +118,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 66,
+            "line": 69,
             "description": "Infers the last action taken on this object: contract or expand\non a given axis",
             "class": "",
             "module": "backbone-ui-resizable",
@@ -126,7 +126,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 81,
+            "line": 84,
             "description": "Infers the handle that was moved by examining the attributes.",
             "class": "",
             "module": "backbone-ui-resizable",
@@ -134,7 +134,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 94,
+            "line": 97,
             "description": "Infers the direction of the movement of a single handle",
             "class": "",
             "module": "backbone-ui-resizable",
@@ -197,23 +197,23 @@
         },
         {
             "message": "Missing item type\nReturns the difference between the current value and the last value",
-            "line": " src/__backbone-ui-resizable/movement-data.js:49"
+            "line": " src/__backbone-ui-resizable/movement-data.js:52"
         },
         {
             "message": "Missing item type\nInfers movement axis",
-            "line": " src/__backbone-ui-resizable/movement-data.js:59"
+            "line": " src/__backbone-ui-resizable/movement-data.js:62"
         },
         {
             "message": "Missing item type\nInfers the last action taken on this object: contract or expand\non a given axis",
-            "line": " src/__backbone-ui-resizable/movement-data.js:66"
+            "line": " src/__backbone-ui-resizable/movement-data.js:69"
         },
         {
             "message": "Missing item type\nInfers the handle that was moved by examining the attributes.",
-            "line": " src/__backbone-ui-resizable/movement-data.js:81"
+            "line": " src/__backbone-ui-resizable/movement-data.js:84"
         },
         {
             "message": "Missing item type\nInfers the direction of the movement of a single handle",
-            "line": " src/__backbone-ui-resizable/movement-data.js:94"
+            "line": " src/__backbone-ui-resizable/movement-data.js:97"
         }
     ]
 }

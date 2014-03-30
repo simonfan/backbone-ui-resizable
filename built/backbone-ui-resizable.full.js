@@ -31,6 +31,8 @@ define('__backbone-ui-resizable/movement-data',['require','exports','module','su
 		data: function data() {
 				// movement axis
 			var axis = this.axis(),
+				// delta
+				delta = axis === 'x' ? this.delta('width') : this.delta('height'),
 				// movement action
 				action = this.action(axis),
 				// movement handle
@@ -40,6 +42,7 @@ define('__backbone-ui-resizable/movement-data',['require','exports','module','su
 
 			return {
 				axis: axis,
+				delta: delta,
 				action: action,
 				handle: handle,
 				direction: direction,
@@ -153,7 +156,7 @@ define('__backbone-ui-resizable/handle-resize',['require','exports','module','./
 			movement = movementData(current, previous);
 
 		// trigger 'resize' event on the model.
-		this.trigger('resize', model, movement);
+		this.trigger('resize', this, movement);
 		model.trigger('resize', model, movement);
 
 		// call the custom handleResize method.

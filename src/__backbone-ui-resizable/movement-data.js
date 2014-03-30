@@ -31,6 +31,8 @@ define(function (require, exports, module) {
 		data: function data() {
 				// movement axis
 			var axis = this.axis(),
+				// delta
+				delta = axis === 'x' ? this.delta('width') : this.delta('height'),
 				// movement action
 				action = this.action(axis),
 				// movement handle
@@ -40,6 +42,7 @@ define(function (require, exports, module) {
 
 			return {
 				axis: axis,
+				delta: delta,
 				action: action,
 				handle: handle,
 				direction: direction,

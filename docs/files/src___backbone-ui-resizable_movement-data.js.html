@@ -121,6 +121,8 @@ define(function (require, exports, module) {
 		data: function data() {
 				// movement axis
 			var axis = this.axis(),
+				// delta
+				delta = axis === &#x27;x&#x27; ? this.delta(&#x27;width&#x27;) : this.delta(&#x27;height&#x27;),
 				// movement action
 				action = this.action(axis),
 				// movement handle
@@ -130,6 +132,7 @@ define(function (require, exports, module) {
 
 			return {
 				axis: axis,
+				delta: delta,
 				action: action,
 				handle: handle,
 				direction: direction,
