@@ -149,14 +149,17 @@ define(function (require, exports, module) {
 	});
 
 
+	var number = /^[0-9]+$/;
+
 	/**
 	 * Just adds &#x27;px&#x27; string to numerical values.
 	 *
-	 * @method addPx
+	 * @method stringifyPositionalValue
 	 * @private
 	 */
-	function addPx(v) {
-		return v + &#x27;px&#x27;;
+	function stringifyPositionalValue(v) {
+		// [1] check if it is a number
+		return number.test(v) ? v + &#x27;px&#x27; : v;
 	}
 
 
@@ -168,10 +171,10 @@ define(function (require, exports, module) {
 		},
 
 		stringifiers: {
-			height: addPx,
-			width: addPx,
-			left: addPx,
-			top: addPx
+			height: stringifyPositionalValue,
+			width: stringifyPositionalValue,
+			left: stringifyPositionalValue,
+			top: stringifyPositionalValue
 		},
 
 		map: {

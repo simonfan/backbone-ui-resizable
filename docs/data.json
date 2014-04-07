@@ -167,10 +167,10 @@
         },
         {
             "file": "src/index.js",
-            "line": 62,
+            "line": 64,
             "description": "Just adds 'px' string to numerical values.",
             "itemtype": "method",
-            "name": "addPx",
+            "name": "stringifyPositionalValue",
             "access": "private",
             "tagname": "",
             "class": "",
@@ -178,7 +178,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 94,
+            "line": 97,
             "description": "No-op.",
             "itemtype": "method",
             "name": "handleResize",

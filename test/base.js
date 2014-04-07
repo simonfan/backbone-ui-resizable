@@ -55,7 +55,7 @@
 			var square = squareBuilder({
 				el: $('#resizable'),
 				model: new Backbone.Model({
-					width: 200,
+					width: '50%',
 					height: 200
 				})
 			});

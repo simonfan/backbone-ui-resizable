@@ -59,14 +59,17 @@ define(function (require, exports, module) {
 	});
 
 
+	var number = /^[0-9]+$/;
+
 	/**
 	 * Just adds 'px' string to numerical values.
 	 *
-	 * @method addPx
+	 * @method stringifyPositionalValue
 	 * @private
 	 */
-	function addPx(v) {
-		return v + 'px';
+	function stringifyPositionalValue(v) {
+		// [1] check if it is a number
+		return number.test(v) ? v + 'px' : v;
 	}
 
 
@@ -78,10 +81,10 @@ define(function (require, exports, module) {
 		},
 
 		stringifiers: {
-			height: addPx,
-			width: addPx,
-			left: addPx,
-			top: addPx
+			height: stringifyPositionalValue,
+			width: stringifyPositionalValue,
+			left: stringifyPositionalValue,
+			top: stringifyPositionalValue
 		},
 
 		map: {
