@@ -114,6 +114,84 @@ define('__backbone-ui-resizable/movement-data',['require','exports','module','su
  * @submodule handle-resize
  */
 
+define('__backbone-ui-resizable/resize',['require','exports','module','lodash','./movement-data'],function (require, exports, module) {
+	
+
+	var _ = require('lodash');
+
+	var movementData = require('./movement-data');
+
+
+	function getAllowedValue(value, min, max) {
+		var res = value;
+
+		if (_.isNumber(min)) {
+			res = res > min ? res : min;
+		}
+
+		if (_.isNumber(max)) {
+			res = res < max ? res : max;
+		}
+
+		return res;
+	}
+
+	/**
+	 * Handles resizes.
+	 *
+	 * @method resize
+	 * @private
+	 * @param e {event Object}
+	 * @param ui {jquery-ui ui Object}
+	 */
+	module.exports = function resize(data) {
+
+		var model = this.model;
+
+		// check for maximums and minimuns
+		if (_.isNumber(data.width)) {
+
+			var minWidth = model.get('minWidth'),
+				maxWidth = model.get('maxWidth');
+
+			data.width = getAllowedValue(data.width, minWidth, maxWidth);
+		}
+
+		if (_.isNumber(data.height)) {
+
+			var minHeight = model.get('minHeight'),
+				maxHeight = model.get('maxHeight');
+
+			data.height = getAllowedValue(data.height, minHeight, maxHeight);
+		}
+
+		// set
+		model.set(data);
+
+		/**
+		 * get data about the movement
+		 */
+		var current = model.toJSON(),
+			previous = model.previousAttributes(),
+
+			// build the movement-data object
+			movement = movementData(current, previous);
+
+		// trigger 'resize' event on the model.
+		this.trigger('resize', this, movement);
+		model.trigger('resize', model, movement);
+
+		return this;
+	};
+});
+
+/**
+ * AMD module.
+ *
+ * @module backbone-ui-resizable
+ * @submodule handle-resize
+ */
+
 define('__backbone-ui-resizable/handle-resize',['require','exports','module','./movement-data'],function (require, exports, module) {
 	
 
@@ -142,25 +220,8 @@ define('__backbone-ui-resizable/handle-resize',['require','exports','module','./
 			height: ui.size.height,
 		};
 
-		var model = this.model;
-
-		this.model.set(data);
-
-		/**
-		 * get data about the movement
-		 */
-		var current = model.attributes,
-			previous = model.previousAttributes(),
-
-			// build the movement-data object
-			movement = movementData(current, previous);
-
-		// trigger 'resize' event on the model.
-		this.trigger('resize', this, movement);
-		model.trigger('resize', model, movement);
-
-		// call the custom handleResize method.
-		this.handleResize(e, ui, movement);
+		// do resizing
+		this.resize(data);
 	};
 });
 
@@ -174,7 +235,7 @@ define('__backbone-ui-resizable/handle-resize',['require','exports','module','./
  * @module backbone-ui-resizable
  */
 
-define('backbone-ui-resizable',['require','exports','module','jquery-ui-resizable','lowercase-backbone','model-dock','lodash','./__backbone-ui-resizable/handle-resize'],function (require, exports, module) {
+define('backbone-ui-resizable',['require','exports','module','jquery-ui-resizable','lowercase-backbone','model-dock','lodash','./__backbone-ui-resizable/resize','./__backbone-ui-resizable/handle-resize'],function (require, exports, module) {
 	
 
 	// require jquery ui resizable
@@ -184,8 +245,30 @@ define('backbone-ui-resizable',['require','exports','module','jquery-ui-resizabl
 		modelDock = require('model-dock'),
 		_ = require('lodash');
 
-	// event handlers
-	var _handleResize = require('./__backbone-ui-resizable/handle-resize');
+	/////////////
+	// private //
+	var resizableOptionsProperties = [
+		'alsoResize', 'animate', 'animateDuration', 'animateEasing',
+		'aspectRatio', 'autoHide', 'cancel', 'containment', 'delay',
+		'disabled', 'distance', 'ghost', 'grid', 'handles', 'helper',
+		'maxHeight', 'maxWidth', 'minHeight', 'minWidth',
+	];
+
+	/**
+	 * Just adds 'px' string to numerical values.
+	 *
+	 * @method stringifyPositionalValue
+	 * @private
+	 */
+	var number = /^[0-9]+$/;
+	function stringifyPositionalValue(v) {
+		// [1] check if it is a number
+		return number.test(v) ? v + 'px' : v;
+	}
+
+	// private //
+	/////////////
+
 
 	var resizable = module.exports = modelDock.extend({
 
@@ -200,74 +283,126 @@ define('backbone-ui-resizable',['require','exports','module','jquery-ui-resizabl
 
 			this.initializeModelDock.apply(this, arguments);
 
-			this.initializeResizableDock.apply(this, arguments);
+			this.initializeUIResizable.apply(this, arguments);
 		},
 
 		/**
 		 * Holds initialization logic exclusive to resizable-dock.
 		 *
-		 * @method initializeResizableDock
+		 * @method initializeUIResizable
 		 * @param options {Object}
 		 */
-		initializeResizableDock: function resizableDock(options) {
+		initializeUIResizable: function resizableDock(options) {
 
 			// bind event handling methods
-			_.bindAll(this, 'handleResize', 'handleResizeStart', 'handleResizeStop');
+			_.bindAll(this,
+				'handleElResize',
+				'handleElResizeStart',
+				'handleElResizeStop',
+				'rebuildResizableEl');
 
-			this.resizableOptions = _.assign(this.resizableOptions, options.resizableOptions);
+			// pick the resizableOptions from the main options object.
+			var resizableOptions = _.extend(
+				// the default resizableOptions
+				this.resizableOptions,
+				// the instance resizableOptions
+				_.pick(options, resizableOptionsProperties)
+			);
 
+
+			// set the options onto the model
+			this.model.set(resizableOptions);
+
+			// listen to events on the $el
 			this.$el
-				.resizable(this.resizableOptions)
-				.on('resize', _.bind(_handleResize, this))
-				.on('resizestart', this.handleResizeStart)
-				.on('resizestop', this.handleResizeStop);
-		}
-	});
+				.resizable(this.model)
+				.on('resize', this.handleElResize)
+				.on('resizestart', this.handleElResizeStart)
+				.on('resizestop', this.handleElResizeStop);
 
+			// listen to change:[attribute] events on model
+			// in order to rebuild the resizable object when resizableOptions change
+			_.each(this.rebuildOnChange, function (attribute) {
+				this.listenTo(this.model, 'change:' + attribute, this.rebuildResizableEl)
+			}, this);
+		},
 
-	var number = /^[0-9]+$/;
+		/**
+		 * Destroys (if present) the previous resizable plugin
+		 * and reinvokes the resizable jquery method.
+		 *
+		 * @method rebuildResizableEl
+		 * @param options
+		 */
+		rebuildResizableEl: function rebuildResizableEl() {
+			this.$el
+				.resizable('destroy')
+				.resizable(this.model.attributes);
+		},
 
-	/**
-	 * Just adds 'px' string to numerical values.
-	 *
-	 * @method stringifyPositionalValue
-	 * @private
-	 */
-	function stringifyPositionalValue(v) {
-		// [1] check if it is a number
-		return number.test(v) ? v + 'px' : v;
-	}
+		/**
+		 * Does the object resizing.
+		 *
+		 * @method resize
+		 * @param data {Object}
+		 */
+		resize: require('./__backbone-ui-resizable/resize'),
 
+		/**
+		 * $el resize event handlers
+		 */
+		handleElResize: require('./__backbone-ui-resizable/handle-resize'),
+		handleElResizeStart: function (e, ui) {
+			this.trigger('resizestart', this);
+		},
+		handleElResizeStop: function (e, ui) {
+			this.trigger('resizestop', this);
+		},
 
-	// methods
-	resizable.proto({
-
+		/**
+		 * Default options to be passed to the $resizable builder
+		 *
+		 * @property resizableOptions
+		 * @type Object
+		 */
 		resizableOptions: {
 			handles: 'n,ne,e,se,s,sw,w,nw',
 		},
 
+		/**
+		 * When any of the attributes listed here is changed,
+		 * the resizable object will be rebuilt.
+		 *
+		 * @property rebuildOnChange
+		 * @type Array
+		 */
+		rebuildOnChange: ['handles', 'maxHeight', 'maxWidth', 'minHeight', 'minWidth'],
+
 		stringifiers: {
 			height: stringifyPositionalValue,
+			minHeight: stringifyPositionalValue,
+			maxHeight: stringifyPositionalValue,
+
 			width: stringifyPositionalValue,
+			minWidth: stringifyPositionalValue,
+			maxWidth: stringifyPositionalValue,
+
 			left: stringifyPositionalValue,
 			top: stringifyPositionalValue
 		},
 
 		map: {
-			'top': '->css:top',
-			'left': '->css:left',
-			'width': '->css:width',
-			'height': '->css:height',
-		},
+			top: '->css:top',
+			left: '->css:left',
 
-		/**
-		 * No-op.
-		 *
-		 * @method handleResize
-		 */
-		handleResize: function (e, ui, data) {},
-		handleResizeStart: function (e, ui) {},
-		handleResizeStop: function (e, ui) {},
+			width: '->css:width',
+			minWidth: '->css:min-width',
+			maxWidth: '->css:max-width',
+
+			height: '->css:height',
+			minHeight: '->css:min-height',
+			maxHeight: '->css:max-height',
+		},
 	});
 });
 

@@ -108,8 +108,30 @@ define(function (require, exports, module) {
 		modelDock = require(&#x27;model-dock&#x27;),
 		_ = require(&#x27;lodash&#x27;);
 
-	// event handlers
-	var _handleResize = require(&#x27;./__backbone-ui-resizable/handle-resize&#x27;);
+	/////////////
+	// private //
+	var resizableOptionsProperties = [
+		&#x27;alsoResize&#x27;, &#x27;animate&#x27;, &#x27;animateDuration&#x27;, &#x27;animateEasing&#x27;,
+		&#x27;aspectRatio&#x27;, &#x27;autoHide&#x27;, &#x27;cancel&#x27;, &#x27;containment&#x27;, &#x27;delay&#x27;,
+		&#x27;disabled&#x27;, &#x27;distance&#x27;, &#x27;ghost&#x27;, &#x27;grid&#x27;, &#x27;handles&#x27;, &#x27;helper&#x27;,
+		&#x27;maxHeight&#x27;, &#x27;maxWidth&#x27;, &#x27;minHeight&#x27;, &#x27;minWidth&#x27;,
+	];
+
+	/**
+	 * Just adds &#x27;px&#x27; string to numerical values.
+	 *
+	 * @method stringifyPositionalValue
+	 * @private
+	 */
+	var number = /^[0-9]+$/;
+	function stringifyPositionalValue(v) {
+		// [1] check if it is a number
+		return number.test(v) ? v + &#x27;px&#x27; : v;
+	}
+
+	// private //
+	/////////////
+
 
 	var resizable = module.exports = modelDock.extend({
 
@@ -124,74 +146,126 @@ define(function (require, exports, module) {
 
 			this.initializeModelDock.apply(this, arguments);
 
-			this.initializeResizableDock.apply(this, arguments);
+			this.initializeUIResizable.apply(this, arguments);
 		},
 
 		/**
 		 * Holds initialization logic exclusive to resizable-dock.
 		 *
-		 * @method initializeResizableDock
+		 * @method initializeUIResizable
 		 * @param options {Object}
 		 */
-		initializeResizableDock: function resizableDock(options) {
+		initializeUIResizable: function resizableDock(options) {
 
 			// bind event handling methods
-			_.bindAll(this, &#x27;handleResize&#x27;, &#x27;handleResizeStart&#x27;, &#x27;handleResizeStop&#x27;);
+			_.bindAll(this,
+				&#x27;handleElResize&#x27;,
+				&#x27;handleElResizeStart&#x27;,
+				&#x27;handleElResizeStop&#x27;,
+				&#x27;rebuildResizableEl&#x27;);
 
-			this.resizableOptions = _.assign(this.resizableOptions, options.resizableOptions);
+			// pick the resizableOptions from the main options object.
+			var resizableOptions = _.extend(
+				// the default resizableOptions
+				this.resizableOptions,
+				// the instance resizableOptions
+				_.pick(options, resizableOptionsProperties)
+			);
 
+
+			// set the options onto the model
+			this.model.set(resizableOptions);
+
+			// listen to events on the $el
 			this.$el
-				.resizable(this.resizableOptions)
-				.on(&#x27;resize&#x27;, _.bind(_handleResize, this))
-				.on(&#x27;resizestart&#x27;, this.handleResizeStart)
-				.on(&#x27;resizestop&#x27;, this.handleResizeStop);
-		}
-	});
+				.resizable(this.model)
+				.on(&#x27;resize&#x27;, this.handleElResize)
+				.on(&#x27;resizestart&#x27;, this.handleElResizeStart)
+				.on(&#x27;resizestop&#x27;, this.handleElResizeStop);
 
+			// listen to change:[attribute] events on model
+			// in order to rebuild the resizable object when resizableOptions change
+			_.each(this.rebuildOnChange, function (attribute) {
+				this.listenTo(this.model, &#x27;change:&#x27; + attribute, this.rebuildResizableEl)
+			}, this);
+		},
 
-	var number = /^[0-9]+$/;
+		/**
+		 * Destroys (if present) the previous resizable plugin
+		 * and reinvokes the resizable jquery method.
+		 *
+		 * @method rebuildResizableEl
+		 * @param options
+		 */
+		rebuildResizableEl: function rebuildResizableEl() {
+			this.$el
+				.resizable(&#x27;destroy&#x27;)
+				.resizable(this.model.attributes);
+		},
 
-	/**
-	 * Just adds &#x27;px&#x27; string to numerical values.
-	 *
-	 * @method stringifyPositionalValue
-	 * @private
-	 */
-	function stringifyPositionalValue(v) {
-		// [1] check if it is a number
-		return number.test(v) ? v + &#x27;px&#x27; : v;
-	}
+		/**
+		 * Does the object resizing.
+		 *
+		 * @method resize
+		 * @param data {Object}
+		 */
+		resize: require(&#x27;./__backbone-ui-resizable/resize&#x27;),
 
+		/**
+		 * $el resize event handlers
+		 */
+		handleElResize: require(&#x27;./__backbone-ui-resizable/handle-resize&#x27;),
+		handleElResizeStart: function (e, ui) {
+			this.trigger(&#x27;resizestart&#x27;, this);
+		},
+		handleElResizeStop: function (e, ui) {
+			this.trigger(&#x27;resizestop&#x27;, this);
+		},
 
-	// methods
-	resizable.proto({
-
+		/**
+		 * Default options to be passed to the $resizable builder
+		 *
+		 * @property resizableOptions
+		 * @type Object
+		 */
 		resizableOptions: {
 			handles: &#x27;n,ne,e,se,s,sw,w,nw&#x27;,
 		},
 
+		/**
+		 * When any of the attributes listed here is changed,
+		 * the resizable object will be rebuilt.
+		 *
+		 * @property rebuildOnChange
+		 * @type Array
+		 */
+		rebuildOnChange: [&#x27;handles&#x27;, &#x27;maxHeight&#x27;, &#x27;maxWidth&#x27;, &#x27;minHeight&#x27;, &#x27;minWidth&#x27;],
+
 		stringifiers: {
 			height: stringifyPositionalValue,
+			minHeight: stringifyPositionalValue,
+			maxHeight: stringifyPositionalValue,
+
 			width: stringifyPositionalValue,
+			minWidth: stringifyPositionalValue,
+			maxWidth: stringifyPositionalValue,
+
 			left: stringifyPositionalValue,
 			top: stringifyPositionalValue
 		},
 
 		map: {
-			&#x27;top&#x27;: &#x27;-&gt;css:top&#x27;,
-			&#x27;left&#x27;: &#x27;-&gt;css:left&#x27;,
-			&#x27;width&#x27;: &#x27;-&gt;css:width&#x27;,
-			&#x27;height&#x27;: &#x27;-&gt;css:height&#x27;,
-		},
+			top: &#x27;-&gt;css:top&#x27;,
+			left: &#x27;-&gt;css:left&#x27;,
 
-		/**
-		 * No-op.
-		 *
-		 * @method handleResize
-		 */
-		handleResize: function (e, ui, data) {},
-		handleResizeStart: function (e, ui) {},
-		handleResizeStop: function (e, ui) {},
+			width: &#x27;-&gt;css:width&#x27;,
+			minWidth: &#x27;-&gt;css:min-width&#x27;,
+			maxWidth: &#x27;-&gt;css:max-width&#x27;,
+
+			height: &#x27;-&gt;css:height&#x27;,
+			minHeight: &#x27;-&gt;css:min-height&#x27;,
+			maxHeight: &#x27;-&gt;css:max-height&#x27;,
+		},
 	});
 });
 

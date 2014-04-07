@@ -1,7 +1,7 @@
 {
   "name": "backbone-ui-resizable",
   "main": "built/backbone-ui-resizable.js",
-  "version": "0.2.4",
+  "version": "0.3.4",
   "description": "Some module...",
   "dependencies": {
     "model-dock": "0.3.5",

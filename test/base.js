@@ -38,6 +38,11 @@
 					'left': ['->css:left', '[data-attribute="left"]'],
 					'top': ['->css:top', '[data-attribute="top"]'],
 
+					minWidth: '[data-attribute="min-width"]',
+					maxWidth: '[data-attribute="max-width"]',
+					minHeight: '[data-attribute="min-height"]',
+					maxHeight: '[data-attribute="max-height"]',
+
 					'bottom': '[data-attribute="bottom"]',
 					'right': '[data-attribute="right"]',
 
