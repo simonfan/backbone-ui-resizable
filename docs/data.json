@@ -20,6 +20,13 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/__backbone-ui-resizable/resize.js": {
+            "name": "src/__backbone-ui-resizable/resize.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src/index.js": {
             "name": "src/index.js",
             "modules": {
@@ -85,14 +92,6 @@
             "submodule": "handle-resize"
         },
         {
-            "file": "src/__backbone-ui-resizable/handle-resize.js",
-            "line": 40,
-            "description": "get data about the movement",
-            "class": "",
-            "module": "backbone-ui-resizable",
-            "submodule": "handle-resize"
-        },
-        {
             "file": "src/__backbone-ui-resizable/movement-data.js",
             "line": 28,
             "description": "Get metadata from the movement",
@@ -141,8 +140,51 @@
             "submodule": "handle-resize"
         },
         {
+            "file": "src/__backbone-ui-resizable/resize.js",
+            "line": 30,
+            "description": "Handles resizes.",
+            "itemtype": "method",
+            "name": "resize",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "",
+                    "type": "Event Object"
+                },
+                {
+                    "name": "ui",
+                    "description": "",
+                    "type": "Jquery-ui ui Object"
+                }
+            ],
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "submodule": "handle-resize"
+        },
+        {
+            "file": "src/__backbone-ui-resizable/resize.js",
+            "line": 62,
+            "description": "get data about the movement",
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "submodule": "handle-resize"
+        },
+        {
             "file": "src/index.js",
-            "line": 26,
+            "line": 30,
+            "description": "Just adds 'px' string to numerical values.",
+            "itemtype": "method",
+            "name": "stringifyPositionalValue",
+            "access": "private",
+            "tagname": "",
+            "class": "",
+            "module": "backbone-ui-resizable"
+        },
+        {
+            "file": "src/index.js",
+            "line": 48,
             "description": "Initialization script.",
             "itemtype": "method",
             "name": "initialize",
@@ -151,10 +193,10 @@
         },
         {
             "file": "src/index.js",
-            "line": 40,
+            "line": 62,
             "description": "Holds initialization logic exclusive to resizable-dock.",
             "itemtype": "method",
-            "name": "initializeResizableDock",
+            "name": "initializeUIResizable",
             "params": [
                 {
                     "name": "options",
@@ -167,30 +209,64 @@
         },
         {
             "file": "src/index.js",
-            "line": 64,
-            "description": "Just adds 'px' string to numerical values.",
+            "line": 102,
+            "description": "Destroys (if present) the previous resizable plugin\nand reinvokes the resizable jquery method.",
             "itemtype": "method",
-            "name": "stringifyPositionalValue",
-            "access": "private",
-            "tagname": "",
+            "name": "rebuildResizableEl",
+            "params": [
+                {
+                    "name": "options",
+                    "description": ""
+                }
+            ],
             "class": "",
             "module": "backbone-ui-resizable"
         },
         {
             "file": "src/index.js",
-            "line": 97,
-            "description": "No-op.",
+            "line": 115,
+            "description": "Does the object resizing.",
             "itemtype": "method",
-            "name": "handleResize",
+            "name": "resize",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "",
+            "module": "backbone-ui-resizable"
+        },
+        {
+            "file": "src/index.js",
+            "line": 123,
+            "description": "$el resize event handlers",
+            "class": "",
+            "module": "backbone-ui-resizable"
+        },
+        {
+            "file": "src/index.js",
+            "line": 134,
+            "description": "Default options to be passed to the $resizable builder",
+            "itemtype": "property",
+            "name": "resizableOptions",
+            "type": "Object",
+            "class": "",
+            "module": "backbone-ui-resizable"
+        },
+        {
+            "file": "src/index.js",
+            "line": 144,
+            "description": "When any of the attributes listed here is changed,\nthe resizable object will be rebuilt.",
+            "itemtype": "property",
+            "name": "rebuildOnChange",
+            "type": "Array",
             "class": "",
             "module": "backbone-ui-resizable"
         }
     ],
     "warnings": [
-        {
-            "message": "Missing item type\nget data about the movement",
-            "line": " src/__backbone-ui-resizable/handle-resize.js:40"
-        },
         {
             "message": "Missing item type\nGet metadata from the movement",
             "line": " src/__backbone-ui-resizable/movement-data.js:28"
@@ -214,6 +290,14 @@
         {
             "message": "Missing item type\nInfers the direction of the movement of a single handle",
             "line": " src/__backbone-ui-resizable/movement-data.js:97"
+        },
+        {
+            "message": "Missing item type\nget data about the movement",
+            "line": " src/__backbone-ui-resizable/resize.js:62"
+        },
+        {
+            "message": "Missing item type\n$el resize event handlers",
+            "line": " src/index.js:123"
         }
     ]
 }
