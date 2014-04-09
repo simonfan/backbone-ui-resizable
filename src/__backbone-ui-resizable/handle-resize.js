@@ -20,20 +20,24 @@ define(function (require, exports, module) {
 	 */
 	module.exports = function handleResize(e, ui) {
 
-		var data = {
-			// set position
-			top: ui.position.top,
-			left: ui.position.left,
-
-			bottom: ui.position.top + ui.size.height,
-			right: ui.position.left + ui.size.width,
-
-			// set dimensions
-			width: ui.size.width,
-			height: ui.size.height,
-		};
-
 		// do resizing
-		this.resize(data);
+		var model = this.model;
+
+		// check for maximums and minimuns
+		if (_.isNumber(ui.size.width)) {
+			remainders.width = this.resizeWidth(ui.size.width - model.get('width'));
+		}
+
+		if (_.isNumber(ui.size.height)) {
+			remainders.height = this.resizeHeight(ui.size.height - model.get('height'));
+		}
+
+		if (_.isNumber(ui.position.left)) {
+			remainders.left = this.moveX(ui.position.left - model.get('left'));
+		}
+
+		if (_.isNumber(ui.position.top)) {
+			remainders.top = this.moveY(ui.position.top - model.get('top'));
+		}
 	};
 });
