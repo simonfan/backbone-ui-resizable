@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__backbone-ui-resizable/resize.js - backbone-ui-resizable</title>
+    <title>src/__backbone-ui-resizable/actions/resize/expand.js - backbone-ui-resizable</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -84,86 +84,97 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__backbone-ui-resizable/resize.js</h1>
+                        <h1 class="file-heading">File: src/__backbone-ui-resizable/actions/resize/expand.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-/**
- * AMD module.
- *
- * @module backbone-ui-resizable
- * @submodule handle-resize
- */
-
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var _ = require(&#x27;lodash&#x27;);
+	/**
+	 * Expands the view by moving the left handle
+	 * towards the left direction while maintaing
+	 * the right handle at a fixed position.
+	 *   --------
+	 *   |&lt;-    |
+	 *   |&lt;-    |
+	 *   |&lt;-    |
+	 *   --------
+	 *
+	 * @method expandToLeft
+	 * @param attemptedDelta {+Number}
+	 */
+	exports.expandToLeft = function expandToLeft(attemptedDelta, silent) {
+		var remainder = this.resizeWidth(attemptedDelta, silent);
 
-	var movementData = require(&#x27;./movement-data&#x27;);
+		// delta &gt;= 0
+		var delta = attemptedDelta - remainder;
 
+		// move the thing to the left.
+		this.moveX(-1 * delta);
 
-	function getAllowedValue(value, min, max) {
-		var res = value;
-
-		if (_.isNumber(min)) {
-			res = res &gt; min ? res : min;
-		}
-
-		if (_.isNumber(max)) {
-			res = res &lt; max ? res : max;
-		}
-
-		return res;
-	}
+		return remainder;
+	};
 
 	/**
-	 * Handles resizes.
+	 * Expands the view by moving the right handle
+	 * towards the right direction while maintaing
+	 * the left handle at a fixed position.
+	 *   --------
+	 *   |    -&gt;|
+	 *   |    -&gt;|
+	 *   |    -&gt;|
+	 *   --------
 	 *
-	 * @method resize
-	 * @private
-	 * @param e {event Object}
-	 * @param ui {jquery-ui ui Object}
+	 * @method expandToRight
+	 * @param attemptedDelta {+Number}
 	 */
-	module.exports = function resize(data) {
-
-		var model = this.model;
-
-		// check for maximums and minimuns
-		if (_.isNumber(data.width)) {
-
-			var minWidth = model.get(&#x27;minWidth&#x27;),
-				maxWidth = model.get(&#x27;maxWidth&#x27;);
-
-			data.width = getAllowedValue(data.width, minWidth, maxWidth);
-		}
-
-		if (_.isNumber(data.height)) {
-
-			var minHeight = model.get(&#x27;minHeight&#x27;),
-				maxHeight = model.get(&#x27;maxHeight&#x27;);
-
-			data.height = getAllowedValue(data.height, minHeight, maxHeight);
-		}
-
-		// set
-		model.set(data);
-
-		/**
-		 * get data about the movement
-		 */
-		var current = model.toJSON(),
-			previous = model.previousAttributes(),
-
-			// build the movement-data object
-			movement = movementData(current, previous);
-
-		// trigger &#x27;resize&#x27; event on the model.
-		this.trigger(&#x27;resize&#x27;, this, movement);
-		model.trigger(&#x27;resize&#x27;, model, movement);
-
-		return this;
+	exports.expandToRight = function expandToRight(attemptedDelta, silent) {
+		return this.resizeWidth(attemptedDelta, silent);
 	};
+
+	/**
+	 * Expands the view by moving the top handle
+	 * towards the top direction while maintaing
+	 * the bottom handle at a fixed position.
+	 *   --------
+	 *   |^^^^^^|
+	 *   |      |
+	 *   |      |
+	 *   --------
+	 *
+	 * @method expandToTop
+	 * @param attemptedDelta {+Number}
+	 */
+	exports.expandToTop = function expandToTop(attemptedDelta, silent) {
+		var remainder = this.resizeHeight(attemptedDelta, silent);
+
+		// delta &gt;= 0
+		var delta = attemptedDelta - remainder;
+
+		// move the thing to top
+		this.moveY(-1 * delta);
+
+		return remainder;
+	};
+
+	/**
+	 * Expands the view by moving the bottom handle
+	 * towards the bottom direction while maintaing
+	 * the top handle at a fixed position.
+	 *   --------
+	 *   |      |
+	 *   |      |
+	 *   |vvvvvv|
+	 *   --------
+	 *
+	 * @method expandToBottom
+	 * @param attemptedDelta {+Number}
+	 */
+	exports.expandToBottom = function expandToBottom(attemptedDelta, silent) {
+		return this.resizeWidth(attemptedDelta, silent);
+	};
+
 });
 
     </pre>

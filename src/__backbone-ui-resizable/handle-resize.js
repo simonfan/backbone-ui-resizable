@@ -8,8 +8,6 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var movementData = require('./movement-data');
-
 	/**
 	 * Handles resizes.
 	 *
@@ -21,23 +19,34 @@ define(function (require, exports, module) {
 	module.exports = function handleResize(e, ui) {
 
 		// do resizing
-		var model = this.model;
+		var model = this.model,
+			width = model.get('width'),
+			height = model.get('height'),
+			left = model.get('left'),
+			top = model.get('top');
 
 		// check for maximums and minimuns
-		if (_.isNumber(ui.size.width)) {
-			remainders.width = this.resizeWidth(ui.size.width - model.get('width'));
+		if (ui.size.width !== width) {
+			// silent to false.
+			this.resizeWidth(ui.size.width - width, false);
 		}
 
-		if (_.isNumber(ui.size.height)) {
-			remainders.height = this.resizeHeight(ui.size.height - model.get('height'));
+		if (ui.size.height !== height) {
+			// silent to false
+			this.resizeHeight(ui.size.height - height, false);
 		}
 
-		if (_.isNumber(ui.position.left)) {
-			remainders.left = this.moveX(ui.position.left - model.get('left'));
+		if (ui.position.left !== left) {
+
+			//console.log()
+
+			// silent to false
+			this.moveX(ui.position.left - left, false);
 		}
 
-		if (_.isNumber(ui.position.top)) {
-			remainders.top = this.moveY(ui.position.top - model.get('top'));
+		if (ui.position.top !== top) {
+			// silent to false
+			this.moveY(ui.position.top - top, false);
 		}
 	};
 });

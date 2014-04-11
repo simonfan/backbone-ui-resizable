@@ -108,6 +108,9 @@ define(function (require, exports, module) {
 		modelDock = require(&#x27;model-dock&#x27;),
 		_ = require(&#x27;lodash&#x27;);
 
+	// internal
+	var initializeResizableModel = require(&#x27;./__backbone-ui-resizable/initialize-model&#x27;);
+
 	/////////////
 	// private //
 	var resizableOptionsProperties = [
@@ -165,28 +168,20 @@ define(function (require, exports, module) {
 				&#x27;rebuildResizableEl&#x27;);
 
 			// pick the resizableOptions from the main options object.
-			var resizableOptions = _.defaults(
+			this.resizableOptions = _.defaults(
 				// the instance resizableOptions
 				_.pick(options, resizableOptionsProperties),
 				// the default resizableOptions
 				this.resizableOptions
 			);
-
-			// set the options onto the model
-			this.model.set(resizableOptions);
-
 			// listen to events on the $el
 			this.$el
-				.resizable(this.model.toJSON())
+				.resizable(this.resizableOptions)
 				.on(&#x27;resize&#x27;, this.handleElResize)
 				.on(&#x27;resizestart&#x27;, this.handleElResizeStart)
 				.on(&#x27;resizestop&#x27;, this.handleElResizeStop);
 
-			// listen to change:[attribute] events on model
-			// in order to rebuild the resizable object when resizableOptions change
-			_.each(this.rebuildOnChange, function (attribute) {
-				this.listenTo(this.model, &#x27;change:&#x27; + attribute, this.rebuildResizableEl)
-			}, this);
+			initializeResizableModel.apply(this, arguments);
 		},
 
 		/**
@@ -201,14 +196,6 @@ define(function (require, exports, module) {
 				.resizable(&#x27;destroy&#x27;)
 				.resizable(this.model.attributes);
 		},
-
-		/**
-		 * Does the object resizing.
-		 *
-		 * @method resize
-		 * @param data {Object}
-		 */
-		resize: require(&#x27;./__backbone-ui-resizable/resize&#x27;),
 
 		/**
 		 * $el resize event handlers
@@ -266,6 +253,11 @@ define(function (require, exports, module) {
 			maxHeight: &#x27;-&gt;css:max-height&#x27;,
 		},
 	});
+
+	// extend
+	resizable
+		.proto(require(&#x27;./__backbone-ui-resizable/actions/move/index&#x27;))
+		.proto(require(&#x27;./__backbone-ui-resizable/actions/resize/index&#x27;));
 });
 
     </pre>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__backbone-ui-resizable/handle-resize.js - backbone-ui-resizable</title>
+    <title>src/__backbone-ui-resizable/actions/resize/index.js - backbone-ui-resizable</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -84,7 +84,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__backbone-ui-resizable/handle-resize.js</h1>
+                        <h1 class="file-heading">File: src/__backbone-ui-resizable/actions/resize/index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -98,47 +98,75 @@
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	/**
-	 * Handles resizes.
-	 *
-	 * @method handleResize
-	 * @private
-	 * @param e {event Object}
-	 * @param ui {jquery-ui ui Object}
-	 */
-	module.exports = function handleResize(e, ui) {
+	var _ = require(&#x27;lodash&#x27;);
 
-		// do resizing
+	var helpers = require(&#x27;../../helpers&#x27;);
+
+	exports.resizeWidth = function resizeWidth(attemptedDelta, silent) {
+
 		var model = this.model,
-			width = model.get(&#x27;width&#x27;),
-			height = model.get(&#x27;height&#x27;),
-			left = model.get(&#x27;left&#x27;),
-			top = model.get(&#x27;top&#x27;);
+			// calculate the new width
+			attemptedWidth = model.get(&#x27;width&#x27;) + attemptedDelta,
 
-		// check for maximums and minimuns
-		if (ui.size.width !== width) {
-			// silent to false.
-			this.resizeWidth(ui.size.width - width, false);
+			resultingWidth = helpers.fitValueWithin(attemptedWidth, model.get(&#x27;minWidth&#x27;), model.get(&#x27;maxWidth&#x27;));
+
+		// set
+		model.set(&#x27;width&#x27;, resultingWidth);
+
+		var previous = model.previous(&#x27;width&#x27;) || 0,
+			delta = resultingWidth - previous;
+
+		if (delta &amp;&amp; !silent) {
+			// only trigger events when there is an actual delta
+			// and the silent option is set to false (or unset)
+
+			var data = {
+				axis: &#x27;x&#x27;,
+				delta: delta,
+				action: delta &gt; 0 ? &#x27;expansion&#x27; : &#x27;contraction&#x27;,
+			};
+
+			this.trigger(&#x27;resize&#x27;, this, data)
+				.trigger(&#x27;resize-width&#x27;, this, data);
 		}
 
-		if (ui.size.height !== height) {
-			// silent to false
-			this.resizeHeight(ui.size.height - height, false);
-		}
-
-		if (ui.position.left !== left) {
-
-			//console.log()
-
-			// silent to false
-			this.moveX(ui.position.left - left, false);
-		}
-
-		if (ui.position.top !== top) {
-			// silent to false
-			this.moveY(ui.position.top - top, false);
-		}
+		// return remainder of operation
+		return attemptedWidth - resultingWidth;
 	};
+
+	exports.resizeHeight = function resizeHeight(attemptedDelta) {
+		var model = this.model,
+			// calculate the attempted height
+			attemptedHeight = model.get(&#x27;height&#x27;) + attemptedDelta,
+			resultingHeight = helpers.fitValueWithin(attemptedHeight, model.get(&#x27;minHeight&#x27;), model.get(&#x27;maxHeight&#x27;));
+
+		// set
+		model.set(&#x27;height&#x27;, resultingHeight);
+
+		var previous = model.previous(&#x27;height&#x27;) || 0,
+			delta = resultingHeight - previous;
+
+		if (delta) {
+			// only trigger events when there is an actual delta.
+
+			var data = {
+				axis: &#x27;y&#x27;,
+				delta: delta,
+				action: delta &gt; 0 ? &#x27;expansion&#x27; : &#x27;contraction&#x27;
+			};
+
+			this.trigger(&#x27;resize&#x27;, this, data)
+				.trigger(&#x27;resize-height&#x27;, this, data);
+		}
+
+		// return remainder of operation
+		return attemptedHeight - resultingHeight;
+	};
+
+
+	// extend exports
+	_.assign(exports, require(&#x27;./contract&#x27;));
+	_.assign(exports, require(&#x27;./expand&#x27;));
 });
 
     </pre>

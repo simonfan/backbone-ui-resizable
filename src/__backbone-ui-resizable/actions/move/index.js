@@ -1,7 +1,7 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var helpers = require('./helpers');
+	var helpers = require('../../helpers');
 
 	exports.moveX = function moveX(attemptedDelta) {
 
@@ -77,4 +77,7 @@ define(function (require, exports, module) {
 	exports.moveToBottom = function moveToBottom(attemptedDelta) {
 		return this.moveY(attemptedDelta);
 	};
+
+
+	// extend exports
 });

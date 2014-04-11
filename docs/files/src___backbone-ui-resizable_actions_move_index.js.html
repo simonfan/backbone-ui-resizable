@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__backbone-ui-resizable/handle-resize.js - backbone-ui-resizable</title>
+    <title>src/__backbone-ui-resizable/actions/move/index.js - backbone-ui-resizable</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -84,61 +84,92 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__backbone-ui-resizable/handle-resize.js</h1>
+                        <h1 class="file-heading">File: src/__backbone-ui-resizable/actions/move/index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-/**
- * AMD module.
- *
- * @module backbone-ui-resizable
- * @submodule handle-resize
- */
-
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	/**
-	 * Handles resizes.
-	 *
-	 * @method handleResize
-	 * @private
-	 * @param e {event Object}
-	 * @param ui {jquery-ui ui Object}
-	 */
-	module.exports = function handleResize(e, ui) {
+	var helpers = require(&#x27;../../helpers&#x27;);
 
-		// do resizing
+	exports.moveX = function moveX(attemptedDelta) {
+
 		var model = this.model,
-			width = model.get(&#x27;width&#x27;),
-			height = model.get(&#x27;height&#x27;),
-			left = model.get(&#x27;left&#x27;),
-			top = model.get(&#x27;top&#x27;);
+			leftBefore = model.get(&#x27;left&#x27;),
+			// convert the attemptedDelta into attemptedLeft
+			attemptedLeft = leftBefore + attemptedDelta;
 
-		// check for maximums and minimuns
-		if (ui.size.width !== width) {
-			// silent to false.
-			this.resizeWidth(ui.size.width - width, false);
-		}
+			// get the allowed left
+		var left = helpers.fitValueWithin(attemptedLeft, model.get(&#x27;minX&#x27;), model.get(&#x27;maxX&#x27;) - model.get(&#x27;width&#x27;));
 
-		if (ui.size.height !== height) {
-			// silent to false
-			this.resizeHeight(ui.size.height - height, false);
-		}
+		model.set(&#x27;left&#x27;, left);
 
-		if (ui.position.left !== left) {
-
-			//console.log()
-
-			// silent to false
-			this.moveX(ui.position.left - left, false);
-		}
-
-		if (ui.position.top !== top) {
-			// silent to false
-			this.moveY(ui.position.top - top, false);
-		}
+		// return remainder
+		return attemptedLeft - left;
 	};
+
+	exports.moveY = function moveY(attemptedDelta) {
+		var model = this.model,
+			topBefore = model.get(&#x27;top&#x27;),
+			// convert the attemptedDelta into attemptedLeft
+			attemptedTop = topBefore + attemptedDelta;
+
+			// get the allowed top
+		var top = helpers.fitValueWithin(attemptedTop, model.get(&#x27;minY&#x27;), model.get(&#x27;maxY&#x27;) - model.get(&#x27;height&#x27;));
+
+		model.set(&#x27;top&#x27;, top);
+
+		// return remainder
+		return attemptedTop - top;
+	};
+
+
+
+
+	/**
+	 * Moves the whole view to the left.
+	 *   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+	 *   --------
+	 *   |      |
+	 *   |      |
+	 *   |      |
+	 *   --------
+	 *
+	 * @method moveToLeft
+	 * @param attemptedDelta {+Number}
+	 */
+	exports.moveToLeft = function moveToLeft(attemptedDelta) {
+		return this.moveX(-1 * attemptedDelta);
+	};
+
+
+	/**
+	 * Moves the whole view to the right.
+	 *   &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+	 *   --------
+	 *   |      |
+	 *   |      |
+	 *   |      |
+	 *   --------
+	 *
+	 * @method moveToRight
+	 * @param attemptedDelta {+Number}
+	 */
+	exports.moveToRight = function moveToRight(attemptedDelta) {
+		return this.moveX(attemptedDelta);
+	};
+
+	exports.moveToTop = function moveToTop(attemptedDelta) {
+		return this.moveY(-1 * attemptedDelta);
+	};
+
+	exports.moveToBottom = function moveToBottom(attemptedDelta) {
+		return this.moveY(attemptedDelta);
+	};
+
+
+	// extend exports
 });
 
     </pre>

@@ -10,41 +10,7 @@ define(function (require, exports, module) {
 
 	var _ = require('lodash');
 
-	var helpers = require('./helpers');
-
-	/**
-	 * Handles resizes.
-	 *
-	 * @method resize
-	 * @private
-	 * @param e {event Object}
-	 * @param ui {jquery-ui ui Object}
-	 */
-	exports.resize = function resize(data) {
-
-		var remainders = {},
-			model = this.model;
-
-		// check for maximums and minimuns
-		if (_.isNumber(data.width)) {
-			remainders.width = this.resizeWidth(data.width - model.get('width'));
-		}
-
-		if (_.isNumber(data.height)) {
-			remainders.height = this.resizeHeight(data.height - model.get('height'));
-		}
-
-		if (_.isNumber(data.left)) {
-			remainders.left = this.moveX(data.left - model.get('left'));
-		}
-
-		if (_.isNumber(data.top)) {
-			remainders.top = this.moveY(data.top - model.get('top'));
-		}
-
-		return remainders;
-	};
-
+	var helpers = require('../../helpers');
 
 	exports.resizeWidth = function resizeWidth(attemptedDelta, silent) {
 
@@ -53,6 +19,9 @@ define(function (require, exports, module) {
 			attemptedWidth = model.get('width') + attemptedDelta,
 
 			resultingWidth = helpers.fitValueWithin(attemptedWidth, model.get('minWidth'), model.get('maxWidth'));
+
+		// set
+		model.set('width', resultingWidth);
 
 		var previous = model.previous('width') || 0,
 			delta = resultingWidth - previous;
@@ -103,4 +72,9 @@ define(function (require, exports, module) {
 		// return remainder of operation
 		return attemptedHeight - resultingHeight;
 	};
+
+
+	// extend exports
+	_.assign(exports, require('./contract'));
+	_.assign(exports, require('./expand'));
 });

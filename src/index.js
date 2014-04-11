@@ -18,6 +18,9 @@ define(function (require, exports, module) {
 		modelDock = require('model-dock'),
 		_ = require('lodash');
 
+	// internal
+	var initializeResizableModel = require('./__backbone-ui-resizable/initialize-model');
+
 	/////////////
 	// private //
 	var resizableOptionsProperties = [
@@ -75,28 +78,20 @@ define(function (require, exports, module) {
 				'rebuildResizableEl');
 
 			// pick the resizableOptions from the main options object.
-			var resizableOptions = _.defaults(
+			this.resizableOptions = _.defaults(
 				// the instance resizableOptions
 				_.pick(options, resizableOptionsProperties),
 				// the default resizableOptions
 				this.resizableOptions
 			);
-
-			// set the options onto the model
-			this.model.set(resizableOptions);
-
 			// listen to events on the $el
 			this.$el
-				.resizable(this.model.toJSON())
+				.resizable(this.resizableOptions)
 				.on('resize', this.handleElResize)
 				.on('resizestart', this.handleElResizeStart)
 				.on('resizestop', this.handleElResizeStop);
 
-			// listen to change:[attribute] events on model
-			// in order to rebuild the resizable object when resizableOptions change
-			_.each(this.rebuildOnChange, function (attribute) {
-				this.listenTo(this.model, 'change:' + attribute, this.rebuildResizableEl)
-			}, this);
+			initializeResizableModel.apply(this, arguments);
 		},
 
 		/**
@@ -111,14 +106,6 @@ define(function (require, exports, module) {
 				.resizable('destroy')
 				.resizable(this.model.attributes);
 		},
-
-		/**
-		 * Does the object resizing.
-		 *
-		 * @method resize
-		 * @param data {Object}
-		 */
-		resize: require('./__backbone-ui-resizable/resize'),
 
 		/**
 		 * $el resize event handlers
@@ -176,4 +163,9 @@ define(function (require, exports, module) {
 			maxHeight: '->css:max-height',
 		},
 	});
+
+	// extend
+	resizable
+		.proto(require('./__backbone-ui-resizable/actions/move/index'))
+		.proto(require('./__backbone-ui-resizable/actions/resize/index'));
 });
