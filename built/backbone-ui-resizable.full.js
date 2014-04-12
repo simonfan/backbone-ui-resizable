@@ -1,8 +1,3 @@
-//     BackboneUiDraggable
-//     (c) simonfan
-//     BackboneUiDraggable is licensed under the MIT terms.
-
-define("__backbone-ui-draggable/move",["require","exports","module"],function(t,e){function i(t,e,i){return isNaN(e)||(t=t>e?t:e),isNaN(i)||(t=i>t?t:i),t}function o(t){return parseInt(t,10)}e.moveX=function(t,e){if(t){if(-1===this.axis.indexOf("x"))return t;var s=this.model,n=parseInt(s.get("left"),10),r=n+t,a=o(s.get("minX")),u=o(s.get("maxX"))-o(this.$el.width()),l=i(r,a,u);s.set("left",o(l)),s.set(this.valueAttribute,this.toValue(s));var h=s.get("left")-n;return e||this.trigger("move",this,{axis:"x",delta:h}).trigger("move-x",this,h),t-h}return 0},e.moveY=function(t,e){if(t){if(-1===this.axis.indexOf("y"))return t;var s=this.model,n=parseInt(s.get("top"),10),r=n+t,a=o(s.get("minY")),u=o(s.get("maxY"))-o(this.$el.height()),l=i(r,a,u);s.set("top",o(l)),s.set(this.valueAttribute,this.toValue(s));var h=s.get("top")-n;return e||this.trigger("move",this,{axis:"y",delta:h}).trigger("move-y",this,h),t-h}return 0},e.moveToLeft=function(t,e){return this.moveX(-1*t,e)},e.moveToRight=function(t,e){return this.moveX(t,e)},e.moveToTop=function(t,e){return this.moveY(-1*t,e)},e.moveToBottom=function(t,e){return this.moveY(t,e)}}),define("backbone-ui-draggable",["require","exports","module","lowercase-backbone","model-dock","lodash","jquery","./__backbone-ui-draggable/move"],function(t,e,i){function o(t){return l.test(t)?t+"px":t}function s(t){return parseInt(t)}var n=t("lowercase-backbone"),r=t("model-dock"),a=t("lodash"),u=t("jquery"),l=/^[0-9\-]+$/,h=i.exports=r.extend({initialize:function(t){n.view.prototype.initialize.call(this,t),this.initializeModelDock(t),this.initializeUIDraggable(t)},initializeUIDraggable:function(t){a.bindAll(this,"mousedown","mousemove","mouseup"),this.$window=u(window),this.$canvas=t.canvas||this.canvas||this.$el.parent();var e=this.$el.position(),i=u.extend({status:"stopped",top:s(e.top),left:s(e.left)},t),o=this.model;o.set(i);var n=this.valueAttribute;if(this.listenTo(o,"change:"+n,function(t){var e=this.toPosition(t.get(n));t.set({top:s(e.top),left:s(e.left)})},this),o.get(n)){var e=this.toPosition(o.get(n));o.set({top:s(e.top),left:s(e.left)})}else o.set(n,this.toValue(o))},events:{mousedown:"mousedown"},mousedown:function(t){if(this.$el.is(t.target)&&1===t.which){this.model.set("status","dragging"),this.lastPosition={x:t.pageX,y:t.pageY};var e=this.$el.offset();return this.handlePosition={x:t.pageX-e.left,y:t.pageY-e.top},this.$window.on("mousemove",this.mousemove).on("mouseup",this.mouseup),this.trigger("movestart",this),!1}},mousemove:function(t){var e=this.lastPosition,i=t.pageX,o=t.pageY,s=i-e.x,n=o-e.y,r=this.$el.offset(),a=this.handlePosition.x+r.left,u=this.handlePosition.y+r.top;return(s>0&&i>a||0>s&&a>i)&&this.moveX(s),(n>0&&o>u||0>n&&u>o)&&this.moveY(n),e.x=i,e.y=o,!1},mouseup:function(){this.$window.off("mousemove",this.mousemove),delete this.lastPosition,this.model.set("status","stopped"),this.trigger("movestop",this)},axis:"xy",valueAttribute:"value",setValue:function(t){return this.model.set(this.valueAttribute,t),this},toValue:function(t){return"At "+t.get("top")+" x "+t.get("left")},toPosition:function(t){var e=t.split("x");return{top:e[0].replace(/[^0-9\-]/g,""),left:e[1].replace(/[^0-9\-]/g,"")}},map:{left:"->css:left",top:"->css:top"},stringifiers:{left:o,top:o}});h.proto(t("./__backbone-ui-draggable/move"))});
 define('__backbone-ui-resizable/build-handles',['require','exports','module','jquery','lodash'],function (require, exports, module) {
 	
 
@@ -66,9 +61,9 @@ define('__backbone-ui-resizable/build-handles',['require','exports','module','jq
 				direction: direction,
 				resizable: this,
 				thickness: _.isNumber(options.thickness) ? options.thickness : options.thickness[direction],
-				hook: _.isNumber(options.hook) ? options.hook : options.hook[direction],
+				ratio: _.isNumber(options.ratio) ? options.ratio : options.ratio[direction],
 
-				canvas: resizable.$canvas,
+				canvas: this.$canvas,
 			}));
 
 		}, this);
@@ -87,89 +82,136 @@ define('__backbone-ui-resizable/build-handles',['require','exports','module','jq
 	};
 });
 
-define('__backbone-ui-resizable/handle/update',['require','exports','module'],function (require, exports, module) {
+define('__backbone-ui-resizable/handle/helpers',['require','exports','module'],function (require, exports, module) {
+	
+
+	exports.min = function min(v1, v2) {
+		if (isNaN(v1)) {
+			return v2;
+		} else if (isNaN(v2)) {
+			return v1;
+		} else {
+
+			return v1 < v2 ? v1 : v2;
+		}
+	};
+
+	exports.max = function max(v1, v2) {
+		if (isNaN(v1)) {
+			return v2;
+		} else if (isNaN(v2)) {
+			return v1;
+		} else {
+			return v1 > v2 ? v1 : v2;
+		}
+
+	};
+
+
+	exports.numberify = function numberify(v) {
+		var res = parseInt(v, 10);
+
+		if (isNaN(res)) {
+			throw new Error(v + ' not number');
+		} else {
+			return res;
+		}
+	};
+});
+
+define('__backbone-ui-resizable/handle/update',['require','exports','module','./helpers'],function (require, exports, module) {
+	
+
+	var helpers = require('./helpers');
 
 	function positionN(offset) {
-		this.model.set('top', parseInt(this.resizable.model.get('top'), 10) + parseInt(offset, 10));
-	};
+		this.model.set('top',
+			helpers.numberify(this.resizable.model.get('top')) +
+			helpers.numberify(offset));
+	}
 
 	function positionS(offset) {
-		this.model.set('top', parseInt(this.resizable.model.get('top'), 10) + this.resizable.model.get('height') + parseInt(offset, 10));
-	};
+		this.model.set('top',
+			helpers.numberify(this.resizable.model.get('top')) +
+			helpers.numberify(this.resizable.model.get('height')) +
+			helpers.numberify(offset));
+	}
 
 	function positionW(offset) {
-		this.model.set('left', parseInt(this.resizable.model.get('left'), 10) + parseInt(offset, 10));
-	};
+		this.model.set('left',
+			helpers.numberify(this.resizable.model.get('left')) +
+			helpers.numberify(offset));
+	}
 
 	function positionE(offset) {
-		this.model.set('left', parseInt(this.resizable.model.get('left'), 10) + this.resizable.model.get('width') + parseInt(offset, 10));
-	};
+		this.model.set('left',
+			helpers.numberify(this.resizable.model.get('left')) +
+			helpers.numberify(this.resizable.model.get('width')) +
+			helpers.numberify(offset));
+	}
 
 	function sizeX() {
-		this.model.set('width', this.resizable.model.get('width'));
-	};
+		this.model.set('width', helpers.numberify(this.resizable.model.get('width')));
+	}
 
 	function sizeY() {
-		this.model.set('height', this.resizable.model.get('height'));
-	};
+		this.model.set('height', helpers.numberify(this.resizable.model.get('height')));
+	}
 
 
 
 
 	exports.n = function updateN() {
-
-		console.log('resizable')
-		console.log(this.resizable.model.attributes);
-
-		console.log('model');
-		console.log(this.model.attributes);
-
-		positionN.call(this, -this.hook);
+		positionN.call(this, -1 * this.outer);
 		positionW.call(this, 0);
 		sizeX.call(this);
 	};
 
 	exports.s = function updateS() {
-		positionS.call(this, - this.thickness + this.hook);
+		positionS.call(this, -1 * this.inner);
 		positionW.call(this, 0);
 		sizeX.call(this);
 	};
 
 	exports.w = function updateW() {
-		positionW.call(this, -this.hook);
+		positionW.call(this, -1 * this.outer);
 		positionN.call(this, 0);
 		sizeY.call(this);
 	};
 
 	exports.e = function updateE() {
-		positionE.call(this, - this.thickness + this.hook);
+		positionE.call(this, -1 * this.inner);
 		positionN.call(this, 0);
 		sizeY.call(this);
 	};
 
 	exports.nw = function updateNW() {
-		positionN.call(this, -this.hook);
-		positionW.call(this, -this.hook);
+		positionN.call(this, -1 * this.outer);
+		positionW.call(this, -1 * this.outer);
 	};
 
 	exports.ne = function updateNE() {
-		positionN.call(this, -this.hook);
-		positionE.call(this, - this.thickness + this.hook);
+		positionN.call(this, -1 * this.outer);
+		positionE.call(this, -1 * this.inner);
 	};
 
 	exports.sw = function updateSW() {
-		positionS.call(this, - this.thickness + this.hook);
-		positionW.call(this, -this.hook);
+		positionS.call(this, -1 * this.inner);
+		positionW.call(this, -1 * this.outer);
 	};
 
 	exports.se = function updateSE() {
-		positionS.call(this, - this.thickness + this.hook);
-		positionE.call(this, - this.thickness + this.hook);
+		positionS.call(this, -1 * this.inner);
+		positionE.call(this, -1 * this.inner);
 	};
 
 });
 
-define('__backbone-ui-resizable/handle/track',['require','exports','module'],function (require, exports, module) {
+define('__backbone-ui-resizable/handle/track',['require','exports','module','./helpers'],function (require, exports, module) {
+
+	
+
+	var h = require('./helpers');
 
 
 	exports.all = function trackAll() {
@@ -184,8 +226,10 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module'],fun
 
 		this.resizable.listenTo(this, 'move-y', function (handle, delta) {
 
-			var height = resizableModel.get('height'),
-				top = resizableModel.get('top');
+			delta = h.numberify(delta);
+
+			var height = h.numberify(resizableModel.get('height')),
+				top = h.numberify(resizableModel.get('top'));
 
 			resizableModel.set({
 				height: height - delta,
@@ -199,7 +243,10 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module'],fun
 		var resizableModel = this.resizable.model;
 
 		this.resizable.listenTo(this, 'move-y', function (handle, delta) {
-			resizableModel.set('height', resizableModel.get('height') + delta)
+
+			var height = h.numberify(resizableModel.get('height')) + h.numberify(delta);
+
+			resizableModel.set('height', height);
 		});
 	};
 
@@ -207,8 +254,11 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module'],fun
 		var resizableModel = this.resizable.model;
 
 		this.resizable.listenTo(this, 'move-x', function (handle, delta) {
-			var width = resizableModel.get('width'),
-				left = resizableModel.get('left');
+
+			delta = h.numberify(delta);
+
+			var width = h.numberify(resizableModel.get('width')),
+				left = h.numberify(resizableModel.get('left'));
 
 			resizableModel.set({
 				width: width - delta,
@@ -221,37 +271,15 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module'],fun
 		var resizableModel = this.resizable.model;
 
 		this.resizable.listenTo(this, 'move-x', function (handle, delta) {
-			resizableModel.set('width', resizableModel.get('width') + delta);
+			var width = h.numberify(resizableModel.get('width')) + h.numberify(delta);
+
+			resizableModel.set('width', width);
 		});
 	};
 });
 
-define('__backbone-ui-resizable/handle/helpers',['require','exports','module'],function (require, exports, module) {
-
-	exports.min = function min(v1, v2) {
-		if (isNaN(v1)) {
-			return v2;
-		} else if (isNaN(v2)) {
-			return v1
-		} else {
-
-			return v1 < v2 ? v1 : v2;
-		}
-	};
-
-	exports.max = function max(v1, v2) {
-		if (isNaN(v1)) {
-			return v2;
-		} else if (isNaN(v2)) {
-			return v1
-		} else {
-			return v1 > v2 ? v1 : v2;
-		}
-
-	};
-});
-
 define('__backbone-ui-resizable/handle/min-max',['require','exports','module','./helpers'],function (require, exports, module) {
+	
 
 	var helpers = require('./helpers');
 
@@ -282,12 +310,12 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// maximum value among the
 			// 1- position at which the resizable object reaches its maximum height
 			// 2- position at which the resizable object reaches its minimum Y position
-			minY: helpers.max(currentY - maxTopDelta, resizableMinY),
+			minY: helpers.max(currentY - maxTopDelta, resizableMinY) - this.outer,
 
 			// the maximum Y for NORTH handles is
 			// simply the position at which the resizable object
 			// reaches its minimum height
-			maxY: currentY + maxBottomDelta
+			maxY: currentY + this.thickness + maxBottomDelta
 		});
 	};
 
@@ -321,7 +349,7 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// minimum value among the
 			// 1- position at which the resizable object reaches its maximum height
 			// 2- position at which the resizable object reaches its maximum Y position
-			maxY: helpers.min(currentY + maxBottomDelta, resizableMaxY)
+			maxY: helpers.min(currentY + maxBottomDelta, resizableMaxY) + this.outer
 		});
 	};
 
@@ -356,12 +384,13 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// maximum value among the
 			// 1- position at which the resizable object reaches its maximum width
 			// 2- position at which the resizable object reaches its minimum X boundary
-			minX: helpers.max(currentX - maxLeftDelta, resizableMinX),
+			// LESS the handle portion that is out.
+			minX: helpers.max(currentX - maxLeftDelta, resizableMinX) - this.outer,
 
 			// the maximum X for WEST handles is
 			// simply the position at which the resizable object
 			// reaches its minimum width
-			maxX: currentX + maxRightDelta
+			maxX: currentX + this.thickness + maxRightDelta
 		});
 	};
 
@@ -398,15 +427,19 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// minimum value among the
 			// 1- position at which the resizable object reaches its maximum width
 			// 2- position at which the resizable object reaches its maximum X boundary
-			maxX: helpers.min(currentX + maxRightDelta, resizableMaxX)
+			maxX: helpers.min(currentX + maxRightDelta, resizableMaxX) + this.outer
 		});
 	};
 
 });
 
-define('__backbone-ui-resizable/handle/index',['require','exports','module','backbone-ui-draggable','./update','./track','./min-max'],function (require, exports, module) {
+define('__backbone-ui-resizable/handle/index',['require','exports','module','jquery-ui','backbone-ui-draggable','lodash','./update','./track','./min-max'],function (require, exports, module) {
+	
 
-	var draggable = require('backbone-ui-draggable');
+	require('jquery-ui');
+
+	var draggable = require('backbone-ui-draggable'),
+		_ = require('lodash');
 
 	var _update = require('./update'),
 		_track = require('./track'),
@@ -464,8 +497,10 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','bac
 			// setStyles
 			this.setStyles();
 
-			// calculate hook point
-			this.hook = this.thickness * options.hook;
+			// calculate ratio point
+			this.ratio = options.ratio;
+			this.outer = options.thickness * this.ratio;
+			this.inner = options.thickness - this.outer;
 
 			// [1] place the handle
 			// set throttle for update
@@ -483,30 +518,31 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','bac
 
 		setStyles: function setStyles() {
 
-			var axis = this.axis;
+			var axis = this.axis,
+				styles;
 
 			if (axis.length > 1) {
 				// xy / yx
-				var styles = {
+				styles = {
 					zIndex: 100,
 					width: this.thickness,
 					height: this.thickness
 				};
 			} else if (axis === 'x') {
 				// horizontal sliding directions
-				var styles = {
+				styles = {
 					zIndex: 99,
 					width: this.thickness,
 					height: this.resizable.model.get('width'),
-				}
+				};
 
 			} else if (axis === 'y') {
 				// vertical sliding direction
-				var styles = {
+				styles = {
 					zIndex: 99,
 					width: this.resizable.model.get('height'),
 					height: this.thickness
-				}
+				};
 			}
 
 			this.$el.css(styles);
@@ -571,14 +607,12 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','bac
  * @module backbone-ui-resizable
  */
 
-define('backbone-ui-resizable',['require','exports','module','jquery-ui-resizable','lowercase-backbone','backbone-ui-draggable','lodash','./__backbone-ui-resizable/build-handles','./__backbone-ui-resizable/handle/index'],function (require, exports, module) {
+define('backbone-ui-resizable',['require','exports','module','lowercase-backbone','backbone-ui-draggable','jquery','lodash','./__backbone-ui-resizable/build-handles','./__backbone-ui-resizable/handle/index'],function (require, exports, module) {
 	
-
-	// require jquery ui resizable
-	require('jquery-ui-resizable');
 
 	var backbone = require('lowercase-backbone'),
 		draggable = require('backbone-ui-draggable'),
+		$ = require('jquery'),
 		_ = require('lodash');
 
 
@@ -657,7 +691,7 @@ define('backbone-ui-resizable',['require','exports','module','jquery-ui-resizabl
 
 
 			var handleOptions = _.defaults(
-				_.pick(options, ['directions', 'clss', 'hook', 'thickness']),
+				_.pick(options, ['directions', 'clss', 'ratio', 'thickness']),
 				this.handleOptions
 			);
 
@@ -669,7 +703,7 @@ define('backbone-ui-resizable',['require','exports','module','jquery-ui-resizabl
 		handleOptions: {
 			directions: 'n,s,w,e,nw,ne,sw,se',
 			clss: 'handle',
-			hook: 0.2,
+			ratio: 0.2,
 			thickness: 30,
 		},
 

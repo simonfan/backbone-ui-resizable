@@ -31,7 +31,7 @@
     "classitems": [
         {
             "file": "src/index.js",
-            "line": 27,
+            "line": 25,
             "description": "Just adds 'px' string to numerical values.",
             "itemtype": "method",
             "name": "stringifyPositionalValue",
@@ -42,7 +42,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 45,
+            "line": 43,
             "description": "Initialization script.",
             "itemtype": "method",
             "name": "initialize",
@@ -51,7 +51,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 61,
+            "line": 59,
             "description": "Holds initialization logic exclusive to resizable-dock.",
             "itemtype": "method",
             "name": "initializeUIResizable",

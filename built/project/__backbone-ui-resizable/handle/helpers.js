@@ -1,1 +1,1 @@
-define(["require","exports","module"],function(e,t,n){t.min=function(t,n){return isNaN(t)?n:isNaN(n)?t:t<n?t:n},t.max=function(t,n){return isNaN(t)?n:isNaN(n)?t:t>n?t:n}});
+define(["require","exports","module"],function(e,t,n){t.min=function(t,n){return isNaN(t)?n:isNaN(n)?t:t<n?t:n},t.max=function(t,n){return isNaN(t)?n:isNaN(n)?t:t>n?t:n},t.numberify=function(t){var n=parseInt(t,10);if(isNaN(n))throw new Error(t+" not number");return n}});

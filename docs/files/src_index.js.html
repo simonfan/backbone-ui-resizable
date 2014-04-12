@@ -99,11 +99,9 @@
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	// require jquery ui resizable
-	require(&#x27;jquery-ui-resizable&#x27;);
-
 	var backbone = require(&#x27;lowercase-backbone&#x27;),
 		draggable = require(&#x27;backbone-ui-draggable&#x27;),
+		$ = require(&#x27;jquery&#x27;),
 		_ = require(&#x27;lodash&#x27;);
 
 
@@ -182,7 +180,7 @@ define(function (require, exports, module) {
 
 
 			var handleOptions = _.defaults(
-				_.pick(options, [&#x27;directions&#x27;, &#x27;clss&#x27;, &#x27;hook&#x27;, &#x27;thickness&#x27;]),
+				_.pick(options, [&#x27;directions&#x27;, &#x27;clss&#x27;, &#x27;ratio&#x27;, &#x27;thickness&#x27;]),
 				this.handleOptions
 			);
 
@@ -194,7 +192,7 @@ define(function (require, exports, module) {
 		handleOptions: {
 			directions: &#x27;n,s,w,e,nw,ne,sw,se&#x27;,
 			clss: &#x27;handle&#x27;,
-			hook: 0.2,
+			ratio: 0.2,
 			thickness: 30,
 		},
 

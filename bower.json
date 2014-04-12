@@ -4,11 +4,10 @@
   "version": "0.4.4",
   "description": "Some module...",
   "dependencies": {
-    "model-dock": "0.3.5",
     "jquery-ui": "~1.10.4",
     "lodash": "~2.4.1",
-    "subject": "~0.4.1",
-    "backbone-ui-draggable": "0.2.1"
+    "backbone-ui-draggable": "~0.2.1",
+    "lowercase-backbone": "*"
   },
   "devDependencies": {
     "requirejs": "*",
@@ -18,10 +17,6 @@
     "qunit": "*"
   },
   "resolutions": {
-    "subject": "~0.4.1",
-    "model-dock": "~0.3.6",
-    "jquery": "~2.1.0",
-    "lowercase-backbone": "~0.2.5",
-    "backbone-ui-draggable": "0.2.1"
+    "jquery": "~2.1.0"
   }
 }

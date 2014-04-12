@@ -1,5 +1,7 @@
 define(function (require, exports, module) {
 
+	'use strict';
+
 	var h = require('./helpers');
 
 

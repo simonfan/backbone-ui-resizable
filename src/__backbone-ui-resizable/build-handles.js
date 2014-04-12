@@ -63,7 +63,7 @@ define(function (require, exports, module) {
 				thickness: _.isNumber(options.thickness) ? options.thickness : options.thickness[direction],
 				ratio: _.isNumber(options.ratio) ? options.ratio : options.ratio[direction],
 
-				canvas: resizable.$canvas,
+				canvas: this.$canvas,
 			}));
 
 		}, this);

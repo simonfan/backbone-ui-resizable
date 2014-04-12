@@ -1,6 +1,10 @@
 define(function (require, exports, module) {
+	'use strict';
 
-	var draggable = require('backbone-ui-draggable');
+	require('jquery-ui');
+
+	var draggable = require('backbone-ui-draggable'),
+		_ = require('lodash');
 
 	var _update = require('./update'),
 		_track = require('./track'),
@@ -79,30 +83,31 @@ define(function (require, exports, module) {
 
 		setStyles: function setStyles() {
 
-			var axis = this.axis;
+			var axis = this.axis,
+				styles;
 
 			if (axis.length > 1) {
 				// xy / yx
-				var styles = {
+				styles = {
 					zIndex: 100,
 					width: this.thickness,
 					height: this.thickness
 				};
 			} else if (axis === 'x') {
 				// horizontal sliding directions
-				var styles = {
+				styles = {
 					zIndex: 99,
 					width: this.thickness,
 					height: this.resizable.model.get('width'),
-				}
+				};
 
 			} else if (axis === 'y') {
 				// vertical sliding direction
-				var styles = {
+				styles = {
 					zIndex: 99,
 					width: this.resizable.model.get('height'),
 					height: this.thickness
-				}
+				};
 			}
 
 			this.$el.css(styles);

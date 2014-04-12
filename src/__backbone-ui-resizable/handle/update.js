@@ -1,4 +1,5 @@
 define(function (require, exports, module) {
+	'use strict';
 
 	var helpers = require('./helpers');
 
@@ -6,35 +7,35 @@ define(function (require, exports, module) {
 		this.model.set('top',
 			helpers.numberify(this.resizable.model.get('top')) +
 			helpers.numberify(offset));
-	};
+	}
 
 	function positionS(offset) {
 		this.model.set('top',
 			helpers.numberify(this.resizable.model.get('top')) +
 			helpers.numberify(this.resizable.model.get('height')) +
 			helpers.numberify(offset));
-	};
+	}
 
 	function positionW(offset) {
 		this.model.set('left',
 			helpers.numberify(this.resizable.model.get('left')) +
 			helpers.numberify(offset));
-	};
+	}
 
 	function positionE(offset) {
 		this.model.set('left',
 			helpers.numberify(this.resizable.model.get('left')) +
 			helpers.numberify(this.resizable.model.get('width')) +
 			helpers.numberify(offset));
-	};
+	}
 
 	function sizeX() {
 		this.model.set('width', helpers.numberify(this.resizable.model.get('width')));
-	};
+	}
 
 	function sizeY() {
 		this.model.set('height', helpers.numberify(this.resizable.model.get('height')));
-	};
+	}
 
 
 
@@ -69,7 +70,7 @@ define(function (require, exports, module) {
 	};
 
 	exports.ne = function updateNE() {
-		positionN.call(this, -1 *this.outer);
+		positionN.call(this, -1 * this.outer);
 		positionE.call(this, -1 * this.inner);
 	};
 

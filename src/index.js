@@ -11,11 +11,9 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	// require jquery ui resizable
-	require('jquery-ui-resizable');
-
 	var backbone = require('lowercase-backbone'),
 		draggable = require('backbone-ui-draggable'),
+		$ = require('jquery'),
 		_ = require('lodash');
 
 
