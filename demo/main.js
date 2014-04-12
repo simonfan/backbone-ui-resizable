@@ -4,6 +4,8 @@ define(['backbone-ui-resizable'], function (resizable) {
 
 
 	var squareBuilder = resizable.extend({
+	//	handles: 'w,e',
+
 		map: {
 			'height': ['->css:height', '[data-attribute="height"]'],
 			'width': ['->css:width', '[data-attribute="width"]'],
@@ -35,17 +37,23 @@ define(['backbone-ui-resizable'], function (resizable) {
 	window.square = squareBuilder({
 		el: $('#resizable'),
 		model: new Backbone.Model({
-			top: 40,
-			left: 50,
+		//	width: '50%',
 
-			width: '50%',
+			minHeight: 200,
 			height: 200,
+			maxHeight: 400,
 
+			minWidth: 200,
+			width: 400,
 			maxWidth: 700,
-			maxHeight: 300,
 
+			minX: 200,
+			left: 250,
 			maxX: 800,
-			maxY: 400
+
+			minY: 150,
+			top: 150,
+			maxY: 750
 		})
 	});
 });

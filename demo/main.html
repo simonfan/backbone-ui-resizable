@@ -25,11 +25,45 @@
 
 
 	<style type="text/css">
+
+		#canvas {
+			position: relative;
+
+			background-color: yellow;
+
+			height: 1000px;
+			width: 100%;
+		}
+
+
+		#boundaries {
+			position: absolute;
+			top: 145px;
+			height: 600px;
+			left: 195px;
+			width: 600px;
+
+			border: 5px dashed black;
+		}
+
 		#resizable {
 			background-color: red;
 			position: absolute;
 			top: 0;
 			left: 0;
+		}
+
+		.handle {
+			position: absolute;
+			height: 20px;
+			width: 20px;
+
+			opacity: 0.3;
+
+
+			cursor: pointer;
+
+			background-color: black;
 		}
 	</style>
 
@@ -42,29 +76,36 @@
 
 	<a href="../index.html">Menu</a>
 
+	<div id="canvas">
+
+		<div id="boundaries"></div>
 
 
+		<div id="resizable">
 
-	<div id="resizable">
-		height: <input type="text" data-attribute="height"><br>
-		width: <input type="text" data-attribute="width"><br>
-		top: <input type="text" data-attribute="top"><br>
-		bottom: <input type="text" data-attribute="bottom"><br>
-		left: <input type="text" data-attribute="left"><br>
-		right: <input type="text" data-attribute="right"><br>
+			min-width: <input type="text" data-attribute="min-width"><br>
+			width: <input type="text" data-attribute="width"><br>
+			max-width: <input type="text" data-attribute="max-width"><br>
 
-		min-width: <input type="text" data-attribute="min-width"><br>
-		max-width: <input type="text" data-attribute="max-width"><br>
-		real-max-width: <input type="text" data-attribute="real-max-width"><br>
+			<br>
 
-		min-height: <input type="text" data-attribute="min-height"><br>
-		max-height: <input type="text" data-attribute="max-height"><br>
-		real-max-height: <input type="text" data-attribute="real-max-height"><br>
+			min-height: <input type="text" data-attribute="min-height"><br>
+			height: <input type="text" data-attribute="height"><br>
+			max-height: <input type="text" data-attribute="max-height"><br>
 
-		min-x: <input type="text" data-attribute="min-x"><br>
-		max-x: <input type="text" data-attribute="max-x"><br>
-		min-y: <input type="text" data-attribute="min-y"><br>
-		max-y: <input type="text" data-attribute="max-y"><br>
+			<br>
+
+			min-x: <input type="text" data-attribute="min-x"><br>
+			left: <input type="text" data-attribute="left"><br>
+			max-x: <input type="text" data-attribute="max-x"><br>
+
+			<br>
+
+			min-y: <input type="text" data-attribute="min-y"><br>
+			top: <input type="text" data-attribute="top"><br>
+			max-y: <input type="text" data-attribute="max-y"><br>
+		</div>
+
 	</div>
 
 

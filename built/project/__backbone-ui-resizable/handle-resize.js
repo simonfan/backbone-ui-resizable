@@ -1,1 +1,0 @@
-define(["require","exports","module"],function(e,t,n){n.exports=function(t,n){var r=this.model,i=r.get("width"),s=r.get("height"),o=r.get("left"),u=r.get("top");n.size.width!==i&&this.resizeWidth(n.size.width-i,!1),n.size.height!==s&&this.resizeHeight(n.size.height-s,!1),n.position.left!==o&&this.moveX(n.position.left-o,!1),n.position.top!==u&&this.moveY(n.position.top-u,!1)}});

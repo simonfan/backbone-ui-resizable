@@ -1,1 +1,0 @@
-define(["require","exports","module","lodash"],function(e,t,n){function i(e){return!isNaN(e)}var r=e("lodash");t.min=function(t){return r(t).filter(i).min().value()},t.max=function(t){return r(t).filter(i).max().value()},t.fitValueWithin=function(n,r,i){var s=n;return s=t.max([s,r]),s=t.min([s,i]),s}});

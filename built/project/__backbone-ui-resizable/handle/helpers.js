@@ -1,0 +1,1 @@
+define(["require","exports","module"],function(e,t,n){t.min=function(t,n){return isNaN(t)?n:isNaN(n)?t:t<n?t:n},t.max=function(t,n){return isNaN(t)?n:isNaN(n)?t:t>n?t:n}});

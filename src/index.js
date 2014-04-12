@@ -15,20 +15,14 @@ define(function (require, exports, module) {
 	require('jquery-ui-resizable');
 
 	var backbone = require('lowercase-backbone'),
-		modelDock = require('model-dock'),
+		draggable = require('backbone-ui-draggable'),
 		_ = require('lodash');
 
-	// internal
-	var initializeResizableModel = require('./__backbone-ui-resizable/initialize-model');
 
-	/////////////
-	// private //
-	var resizableOptionsProperties = [
-		'alsoResize', 'animate', 'animateDuration', 'animateEasing',
-		'aspectRatio', 'autoHide', 'cancel', 'containment', 'delay',
-		'disabled', 'distance', 'ghost', 'grid', 'handles', 'helper',
-		'maxHeight', 'maxWidth', 'minHeight', 'minWidth',
-	];
+	// internal
+	var buildHandles = require('./__backbone-ui-resizable/build-handles'),
+		handleBuilder = require('./__backbone-ui-resizable/handle/index');
+
 
 	/**
 	 * Just adds 'px' string to numerical values.
@@ -46,7 +40,7 @@ define(function (require, exports, module) {
 	/////////////
 
 
-	var resizable = module.exports = modelDock.extend({
+	var resizable = module.exports = draggable.extend({
 
 		/**
 		 * Initialization script.
@@ -55,11 +49,13 @@ define(function (require, exports, module) {
 		 */
 		initialize: function initialize(options) {
 
-			backbone.view.prototype.initialize.apply(this, arguments);
+			backbone.view.prototype.initialize.call(this, options);
 
-			this.initializeModelDock.apply(this, arguments);
+			this.initializeModelDock(options);
 
-			this.initializeUIResizable.apply(this, arguments);
+			this.initializeUIDraggable(options);
+
+			this.initializeUIResizable(options);
 		},
 
 		/**
@@ -71,71 +67,48 @@ define(function (require, exports, module) {
 		initializeUIResizable: function resizableDock(options) {
 
 			// bind event handling methods
-			_.bindAll(this,
+	/*		_.bindAll(this,
 				'handleElResize',
 				'handleElResizeStart',
 				'handleElResizeStop',
 				'rebuildResizableEl');
+		*/
 
-			// pick the resizableOptions from the main options object.
-			this.resizableOptions = _.defaults(
-				// the instance resizableOptions
-				_.pick(options, resizableOptionsProperties),
-				// the default resizableOptions
-				this.resizableOptions
+			// canvas
+			this.$canvas = options.canvas || this.canvas || $(window);
+
+			var data = _.extend({
+				minWidth: 2 * this.handleOptions.thickness,
+				minHeight: 2 * this.handleOptions.thickness,
+
+				width: this.$el.width(),
+				height: this.$el.height(),
+
+			}, this.$el.position(), options);
+
+			// set initial position
+			this.model.set(data);
+
+
+
+
+
+			var handleOptions = _.defaults(
+				_.pick(options, ['directions', 'clss', 'ratio', 'thickness']),
+				this.handleOptions
 			);
-			// listen to events on the $el
-			this.$el
-				.resizable(this.resizableOptions)
-				.on('resize', this.handleElResize)
-				.on('resizestart', this.handleElResizeStart)
-				.on('resizestop', this.handleElResizeStop);
 
-			initializeResizableModel.apply(this, arguments);
+			buildHandles.call(this, handleOptions);
 		},
 
-		/**
-		 * Destroys (if present) the previous resizable plugin
-		 * and reinvokes the resizable jquery method.
-		 *
-		 * @method rebuildResizableEl
-		 * @param options
-		 */
-		rebuildResizableEl: function rebuildResizableEl() {
-			this.$el
-				.resizable('destroy')
-				.resizable(this.model.attributes);
-		},
+		handleBuilder: handleBuilder,
 
-		/**
-		 * $el resize event handlers
-		 */
-		handleElResize: require('./__backbone-ui-resizable/handle-resize'),
-		handleElResizeStart: function (e, ui) {
-			this.trigger('resizestart', this);
+		handleOptions: {
+			directions: 'n,s,w,e,nw,ne,sw,se',
+			clss: 'handle',
+			ratio: 0.2,
+			thickness: 30,
 		},
-		handleElResizeStop: function (e, ui) {
-			this.trigger('resizestop', this);
-		},
-
-		/**
-		 * Default options to be passed to the $resizable builder
-		 *
-		 * @property resizableOptions
-		 * @type Object
-		 */
-		resizableOptions: {
-			handles: 'n,ne,e,se,s,sw,w,nw',
-		},
-
-		/**
-		 * When any of the attributes listed here is changed,
-		 * the resizable object will be rebuilt.
-		 *
-		 * @property rebuildOnChange
-		 * @type Array
-		 */
-		rebuildOnChange: ['handles', 'maxHeight', 'maxWidth', 'minHeight', 'minWidth'],
 
 		stringifiers: {
 			height: stringifyPositionalValue,
@@ -164,8 +137,4 @@ define(function (require, exports, module) {
 		},
 	});
 
-	// extend
-	resizable
-		.proto(require('./__backbone-ui-resizable/actions/move/index'))
-		.proto(require('./__backbone-ui-resizable/actions/resize/index'));
 });

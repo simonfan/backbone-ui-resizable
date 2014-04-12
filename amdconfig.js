@@ -15,13 +15,14 @@ require.config({
 		lodash: '../bower_components/lodash/dist/lodash.compat',
 		'lowercase-backbone': '../bower_components/lowercase-backbone/built/lowercase-backbone',
 		'dockable-view': '../bower_components/dockable-view/built/dockable-view',
-		jquery: '../bower_components/jquery/jquery',
+		jquery: '../bower_components/jquery/dist/jquery',
 		qunit: '../bower_components/qunit/qunit/qunit',
 		q: '../bower_components/q/q',
 		'model-dock': '../bower_components/model-dock/built/model-dock',
 		underscore: '../bower_components/underscore/underscore',
 		'requirejs-text': '../bower_components/requirejs-text/text',
-		subject: '../bower_components/subject/built/subject'
+		subject: '../bower_components/subject/built/subject',
+		'backbone-ui-draggable': '../bower_components/backbone-ui-draggable/built/backbone-ui-draggable'
 	},
 	shim: {
 		backbone: {

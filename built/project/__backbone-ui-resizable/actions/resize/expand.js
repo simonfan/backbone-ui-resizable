@@ -1,1 +1,0 @@
-define(["require","exports","module"],function(e,t,n){t.expandToLeft=function(t,n){var r=this.resizeWidth(t,n),i=t-r;return this.moveX(-1*i),r},t.expandToRight=function(t,n){return this.resizeWidth(t,n)},t.expandToTop=function(t,n){var r=this.resizeHeight(t,n),i=t-r;return this.moveY(-1*i),r},t.expandToBottom=function(t,n){return this.resizeWidth(t,n)}});

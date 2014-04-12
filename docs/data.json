@@ -4,50 +4,6 @@
         "version": "0.0.0"
     },
     "files": {
-        "src/__backbone-ui-resizable/actions/move/index.js": {
-            "name": "src/__backbone-ui-resizable/actions/move/index.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__backbone-ui-resizable/actions/resize/contract.js": {
-            "name": "src/__backbone-ui-resizable/actions/resize/contract.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__backbone-ui-resizable/actions/resize/expand.js": {
-            "name": "src/__backbone-ui-resizable/actions/resize/expand.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__backbone-ui-resizable/actions/resize/index.js": {
-            "name": "src/__backbone-ui-resizable/actions/resize/index.js",
-            "modules": {
-                "handle-resize": 1
-            },
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__backbone-ui-resizable/handle-resize.js": {
-            "name": "src/__backbone-ui-resizable/handle-resize.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src/__backbone-ui-resizable/movement-data.js": {
-            "name": "src/__backbone-ui-resizable/movement-data.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
         "src/index.js": {
             "name": "src/index.js",
             "modules": {
@@ -61,9 +17,7 @@
     "modules": {
         "backbone-ui-resizable": {
             "name": "backbone-ui-resizable",
-            "submodules": {
-                "handle-resize": 1
-            },
+            "submodules": {},
             "classes": {},
             "fors": {},
             "namespaces": {},
@@ -71,248 +25,13 @@
             "file": "src/index.js",
             "line": 5,
             "description": "AMD module."
-        },
-        "handle-resize": {
-            "name": "handle-resize",
-            "submodules": {},
-            "classes": {},
-            "fors": {},
-            "is_submodule": 1,
-            "namespaces": {},
-            "module": "backbone-ui-resizable",
-            "namespace": "",
-            "file": "src/__backbone-ui-resizable/actions/resize/index.js",
-            "line": 1,
-            "description": "AMD module."
         }
     },
     "classes": {},
     "classitems": [
         {
-            "file": "src/__backbone-ui-resizable/actions/move/index.js",
-            "line": 40,
-            "description": "Moves the whole view to the left.\n  <<<<<<<<\n  --------\n  |      |\n  |      |\n  |      |\n  --------",
-            "itemtype": "method",
-            "name": "moveToLeft",
-            "params": [
-                {
-                    "name": "attemptedDelta",
-                    "description": "",
-                    "type": "+Number"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "src/__backbone-ui-resizable/actions/move/index.js",
-            "line": 57,
-            "description": "Moves the whole view to the right.\n  >>>>>>>>\n  --------\n  |      |\n  |      |\n  |      |\n  --------",
-            "itemtype": "method",
-            "name": "moveToRight",
-            "params": [
-                {
-                    "name": "attemptedDelta",
-                    "description": "",
-                    "type": "+Number"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "src/__backbone-ui-resizable/actions/resize/contract.js",
-            "line": 4,
-            "description": "Contracts the view by moving the left handle\ntowards the right direction while maintaining\nthe right handle at a fixed position.\n  --------\n->|      |\n->|      |\n->|      |\n  --------",
-            "itemtype": "method",
-            "name": "contractToRight",
-            "params": [
-                {
-                    "name": "attemptedDelta",
-                    "description": "",
-                    "type": "+Number"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "src/__backbone-ui-resizable/actions/resize/contract.js",
-            "line": 31,
-            "description": "Contracts the view by moving the right handle\ntowards the left direction while maintaing the\nleft handle at a fixed position.\n  --------\n  |      |<-\n  |      |<-\n  |      |<-\n  --------",
-            "itemtype": "method",
-            "name": "contractToLeft",
-            "params": [
-                {
-                    "name": "attemptedDelta",
-                    "description": "",
-                    "type": "+Number"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "src/__backbone-ui-resizable/actions/resize/contract.js",
-            "line": 50,
-            "description": "Contracts the view by moving the top handle\ntowards the bottom direction while maintaining\nthe bottom handle at a fixed position.\n\n   vvvvvv\n  --------\n  |      |\n  |      |\n  |      |\n  --------",
-            "itemtype": "method",
-            "name": "contractToBottom",
-            "params": [
-                {
-                    "name": "attemptedDelta",
-                    "description": "",
-                    "type": "+Number"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "src/__backbone-ui-resizable/actions/resize/contract.js",
-            "line": 77,
-            "description": "Contracts the view by moving the bottom handle\ntowards the top direction while maintaing the\ntop handle at a fixed position.\n  --------\n  |      |\n  |      |\n  |      |\n  --------\n   ^^^^^^",
-            "itemtype": "method",
-            "name": "contractToTop",
-            "params": [
-                {
-                    "name": "attemptedDelta",
-                    "description": "",
-                    "type": "+Number"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "src/__backbone-ui-resizable/actions/resize/expand.js",
-            "line": 4,
-            "description": "Expands the view by moving the left handle\ntowards the left direction while maintaing\nthe right handle at a fixed position.\n  --------\n  |<-    |\n  |<-    |\n  |<-    |\n  --------",
-            "itemtype": "method",
-            "name": "expandToLeft",
-            "params": [
-                {
-                    "name": "attemptedDelta",
-                    "description": "",
-                    "type": "+Number"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "src/__backbone-ui-resizable/actions/resize/expand.js",
-            "line": 29,
-            "description": "Expands the view by moving the right handle\ntowards the right direction while maintaing\nthe left handle at a fixed position.\n  --------\n  |    ->|\n  |    ->|\n  |    ->|\n  --------",
-            "itemtype": "method",
-            "name": "expandToRight",
-            "params": [
-                {
-                    "name": "attemptedDelta",
-                    "description": "",
-                    "type": "+Number"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "src/__backbone-ui-resizable/actions/resize/expand.js",
-            "line": 46,
-            "description": "Expands the view by moving the top handle\ntowards the top direction while maintaing\nthe bottom handle at a fixed position.\n  --------\n  |^^^^^^|\n  |      |\n  |      |\n  --------",
-            "itemtype": "method",
-            "name": "expandToTop",
-            "params": [
-                {
-                    "name": "attemptedDelta",
-                    "description": "",
-                    "type": "+Number"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "src/__backbone-ui-resizable/actions/resize/expand.js",
-            "line": 71,
-            "description": "Expands the view by moving the bottom handle\ntowards the bottom direction while maintaing\nthe top handle at a fixed position.\n  --------\n  |      |\n  |      |\n  |vvvvvv|\n  --------",
-            "itemtype": "method",
-            "name": "expandToBottom",
-            "params": [
-                {
-                    "name": "attemptedDelta",
-                    "description": "",
-                    "type": "+Number"
-                }
-            ],
-            "class": ""
-        },
-        {
-            "file": "src/__backbone-ui-resizable/handle-resize.js",
-            "line": 11,
-            "description": "Handles resizes.",
-            "itemtype": "method",
-            "name": "handleResize",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "e",
-                    "description": "",
-                    "type": "Event Object"
-                },
-                {
-                    "name": "ui",
-                    "description": "",
-                    "type": "Jquery-ui ui Object"
-                }
-            ],
-            "class": "",
-            "module": "backbone-ui-resizable",
-            "submodule": "handle-resize"
-        },
-        {
-            "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 28,
-            "description": "Get metadata from the movement",
-            "class": "",
-            "module": "backbone-ui-resizable",
-            "submodule": "handle-resize"
-        },
-        {
-            "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 52,
-            "description": "Returns the difference between the current value and the last value",
-            "class": "",
-            "module": "backbone-ui-resizable",
-            "submodule": "handle-resize"
-        },
-        {
-            "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 62,
-            "description": "Infers movement axis",
-            "class": "",
-            "module": "backbone-ui-resizable",
-            "submodule": "handle-resize"
-        },
-        {
-            "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 69,
-            "description": "Infers the last action taken on this object: contract or expand\non a given axis",
-            "class": "",
-            "module": "backbone-ui-resizable",
-            "submodule": "handle-resize"
-        },
-        {
-            "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 84,
-            "description": "Infers the handle that was moved by examining the attributes.",
-            "class": "",
-            "module": "backbone-ui-resizable",
-            "submodule": "handle-resize"
-        },
-        {
-            "file": "src/__backbone-ui-resizable/movement-data.js",
-            "line": 97,
-            "description": "Infers the direction of the movement of a single handle",
-            "class": "",
-            "module": "backbone-ui-resizable",
-            "submodule": "handle-resize"
-        },
-        {
             "file": "src/index.js",
-            "line": 33,
+            "line": 27,
             "description": "Just adds 'px' string to numerical values.",
             "itemtype": "method",
             "name": "stringifyPositionalValue",
@@ -323,7 +42,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 51,
+            "line": 45,
             "description": "Initialization script.",
             "itemtype": "method",
             "name": "initialize",
@@ -332,7 +51,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 65,
+            "line": 61,
             "description": "Holds initialization logic exclusive to resizable-dock.",
             "itemtype": "method",
             "name": "initializeUIResizable",
@@ -345,78 +64,7 @@
             ],
             "class": "",
             "module": "backbone-ui-resizable"
-        },
-        {
-            "file": "src/index.js",
-            "line": 97,
-            "description": "Destroys (if present) the previous resizable plugin\nand reinvokes the resizable jquery method.",
-            "itemtype": "method",
-            "name": "rebuildResizableEl",
-            "params": [
-                {
-                    "name": "options",
-                    "description": ""
-                }
-            ],
-            "class": "",
-            "module": "backbone-ui-resizable"
-        },
-        {
-            "file": "src/index.js",
-            "line": 110,
-            "description": "$el resize event handlers",
-            "class": "",
-            "module": "backbone-ui-resizable"
-        },
-        {
-            "file": "src/index.js",
-            "line": 121,
-            "description": "Default options to be passed to the $resizable builder",
-            "itemtype": "property",
-            "name": "resizableOptions",
-            "type": "Object",
-            "class": "",
-            "module": "backbone-ui-resizable"
-        },
-        {
-            "file": "src/index.js",
-            "line": 131,
-            "description": "When any of the attributes listed here is changed,\nthe resizable object will be rebuilt.",
-            "itemtype": "property",
-            "name": "rebuildOnChange",
-            "type": "Array",
-            "class": "",
-            "module": "backbone-ui-resizable"
         }
     ],
-    "warnings": [
-        {
-            "message": "Missing item type\nGet metadata from the movement",
-            "line": " src/__backbone-ui-resizable/movement-data.js:28"
-        },
-        {
-            "message": "Missing item type\nReturns the difference between the current value and the last value",
-            "line": " src/__backbone-ui-resizable/movement-data.js:52"
-        },
-        {
-            "message": "Missing item type\nInfers movement axis",
-            "line": " src/__backbone-ui-resizable/movement-data.js:62"
-        },
-        {
-            "message": "Missing item type\nInfers the last action taken on this object: contract or expand\non a given axis",
-            "line": " src/__backbone-ui-resizable/movement-data.js:69"
-        },
-        {
-            "message": "Missing item type\nInfers the handle that was moved by examining the attributes.",
-            "line": " src/__backbone-ui-resizable/movement-data.js:84"
-        },
-        {
-            "message": "Missing item type\nInfers the direction of the movement of a single handle",
-            "line": " src/__backbone-ui-resizable/movement-data.js:97"
-        },
-        {
-            "message": "Missing item type\n$el resize event handlers",
-            "line": " src/index.js:110"
-        }
-    ]
+    "warnings": []
 }
