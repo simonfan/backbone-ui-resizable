@@ -4,13 +4,22 @@ define(function (require, exports, module) {
 
 	var h = require('./helpers');
 
-
+	/**
+	 * All handles should track these events.
+	 *
+	 * @method all
+	 */
 	exports.all = function trackAll() {
 		// move together
 		this.listenTo(this.resizable.model, 'change', this.update);
 	};
 
-
+	/**
+	 * North-related handles should track these movements:
+	 * - move-y
+	 *
+	 * @method n
+	 */
 	exports.n = function trackN() {
 
 		var resizableModel = this.resizable.model;
@@ -30,6 +39,12 @@ define(function (require, exports, module) {
 		}, this);
 	};
 
+	/**
+	 * South-related handles should track these movements:
+	 * - move-y
+	 *
+	 * @method s
+	 */
 	exports.s = function trackS() {
 		var resizableModel = this.resizable.model;
 
@@ -41,6 +56,12 @@ define(function (require, exports, module) {
 		});
 	};
 
+	/**
+	 * West-related handles should track these movements:
+	 * - move-x
+	 *
+	 * @method w
+	 */
 	exports.w = function trackW() {
 		var resizableModel = this.resizable.model;
 
@@ -58,6 +79,12 @@ define(function (require, exports, module) {
 		});
 	};
 
+	/**
+	 * East-related handles should track these movements:
+	 * - move-x
+	 *
+	 * @method e
+	 */
 	exports.e = function trackE() {
 		var resizableModel = this.resizable.model;
 

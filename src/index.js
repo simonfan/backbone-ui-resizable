@@ -64,14 +64,6 @@ define(function (require, exports, module) {
 		 */
 		initializeUIResizable: function resizableDock(options) {
 
-			// bind event handling methods
-	/*		_.bindAll(this,
-				'handleElResize',
-				'handleElResizeStart',
-				'handleElResizeStop',
-				'rebuildResizableEl');
-		*/
-
 			// canvas
 			this.$canvas = options.canvas || this.canvas || $(window);
 
@@ -87,20 +79,40 @@ define(function (require, exports, module) {
 			// set initial position
 			this.model.set(data);
 
-
-
-
-
+			// get the options for the handle
 			var handleOptions = _.defaults(
 				_.pick(options, ['directions', 'clss', 'ratio', 'thickness']),
 				this.handleOptions
 			);
 
+			// build all handles
 			buildHandles.call(this, handleOptions);
 		},
 
+		/**
+		 * The builder that returns a handle object instance.
+		 *
+		 * @property handleBuilder
+		 * @type Function
+		 */
 		handleBuilder: handleBuilder,
 
+		/**
+		 * Options to be passed to handleBuilder
+		 *
+		 * @property handleOptions
+		 * @type Object
+		 *     @property directions {String|Array|Object}
+		 *         String: string of comma separated directions
+		 *         Array: array of directions
+		 *         Object: hash keyed by directions and valued by handle-selectors or $handles
+		 *     @property clss {String}
+		 *     @property ratio {Float}
+		 *         The portion of the handle thickness that should
+		 *         be left outside the resizable object.
+		 *     @property thickness {Int}
+		 *         The thickness of the handle in pixels.
+		 */
 		handleOptions: {
 			directions: 'n,s,w,e,nw,ne,sw,se',
 			clss: 'handle',
@@ -134,5 +146,8 @@ define(function (require, exports, module) {
 			maxHeight: '->css:max-height',
 		},
 	});
+
+	// define proto
+	resizable.proto(require('./__backbone-ui-resizable/actions'));
 
 });

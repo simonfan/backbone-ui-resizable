@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src/__backbone-ui-resizable/build-handles.js - backbone-ui-resizable</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="backbone-ui-resizable"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/backbone-ui-resizable.html">backbone-ui-resizable</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: src/__backbone-ui-resizable/build-handles.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+define(function (require, exports, module) {
+	&#x27;use strict&#x27;;
+
+	var $ = require(&#x27;jquery&#x27;),
+		_ = require(&#x27;lodash&#x27;);
+
+	/**
+	 * Builds a SINGLE $el for a direction handle.
+	 *
+	 * @method buildHandle$El
+	 * @private
+	 */
+	function buildHandle$El(direction, options) {
+		var clss = options.clss;
+
+		var $handle = $(&#x27;&lt;div&gt;&lt;/div&gt;&#x27;);
+
+		$handle
+			.addClass(clss)
+			.addClass(clss + &#x27;-&#x27; + direction);
+
+		return $handle.insertAfter(this.$el);
+	}
+
+
+	/**
+	 * Builds multiple handles for multiple directions.
+	 *
+	 * @method buildHandle$Els
+	 * @private
+	 */
+	function buildHandle$Els(directions, options) {
+
+		if (_.isArray(directions)) {
+
+			// array of directions
+			var $directions = _.map(directions, function (direction) {
+				return buildHandle$El.call(this, direction, options);
+			}, this);
+
+			return _.zipObject(directions, $directions);
+
+		} else if (_.isObject(directions)) {
+
+			// hash of direction: $handle/$handle-selector
+			return _.mapValues(directions, function ($handle, direction) {
+
+				$handle = _.isObject($handle) ? $handle : this.$el.find($handle);
+
+				return ($handle.length !== 0) ? $handle : buildHandle$El.call(this, direction, options);
+
+			}, this);
+
+		} else if (_.isString(directions)) {
+
+			// string of comma-separated directions
+			// trim
+			directions = directions.replace(&#x27; &#x27;, &#x27;&#x27;);
+			// split
+			directions = directions.split(&#x27;,&#x27;);
+
+			return buildHandle$Els.call(this, directions, options);
+		}
+
+	}
+
+	/**
+	 * Takes the $els for the handles and builds the handle object over them
+	 * using this.handleBuilder builder.
+	 *
+	 * @method buildHandleObjects
+	 * @private
+	 */
+	function buildHandleObjects($handles, options) {
+		// $handles : {direction: $el}
+
+		return _.mapValues($handles, function ($el, direction) {
+
+			return this.handleBuilder(_.extend({}, options, {
+				el: $el,
+				direction: direction,
+				resizable: this,
+				thickness: _.isNumber(options.thickness) ? options.thickness : options.thickness[direction],
+				ratio: _.isNumber(options.ratio) ? options.ratio : options.ratio[direction],
+
+				canvas: this.$canvas,
+			}));
+
+		}, this);
+	}
+
+	/**
+	 * The action caller.
+	 *
+	 * @method buildHandles
+	 * @private
+	 */
+	module.exports = function buildHandles(options) {
+
+		var directions = options.directions;
+
+		// get $handle jquery objects
+		var $handles = buildHandle$Els.call(this, options.directions, options);
+
+		// get the handle objects
+		this.handles = buildHandleObjects.call(this, $handles, options);
+	};
+});
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
