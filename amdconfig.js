@@ -22,7 +22,8 @@ require.config({
 		underscore: '../bower_components/underscore/underscore',
 		'requirejs-text': '../bower_components/requirejs-text/text',
 		subject: '../bower_components/subject/built/subject',
-		'backbone-ui-draggable': '../bower_components/backbone-ui-draggable/built/backbone-ui-draggable'
+		'backbone-ui-draggable': '../bower_components/backbone-ui-draggable/built/backbone-ui-draggable',
+		no: '../bower_components/no/built/no'
 	},
 	shim: {
 		backbone: {

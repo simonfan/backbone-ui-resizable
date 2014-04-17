@@ -81,6 +81,12 @@ define(function (require, exports, module) {
 			this.on('movestart', this.calcMinMax);
 		},
 
+		/**
+		 * Sets the styles needed for this type of direction handle.
+		 *
+		 * @method setStyles
+		 * @private
+		 */
 		setStyles: function setStyles() {
 
 			var axis = this.axis,
@@ -113,14 +119,12 @@ define(function (require, exports, module) {
 			this.$el.css(styles);
 		},
 
-		calcCenter: function calcCenter(centerRatio) {
-
-			this.center = {
-				x: this.$el.width() * centerRatio,
-				y: this.$el.height() * centerRatio
-			};
-		},
-
+		/**
+		 * Places the handle at its initial position,
+		 * at the right place given the direction.
+		 *
+		 * @method initializePosition
+		 */
 		initializePosition: function initializePosition(options) {
 			var $el = this.$el;
 
@@ -136,6 +140,11 @@ define(function (require, exports, module) {
 			this.update();
 		},
 
+		/**
+		 * Links up movement from the handle to the resizable object.
+		 *
+		 * @method track
+		 */
 		track: function track() {
 			_.each(this.direction, function (d) {
 
@@ -147,6 +156,13 @@ define(function (require, exports, module) {
 			_track.all.call(this);
 		},
 
+		/**
+		 * Calculates the minimum and maximum positions for the handle
+		 * taking into account settings of min and max of the resizable object.
+		 *
+		 * @method calcMinMax
+		 *
+		 */
 		calcMinMax: function calcMinMax() {
 			_.each(this.direction, function (d) {
 

@@ -1,40 +1,47 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var helpers = require('./helpers');
+	var helpers = require('./helpers'),
+		no = require('no');
 
 	function positionN(offset) {
-		this.model.set('top',
-			helpers.numberify(this.resizable.model.get('top')) +
-			helpers.numberify(offset));
+		var top = no(this.resizable.model.get('top')).add(offset);
+
+		this.model.set('top', top.value());
 	}
 
 	function positionS(offset) {
-		this.model.set('top',
-			helpers.numberify(this.resizable.model.get('top')) +
-			helpers.numberify(this.resizable.model.get('height')) +
-			helpers.numberify(offset));
+
+		var top = no(this.resizable.model.get('top'));
+
+		top.add(this.resizable.model.get('height'))
+			.add(offset);
+
+		this.model.set('top', top.value());
 	}
 
 	function positionW(offset) {
-		this.model.set('left',
-			helpers.numberify(this.resizable.model.get('left')) +
-			helpers.numberify(offset));
+		var left = no(this.resizable.model.get('left'));
+
+		this.model.set('left', left.add(offset).value());
 	}
 
 	function positionE(offset) {
-		this.model.set('left',
-			helpers.numberify(this.resizable.model.get('left')) +
-			helpers.numberify(this.resizable.model.get('width')) +
-			helpers.numberify(offset));
+
+		var left = no(this.resizable.model.get('left'));
+
+		left.add(this.resizable.model.get('width'))
+			.add(offset);
+
+		this.model.set('left', left.value());
 	}
 
 	function sizeX() {
-		this.model.set('width', helpers.numberify(this.resizable.model.get('width')));
+		this.model.set('width', no(this.resizable.model.get('width')).value());
 	}
 
 	function sizeY() {
-		this.model.set('height', helpers.numberify(this.resizable.model.get('height')));
+		this.model.set('height', no(this.resizable.model.get('height')).value());
 	}
 
 

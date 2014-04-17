@@ -4,6 +4,34 @@
         "version": "0.0.0"
     },
     "files": {
+        "src/__backbone-ui-resizable/handle/index.js": {
+            "name": "src/__backbone-ui-resizable/handle/index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__backbone-ui-resizable/handle/track.js": {
+            "name": "src/__backbone-ui-resizable/handle/track.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__backbone-ui-resizable/actions.js": {
+            "name": "src/__backbone-ui-resizable/actions.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__backbone-ui-resizable/build-handles.js": {
+            "name": "src/__backbone-ui-resizable/build-handles.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src/index.js": {
             "name": "src/index.js",
             "modules": {
@@ -29,6 +57,204 @@
     },
     "classes": {},
     "classitems": [
+        {
+            "file": "src/__backbone-ui-resizable/handle/index.js",
+            "line": 84,
+            "description": "Sets the styles needed for this type of direction handle.",
+            "itemtype": "method",
+            "name": "setStyles",
+            "access": "private",
+            "tagname": "",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/handle/index.js",
+            "line": 122,
+            "description": "Places the handle at its initial position,\nat the right place given the direction.",
+            "itemtype": "method",
+            "name": "initializePosition",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/handle/index.js",
+            "line": 143,
+            "description": "Links up movement from the handle to the resizable object.",
+            "itemtype": "method",
+            "name": "track",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/handle/index.js",
+            "line": 159,
+            "description": "Calculates the minimum and maximum positions for the handle\ntaking into account settings of min and max of the resizable object.",
+            "itemtype": "method",
+            "name": "calcMinMax",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/handle/track.js",
+            "line": 7,
+            "description": "All handles should track these events.",
+            "itemtype": "method",
+            "name": "all",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/handle/track.js",
+            "line": 17,
+            "description": "North-related handles should track these movements:\n- move-y",
+            "itemtype": "method",
+            "name": "n",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/handle/track.js",
+            "line": 42,
+            "description": "South-related handles should track these movements:\n- move-y",
+            "itemtype": "method",
+            "name": "s",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/handle/track.js",
+            "line": 59,
+            "description": "West-related handles should track these movements:\n- move-x",
+            "itemtype": "method",
+            "name": "w",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/handle/track.js",
+            "line": 82,
+            "description": "East-related handles should track these movements:\n- move-x",
+            "itemtype": "method",
+            "name": "e",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/actions.js",
+            "line": 4,
+            "description": "Expands the view by moving the left handle\ntowards the left direction while maintaing\nthe right handle at a fixed position.\n  --------\n  |<-    |\n  |<-    |\n  |<-    |\n  --------",
+            "itemtype": "method",
+            "name": "expandToLeft",
+            "params": [
+                {
+                    "name": "attemptedDelta",
+                    "description": "",
+                    "type": "+Number"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/actions.js",
+            "line": 24,
+            "description": "Expands the view by moving the right handle\ntowards the right direction while maintaing\nthe left handle at a fixed position.\n  --------\n  |    ->|\n  |    ->|\n  |    ->|\n  --------",
+            "itemtype": "method",
+            "name": "expandToRight",
+            "params": [
+                {
+                    "name": "attemptedDelta",
+                    "description": "",
+                    "type": "+Number"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/actions.js",
+            "line": 44,
+            "description": "-------\n  |^^^^^|\n  |     |\n  |     |\n  -------",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/actions.js",
+            "line": 60,
+            "description": "-------\n  |     |\n  |     |\n  |vvvvv|\n  -------",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/actions.js",
+            "line": 77,
+            "description": "Contracts the view by moving the left handle\ntowards the right direction while maintaining\nthe right handle at a fixed position.\n  --------\n->|      |\n->|      |\n->|      |\n  --------",
+            "itemtype": "method",
+            "name": "contractToRight",
+            "params": [
+                {
+                    "name": "attemptedDelta",
+                    "description": "",
+                    "type": "+Number"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/actions.js",
+            "line": 97,
+            "description": "Contracts the view by moving the right handle\ntowards the left direction while maintaing the\nleft handle at a fixed position.\n  --------\n  |      |<-\n  |      |<-\n  |      |<-\n  --------",
+            "itemtype": "method",
+            "name": "contractToLeft",
+            "params": [
+                {
+                    "name": "attemptedDelta",
+                    "description": "",
+                    "type": "+Number"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/actions.js",
+            "line": 117,
+            "description": "vvvvv\n  -------\n  |     |\n  |     |\n  |     |\n  -------",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/actions.js",
+            "line": 133,
+            "description": "-------\n  |     |\n  |     |\n  |     |\n  -------\n   ^^^^^",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/build-handles.js",
+            "line": 7,
+            "description": "Builds a SINGLE $el for a direction handle.",
+            "itemtype": "method",
+            "name": "buildHandle$El",
+            "access": "private",
+            "tagname": "",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/build-handles.js",
+            "line": 26,
+            "description": "Builds multiple handles for multiple directions.",
+            "itemtype": "method",
+            "name": "buildHandle$Els",
+            "access": "private",
+            "tagname": "",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/build-handles.js",
+            "line": 67,
+            "description": "Takes the $els for the handles and builds the handle object over them\nusing this.handleBuilder builder.",
+            "itemtype": "method",
+            "name": "buildHandleObjects",
+            "access": "private",
+            "tagname": "",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/build-handles.js",
+            "line": 92,
+            "description": "The action caller.",
+            "itemtype": "method",
+            "name": "buildHandles",
+            "access": "private",
+            "tagname": "",
+            "class": ""
+        },
         {
             "file": "src/index.js",
             "line": 25,
@@ -64,7 +290,61 @@
             ],
             "class": "",
             "module": "backbone-ui-resizable"
+        },
+        {
+            "file": "src/index.js",
+            "line": 92,
+            "description": "The builder that returns a handle object instance.",
+            "itemtype": "property",
+            "name": "handleBuilder",
+            "type": "Function",
+            "class": "",
+            "module": "backbone-ui-resizable"
+        },
+        {
+            "file": "src/index.js",
+            "line": 100,
+            "description": "Options to be passed to handleBuilder",
+            "itemtype": "property",
+            "name": "directions {String|Array|Object}\n        String: string of comma separated directions\n        Array: array of directions\n        Object: hash keyed by directions and valued by handle-selectors or $handles",
+            "type": "Object",
+            "class": "",
+            "module": "backbone-ui-resizable",
+            "subprops": [
+                {
+                    "name": "clss",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "ratio",
+                    "description": "\n        The portion of the handle thickness that should\n        be left outside the resizable object.",
+                    "type": "Float"
+                },
+                {
+                    "name": "thickness",
+                    "description": "\n        The thickness of the handle in pixels.",
+                    "type": "Int"
+                }
+            ]
         }
     ],
-    "warnings": []
+    "warnings": [
+        {
+            "message": "Missing item type\n-------\n  |^^^^^|\n  |     |\n  |     |\n  -------",
+            "line": " src/__backbone-ui-resizable/actions.js:44"
+        },
+        {
+            "message": "Missing item type\n-------\n  |     |\n  |     |\n  |vvvvv|\n  -------",
+            "line": " src/__backbone-ui-resizable/actions.js:60"
+        },
+        {
+            "message": "Missing item type\nvvvvv\n  -------\n  |     |\n  |     |\n  |     |\n  -------",
+            "line": " src/__backbone-ui-resizable/actions.js:117"
+        },
+        {
+            "message": "Missing item type\n-------\n  |     |\n  |     |\n  |     |\n  -------\n   ^^^^^",
+            "line": " src/__backbone-ui-resizable/actions.js:133"
+        }
+    ]
 }

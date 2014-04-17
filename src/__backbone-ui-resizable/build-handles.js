@@ -4,6 +4,12 @@ define(function (require, exports, module) {
 	var $ = require('jquery'),
 		_ = require('lodash');
 
+	/**
+	 * Builds a SINGLE $el for a direction handle.
+	 *
+	 * @method buildHandle$El
+	 * @private
+	 */
 	function buildHandle$El(direction, options) {
 		var clss = options.clss;
 
@@ -16,6 +22,13 @@ define(function (require, exports, module) {
 		return $handle.insertAfter(this.$el);
 	}
 
+
+	/**
+	 * Builds multiple handles for multiple directions.
+	 *
+	 * @method buildHandle$Els
+	 * @private
+	 */
 	function buildHandle$Els(directions, options) {
 
 		if (_.isArray(directions)) {
@@ -51,6 +64,13 @@ define(function (require, exports, module) {
 
 	}
 
+	/**
+	 * Takes the $els for the handles and builds the handle object over them
+	 * using this.handleBuilder builder.
+	 *
+	 * @method buildHandleObjects
+	 * @private
+	 */
 	function buildHandleObjects($handles, options) {
 		// $handles : {direction: $el}
 
@@ -69,7 +89,12 @@ define(function (require, exports, module) {
 		}, this);
 	}
 
-
+	/**
+	 * The action caller.
+	 *
+	 * @method buildHandles
+	 * @private
+	 */
 	module.exports = function buildHandles(options) {
 
 		var directions = options.directions;

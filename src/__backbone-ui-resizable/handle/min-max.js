@@ -4,7 +4,6 @@ define(function (require, exports, module) {
 	var helpers = require('./helpers');
 
 	// Y
-
 	exports.n = function nMinMax() {
 
 		var resizableModel = this.resizable.model;
@@ -69,7 +68,7 @@ define(function (require, exports, module) {
 			// minimum value among the
 			// 1- position at which the resizable object reaches its maximum height
 			// 2- position at which the resizable object reaches its maximum Y position
-			maxY: helpers.min(currentY + maxBottomDelta, resizableMaxY) + this.outer
+			maxY: helpers.min(currentY + maxBottomDelta, resizableMaxY) + this.thickness
 		});
 	};
 
@@ -147,7 +146,7 @@ define(function (require, exports, module) {
 			// minimum value among the
 			// 1- position at which the resizable object reaches its maximum width
 			// 2- position at which the resizable object reaches its maximum X boundary
-			maxX: helpers.min(currentX + maxRightDelta, resizableMaxX) + this.outer
+			maxX: helpers.min(currentX + maxRightDelta, resizableMaxX) + this.thickness
 		});
 	};
 
