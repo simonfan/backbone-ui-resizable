@@ -66,6 +66,8 @@ function (resizable            ,  $      ,  modelDock  ) {
 
 			this.listenTo(square, 'resize', function (square, eventData) {
 
+				console.log(eventData);
+
 				this.model.set(eventData);
 
 			}, this);
@@ -91,7 +93,8 @@ function (resizable            ,  $      ,  modelDock  ) {
 			action: '[data-attribute="action"]',
 			axis: '[data-attribute="axis"]',
 			delta: '[data-attribute="delta"]',
-			agent: '[data-attribute="agent"]'
+			agent: '[data-attribute="agent"]',
+			handle: '[data-attribute="handle"]'
 		},
 	});
 

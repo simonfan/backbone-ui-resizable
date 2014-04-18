@@ -109,7 +109,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle/track.js",
-            "line": 72,
+            "line": 76,
             "description": "South-related handles should track these movements:\n- move-y",
             "itemtype": "method",
             "name": "s",
@@ -117,7 +117,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle/track.js",
-            "line": 107,
+            "line": 115,
             "description": "West-related handles should track these movements:\n- move-x",
             "itemtype": "method",
             "name": "w",
@@ -125,7 +125,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle/track.js",
-            "line": 147,
+            "line": 159,
             "description": "East-related handles should track these movements:\n- move-x",
             "itemtype": "method",
             "name": "e",

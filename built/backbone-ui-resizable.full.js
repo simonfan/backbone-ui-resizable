@@ -277,7 +277,8 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module','lod
 	exports.n = function trackN() {
 
 
-		var resizable = this.resizable;
+		var resizable = this.resizable,
+			direction = this.direction;
 
 		resizable.listenTo(this, 'move-y', function (handleObj, edata) {
 
@@ -298,7 +299,10 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module','lod
 
 				var action = delta > 0 ? 'contract' : 'expand';
 
-				edata = _.assign({ action: action }, edata);
+				edata = _.assign({
+					action: action,
+					handle: direction
+				}, edata);
 
 				this.trigger('resize', this, edata)
 					.trigger('resize-y', this, edata)
@@ -317,9 +321,10 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module','lod
 	 * @method s
 	 */
 	exports.s = function trackS() {
-		var resizable = this.resizable;
+		var resizable = this.resizable,
+			direction = this.direction;
 
-		resizable.listenTo(this, 'move-y', function (handle, edata) {
+		resizable.listenTo(this, 'move-y', function (handleObj, edata) {
 			// 'this' refers to the resizable object.
 
 			var model = this.model;
@@ -333,7 +338,10 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module','lod
 
 				var action = edata.delta > 0 ? 'expand' : 'contract';
 
-				edata = _.assign({ action: action }, edata);
+				edata = _.assign({
+					action: action,
+					handle: direction
+				}, edata);
 
 				this.trigger('resize', this, edata)
 					.trigger('resize-y', this, edata)
@@ -352,9 +360,10 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module','lod
 	 * @method w
 	 */
 	exports.w = function trackW() {
-		var resizable = this.resizable;
+		var resizable = this.resizable,
+			direction = this.direction;
 
-		resizable.listenTo(this, 'move-x', function (handle, edata) {
+		resizable.listenTo(this, 'move-x', function (handleObj, edata) {
 			// 'this' refers to the resizable object.
 			var model = this.model;
 
@@ -373,7 +382,10 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module','lod
 
 				var action = delta > 0 ? 'contract' : 'expand';
 
-				edata = _.assign({ action: action }, edata);
+				edata = _.assign({
+					action: action,
+					handle: direction
+				}, edata);
 
 				this.trigger('resize', this, edata)
 					.trigger('resize-x', this, edata)
@@ -392,9 +404,10 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module','lod
 	 * @method e
 	 */
 	exports.e = function trackE() {
-		var resizable = this.resizable;
+		var resizable = this.resizable,
+			direction = this.direction;
 
-		resizable.listenTo(this, 'move-x', function (handle, edata) {
+		resizable.listenTo(this, 'move-x', function (handleObj, edata) {
 			// 'this' refers to the resizable object.
 
 			var model = this.model;
@@ -411,7 +424,10 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module','lod
 
 				var action = edata.delta > 0 ? 'expand' : 'contract';
 
-				edata = _.assign({ action: action }, edata);
+				edata = _.assign({
+					action: action,
+					handle: direction
+				}, edata);
 
 				this.trigger('resize', this, edata)
 					.trigger('resize-x', this, edata)

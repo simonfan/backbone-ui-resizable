@@ -124,7 +124,8 @@ define(function (require, exports, module) {
 	exports.n = function trackN() {
 
 
-		var resizable = this.resizable;
+		var resizable = this.resizable,
+			direction = this.direction;
 
 		resizable.listenTo(this, &#x27;move-y&#x27;, function (handleObj, edata) {
 
@@ -145,7 +146,10 @@ define(function (require, exports, module) {
 
 				var action = delta &gt; 0 ? &#x27;contract&#x27; : &#x27;expand&#x27;;
 
-				edata = _.assign({ action: action }, edata);
+				edata = _.assign({
+					action: action,
+					handle: direction
+				}, edata);
 
 				this.trigger(&#x27;resize&#x27;, this, edata)
 					.trigger(&#x27;resize-y&#x27;, this, edata)
@@ -164,9 +168,10 @@ define(function (require, exports, module) {
 	 * @method s
 	 */
 	exports.s = function trackS() {
-		var resizable = this.resizable;
+		var resizable = this.resizable,
+			direction = this.direction;
 
-		resizable.listenTo(this, &#x27;move-y&#x27;, function (handle, edata) {
+		resizable.listenTo(this, &#x27;move-y&#x27;, function (handleObj, edata) {
 			// &#x27;this&#x27; refers to the resizable object.
 
 			var model = this.model;
@@ -180,7 +185,10 @@ define(function (require, exports, module) {
 
 				var action = edata.delta &gt; 0 ? &#x27;expand&#x27; : &#x27;contract&#x27;;
 
-				edata = _.assign({ action: action }, edata);
+				edata = _.assign({
+					action: action,
+					handle: direction
+				}, edata);
 
 				this.trigger(&#x27;resize&#x27;, this, edata)
 					.trigger(&#x27;resize-y&#x27;, this, edata)
@@ -199,9 +207,10 @@ define(function (require, exports, module) {
 	 * @method w
 	 */
 	exports.w = function trackW() {
-		var resizable = this.resizable;
+		var resizable = this.resizable,
+			direction = this.direction;
 
-		resizable.listenTo(this, &#x27;move-x&#x27;, function (handle, edata) {
+		resizable.listenTo(this, &#x27;move-x&#x27;, function (handleObj, edata) {
 			// &#x27;this&#x27; refers to the resizable object.
 			var model = this.model;
 
@@ -220,7 +229,10 @@ define(function (require, exports, module) {
 
 				var action = delta &gt; 0 ? &#x27;contract&#x27; : &#x27;expand&#x27;;
 
-				edata = _.assign({ action: action }, edata);
+				edata = _.assign({
+					action: action,
+					handle: direction
+				}, edata);
 
 				this.trigger(&#x27;resize&#x27;, this, edata)
 					.trigger(&#x27;resize-x&#x27;, this, edata)
@@ -239,9 +251,10 @@ define(function (require, exports, module) {
 	 * @method e
 	 */
 	exports.e = function trackE() {
-		var resizable = this.resizable;
+		var resizable = this.resizable,
+			direction = this.direction;
 
-		resizable.listenTo(this, &#x27;move-x&#x27;, function (handle, edata) {
+		resizable.listenTo(this, &#x27;move-x&#x27;, function (handleObj, edata) {
 			// &#x27;this&#x27; refers to the resizable object.
 
 			var model = this.model;
@@ -258,7 +271,10 @@ define(function (require, exports, module) {
 
 				var action = edata.delta &gt; 0 ? &#x27;expand&#x27; : &#x27;contract&#x27;;
 
-				edata = _.assign({ action: action }, edata);
+				edata = _.assign({
+					action: action,
+					handle: direction
+				}, edata);
 
 				this.trigger(&#x27;resize&#x27;, this, edata)
 					.trigger(&#x27;resize-x&#x27;, this, edata)
