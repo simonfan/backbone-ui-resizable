@@ -24,10 +24,15 @@ function (resizable            ,  $      ,  modelDock  ) {
 			'bottom': '[data-attribute="bottom"]',
 			'right': '[data-attribute="right"]',
 
-			minX: '[data-attribute="min-x"]',
-			maxX: '[data-attribute="max-x"]',
-			minY: '[data-attribute="min-y"]',
-			maxY: '[data-attribute="max-y"]',
+			minLeft: '[data-attribute="min-left"]',
+			maxLeft: '[data-attribute="max-left"]',
+			minRight: '[data-attribute="min-right"]',
+			maxRight: '[data-attribute="max-right"]',
+
+			minTop: '[data-attribute="min-top"]',
+			maxTop: '[data-attribute="max-top"]',
+			minBottom: '[data-attribute="min-bottom"]',
+			maxBottom: '[data-attribute="max-bottom"]',
 		},
 
 		handleResize: function handleResize(e, ui, movement) {
@@ -48,13 +53,22 @@ function (resizable            ,  $      ,  modelDock  ) {
 			width: 400,
 			maxWidth: 700,
 
-			minX: 200,
-			left: 250,
-			maxX: 800,
 
-			minY: 150,
-			top: 150,
-			maxY: 750
+			left: 250,
+
+			minLeft: 200,
+			maxLeft: 400,
+
+			minRight: 400,
+			maxRight: 800,
+
+			top: 200,
+
+			minTop: 150,
+			maxTop: 400,
+
+			minBottom: 500,
+			maxBottom: 750
 		})
 	});
 

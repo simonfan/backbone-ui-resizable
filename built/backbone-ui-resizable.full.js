@@ -461,7 +461,7 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 
 
 			// the minimum Y set on resizableModel
-		var resizableMinY = resizableModel.get('minY') || 0;
+		var resizableMinY = resizableModel.get('minTop') || 0;
 
 
 		var currentY = this.model.get('top');
@@ -471,12 +471,12 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// maximum value among the
 			// 1- position at which the resizable object reaches its maximum height
 			// 2- position at which the resizable object reaches its minimum Y position
-			minY: helpers.max(currentY - maxTopDelta, resizableMinY) - this.outer,
+			minTop: helpers.max(currentY - maxTopDelta, resizableMinY) - this.outer,
 
 			// the maximum Y for NORTH handles is
 			// simply the position at which the resizable object
 			// reaches its minimum height
-			maxY: currentY + this.thickness + maxBottomDelta
+			maxBottom: currentY + this.thickness + maxBottomDelta
 		});
 	};
 
@@ -495,7 +495,7 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 
 
 			// the maximum Y set on resizableModel
-		var resizableMaxY = resizableModel.get('maxY') || 0;
+		var resizableMaxY = resizableModel.get('maxBottom') || 0;
 
 
 		var currentY = this.model.get('top'),
@@ -505,13 +505,13 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// the minimum Y for SOUTH handles is
 			// simply the position at which the resizable object
 			// reaches its minimum height
-			minY: currentY - maxTopDelta,
+			minTop: currentY - maxTopDelta,
 
 			// the maximum Y for SOUTH handles is the
 			// minimum value among the
 			// 1- position at which the resizable object reaches its maximum height
 			// 2- position at which the resizable object reaches its maximum Y position
-			maxY: helpers.min(currentBottomY + maxBottomDelta, resizableMaxY + this.outer)
+			maxBottom: helpers.min(currentBottomY + maxBottomDelta, resizableMaxY + this.outer)
 		});
 	};
 
@@ -536,7 +536,7 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 
 
 			// the minimum X set on resizableModel
-		var resizableMinX = resizableModel.get('minX') || 0;
+		var resizableMinX = resizableModel.get('minLeft') || 0;
 
 			// the current X position of the handle
 		var currentX = this.model.get('left');
@@ -547,12 +547,12 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// 1- position at which the resizable object reaches its maximum width
 			// 2- position at which the resizable object reaches its minimum X boundary
 			// LESS the handle portion that is out.
-			minX: helpers.max(currentX - maxLeftDelta, resizableMinX) - this.outer,
+			minLeft: helpers.max(currentX - maxLeftDelta, resizableMinX) - this.outer,
 
 			// the maximum X for WEST handles is
 			// simply the position at which the resizable object
 			// reaches its minimum width
-			maxX: currentX + this.thickness + maxRightDelta
+			maxRight: currentX + this.thickness + maxRightDelta
 		});
 	};
 
@@ -574,7 +574,7 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 
 
 			// the maximum X set on resizableModel
-		var resizableMaxX = resizableModel.get('maxX');
+		var resizableMaxX = resizableModel.get('maxRight');
 
 
 		var currentX = this.model.get('left'),
@@ -584,13 +584,13 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// the minimum X for EAST handles is
 			// simply the position at which the resizable object
 			// reaches its minimum width
-			minX: currentX - maxLeftDelta,
+			minLeft: currentX - maxLeftDelta,
 
 			// the maximum X for EAST handles is the
 			// minimum value among the
 			// 1- position at which the resizable object reaches its maximum width
 			// 2- position at which the resizable object reaches its maximum X boundary
-			maxX: helpers.min(currentRightX + maxRightDelta, resizableMaxX + this.outer)
+			maxRight: helpers.min(currentRightX + maxRightDelta, resizableMaxX + this.outer)
 		});
 	};
 
