@@ -461,7 +461,9 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 
 
 			// the minimum Y set on resizableModel
-		var resizableMinY = resizableModel.get('minTop') || 0;
+		var resizableMinTop = resizableModel.get('minTop') || 0,
+
+			resizableMaxTop = resizableModel.get('maxTop');
 
 
 		var currentY = this.model.get('top');
@@ -471,12 +473,12 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// maximum value among the
 			// 1- position at which the resizable object reaches its maximum height
 			// 2- position at which the resizable object reaches its minimum Y position
-			minTop: helpers.max(currentY - maxTopDelta, resizableMinY) - this.outer,
+			minTop: helpers.max(currentY - maxTopDelta, resizableMinTop) - this.outer,
 
 			// the maximum Y for NORTH handles is
 			// simply the position at which the resizable object
 			// reaches its minimum height
-			maxBottom: currentY + this.thickness + maxBottomDelta
+			maxTop: helpers.min(currentY + maxBottomDelta, resizableMaxTop) - this.outer,
 		});
 	};
 
@@ -494,24 +496,24 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			maxBottomDelta = maxHeight - height;
 
 
+		var resizableMinBottom = resizableModel.get('minBottom'),
 			// the maximum Y set on resizableModel
-		var resizableMaxY = resizableModel.get('maxBottom') || 0;
+			resizableMaxBottom = resizableModel.get('maxBottom');
 
 
-		var currentY = this.model.get('top'),
-			currentBottomY = currentY + this.thickness;
+		var currentY = this.model.get('top');
 
 		this.model.set({
 			// the minimum Y for SOUTH handles is
 			// simply the position at which the resizable object
 			// reaches its minimum height
-			minTop: currentY - maxTopDelta,
+			minTop: helpers.max(currentY - maxTopDelta, resizableMinBottom + this.outer),
 
 			// the maximum Y for SOUTH handles is the
 			// minimum value among the
 			// 1- position at which the resizable object reaches its maximum height
 			// 2- position at which the resizable object reaches its maximum Y position
-			maxBottom: helpers.min(currentBottomY + maxBottomDelta, resizableMaxY + this.outer)
+			maxTop: helpers.min(currentY + maxBottomDelta, resizableMaxBottom - this.inner)
 		});
 	};
 
@@ -536,7 +538,9 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 
 
 			// the minimum X set on resizableModel
-		var resizableMinX = resizableModel.get('minLeft') || 0;
+		var resizableMinLeft = resizableModel.get('minLeft') || 0,
+
+			resizableMaxLeft = resizableModel.get('maxLeft');
 
 			// the current X position of the handle
 		var currentX = this.model.get('left');
@@ -547,12 +551,12 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// 1- position at which the resizable object reaches its maximum width
 			// 2- position at which the resizable object reaches its minimum X boundary
 			// LESS the handle portion that is out.
-			minLeft: helpers.max(currentX - maxLeftDelta, resizableMinX) - this.outer,
+			minLeft: helpers.max(currentX - maxLeftDelta, resizableMinLeft) - this.outer,
 
 			// the maximum X for WEST handles is
 			// simply the position at which the resizable object
 			// reaches its minimum width
-			maxRight: currentX + this.thickness + maxRightDelta
+			maxLeft: helpers.min(currentX + maxRightDelta, resizableMaxLeft) - this.outer
 		});
 	};
 
@@ -572,25 +576,24 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','.
 			// the highest possible delta towards the right
 			maxRightDelta = maxWidth - width;
 
-
+		var resizableMinRight = resizableModel.get('minRight'),
 			// the maximum X set on resizableModel
-		var resizableMaxX = resizableModel.get('maxRight');
+			resizableMaxRight = resizableModel.get('maxRight');
 
 
-		var currentX = this.model.get('left'),
-			currentRightX = currentX + this.thickness;
+		var currentX = this.model.get('left');
 
 		this.model.set({
 			// the minimum X for EAST handles is
 			// simply the position at which the resizable object
 			// reaches its minimum width
-			minLeft: currentX - maxLeftDelta,
+			minLeft: helpers.max(currentX - maxLeftDelta, resizableMinRight + this.outer),
 
 			// the maximum X for EAST handles is the
 			// minimum value among the
 			// 1- position at which the resizable object reaches its maximum width
 			// 2- position at which the resizable object reaches its maximum X boundary
-			maxRight: helpers.min(currentRightX + maxRightDelta, resizableMaxX + this.outer)
+			maxLeft: helpers.min(currentX + maxRightDelta, resizableMaxRight - this.inner)
 		});
 	};
 
