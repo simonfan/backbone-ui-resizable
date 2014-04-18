@@ -2,6 +2,8 @@ define(function (require, exports, module) {
 
 	'use strict';
 
+	var _ = require('lodash');
+
 	var h = require('./helpers');
 
 	/**
@@ -10,8 +12,19 @@ define(function (require, exports, module) {
 	 * @method all
 	 */
 	exports.all = function trackAll() {
-		// move together
-		this.listenTo(this.resizable.model, 'change', this.update);
+		var resizable = this.resizable
+
+		// resizestart, resizestop
+		resizable.listenTo(this, 'movestart', function () {
+			this.trigger('resizestart', resizable);
+		});
+
+		resizable.listenTo(this, 'movestop', function () {
+			this.trigger('resizestop', resizable);
+		})
+
+		// move handles together
+		this.listenTo(resizable.model, 'change', this.update);
 	};
 
 	/**
@@ -22,21 +35,38 @@ define(function (require, exports, module) {
 	 */
 	exports.n = function trackN() {
 
-		var resizableModel = this.resizable.model;
 
-		this.resizable.listenTo(this, 'move-y', function (handle, delta) {
+		var resizable = this.resizable;
 
-			delta = h.numberify(delta);
+		resizable.listenTo(this, 'move-y', function (handleObj, edata) {
 
-			var height = h.numberify(resizableModel.get('height')),
-				top = h.numberify(resizableModel.get('top'));
+			// 'this' refers to the resizable object.
+			var model = this.model;
 
-			resizableModel.set({
+			var delta = h.numberify(edata.delta),
+				height = h.numberify(model.get('height')),
+				top = h.numberify(model.get('top'));
+
+			model.set({
 				height: height - delta,
 				top: top + delta
 			});
 
-		}, this);
+			// trigger events
+			if (!edata.silent) {
+
+				var action = delta > 0 ? 'contract' : 'expand';
+
+				edata = _.assign({ action: action }, edata);
+
+				this.trigger('resize', this, edata)
+					.trigger('resize-y', this, edata)
+					// action events
+					.trigger(action, this, edata)
+					.trigger(action + 'y', this, edata);
+			}
+
+		}, resizable);
 	};
 
 	/**
@@ -46,14 +76,32 @@ define(function (require, exports, module) {
 	 * @method s
 	 */
 	exports.s = function trackS() {
-		var resizableModel = this.resizable.model;
+		var resizable = this.resizable;
 
-		this.resizable.listenTo(this, 'move-y', function (handle, delta) {
+		resizable.listenTo(this, 'move-y', function (handle, edata) {
+			// 'this' refers to the resizable object.
 
-			var height = h.numberify(resizableModel.get('height')) + h.numberify(delta);
+			var model = this.model;
 
-			resizableModel.set('height', height);
-		});
+			var height = h.numberify(model.get('height')) + h.numberify(edata.delta);
+
+			model.set('height', height);
+
+			// trigger events
+			if (!edata.silent) {
+
+				var action = edata.delta > 0 ? 'expand' : 'contract';
+
+				edata = _.assign({ action: action }, edata);
+
+				this.trigger('resize', this, edata)
+					.trigger('resize-y', this, edata)
+					// action events
+					.trigger(action, this, edata)
+					.trigger(action + 'y', this, edata);
+			}
+
+		}, resizable);
 	};
 
 	/**
@@ -63,20 +111,37 @@ define(function (require, exports, module) {
 	 * @method w
 	 */
 	exports.w = function trackW() {
-		var resizableModel = this.resizable.model;
+		var resizable = this.resizable;
 
-		this.resizable.listenTo(this, 'move-x', function (handle, delta) {
+		resizable.listenTo(this, 'move-x', function (handle, edata) {
+			// 'this' refers to the resizable object.
+			var model = this.model;
 
-			delta = h.numberify(delta);
+			var delta = h.numberify(edata.delta);
 
-			var width = h.numberify(resizableModel.get('width')),
-				left = h.numberify(resizableModel.get('left'));
+			var width = h.numberify(model.get('width')),
+				left = h.numberify(model.get('left'));
 
-			resizableModel.set({
+			model.set({
 				width: width - delta,
 				left: left + delta
 			});
-		});
+
+			// trigger events
+			if (!edata.silent) {
+
+				var action = delta > 0 ? 'contract' : 'expand';
+
+				edata = _.assign({ action: action }, edata);
+
+				this.trigger('resize', this, edata)
+					.trigger('resize-x', this, edata)
+					// action events
+					.trigger(action, this, edata)
+					.trigger(action + 'x', this, edata);
+			}
+
+		}, resizable);
 	};
 
 	/**
@@ -86,12 +151,34 @@ define(function (require, exports, module) {
 	 * @method e
 	 */
 	exports.e = function trackE() {
-		var resizableModel = this.resizable.model;
+		var resizable = this.resizable;
 
-		this.resizable.listenTo(this, 'move-x', function (handle, delta) {
-			var width = h.numberify(resizableModel.get('width')) + h.numberify(delta);
+		resizable.listenTo(this, 'move-x', function (handle, edata) {
+			// 'this' refers to the resizable object.
 
-			resizableModel.set('width', width);
-		});
+			var model = this.model;
+
+			var width = h.numberify(model.get('width')) + h.numberify(edata.delta);
+
+			model.set('width', width);
+
+
+			// trigger events
+			// we are sure delta is not 0, as that was dealt with at the
+			// draggable object
+			if (!edata.silent) {
+
+				var action = edata.delta > 0 ? 'expand' : 'contract';
+
+				edata = _.assign({ action: action }, edata);
+
+				this.trigger('resize', this, edata)
+					.trigger('resize-x', this, edata)
+					// action events
+					.trigger(action, this, edata)
+					.trigger(action + 'x', this, edata);
+			}
+
+		}, resizable);
 	};
 });

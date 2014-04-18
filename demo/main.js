@@ -1,4 +1,5 @@
-define(['backbone-ui-resizable'], function (resizable) {
+define(['backbone-ui-resizable', 'jquery', 'model-dock'],
+function (resizable            ,  $      ,  modelDock  ) {
 
 
 
@@ -56,4 +57,45 @@ define(['backbone-ui-resizable'], function (resizable) {
 			maxY: 750
 		})
 	});
+
+
+	var controlBuilder = modelDock.extend({
+
+		initialize: function initialize(options) {
+			modelDock.prototype.initialize.call(this, options);
+
+			this.listenTo(square, 'resize', function (square, eventData) {
+
+				this.model.set(eventData);
+
+			}, this);
+		},
+
+		events: {
+			'click button': 'doStuff'
+		},
+
+		doStuff: function doStuff(e) {
+			var $t = $(e.target),
+				action = $t.data('action');
+
+
+			var remainder = square[action](20, { agent: 'button' });
+
+			if (remainder) {
+				alert('you\'ve reached the limit. Not possible to ' + action + ' another ' + remainder);
+			}
+		},
+
+		map: {
+			action: '[data-attribute="action"]',
+			axis: '[data-attribute="axis"]',
+			delta: '[data-attribute="delta"]',
+			agent: '[data-attribute="agent"]'
+		},
+	});
+
+	window.control = controlBuilder({
+		el: $('#control')
+	})
 });

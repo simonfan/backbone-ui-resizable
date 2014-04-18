@@ -13,12 +13,19 @@ define(function (require, exports, module) {
 	 *
 	 * @method expandToLeft
 	 * @param attemptedDelta {+Number}
+	 * @param options {Obejct}
+	 *     options will be passed straight to handle.moveToLeft,
+	 *     which will pass options on to event data
 	 */
-	exports.expandToLeft = function expandToLeft(attemptedDelta) {
+	exports.expandToLeft = function expandToLeft(attemptedDelta, options) {
+
+		options = options || {};
+		options.agent = options.agent || 'code';
+
 		var handle = this.handles.w;
 
 		handle.calcMinMax();
-		return handle.moveToLeft(attemptedDelta);
+		return handle.moveToLeft(attemptedDelta, options);
 	};
 
 	/**
@@ -34,11 +41,15 @@ define(function (require, exports, module) {
 	 * @method expandToRight
 	 * @param attemptedDelta {+Number}
 	 */
-	exports.expandToRight = function expandToRight(attemptedDelta) {
+	exports.expandToRight = function expandToRight(attemptedDelta, options) {
+
+		options = options || {};
+		options.agent = options.agent || 'code';
+
 		var handle = this.handles.e;
 
 		handle.calcMinMax();
-		return handle.moveToRight(attemptedDelta);
+		return handle.moveToRight(attemptedDelta, options);
 	};
 
 	/**
@@ -50,11 +61,15 @@ define(function (require, exports, module) {
 	 *  -------
 	 *
 	 */
-	exports.expandToTop = function expandToTop(attemptedDelta) {
+	exports.expandToTop = function expandToTop(attemptedDelta, options) {
+
+		options = options || {};
+		options.agent = options.agent || 'code';
+
 		var handle = this.handles.n;
 
 		handle.calcMinMax();
-		return handle.moveToTop(attemptedDelta);
+		return handle.moveToTop(attemptedDelta, options);
 	};
 
 	/**
@@ -66,11 +81,15 @@ define(function (require, exports, module) {
 	 *  -------
 	 *
 	 */
-	exports.expandToBottom = function expandToBottom(attemptedDelta) {
+	exports.expandToBottom = function expandToBottom(attemptedDelta, options) {
+
+		options = options || {};
+		options.agent = options.agent || 'code';
+
 		var handle = this.handles.s;
 
 		handle.calcMinMax();
-		return handle.moveToBottom(attemptedDelta);
+		return handle.moveToBottom(attemptedDelta, options);
 	};
 
 
@@ -87,11 +106,15 @@ define(function (require, exports, module) {
 	 * @method contractToRight
 	 * @param attemptedDelta {+Number}
 	 */
-	exports.contractToRight = function contractToRight(attemptedDelta) {
+	exports.contractToRight = function contractToRight(attemptedDelta, options) {
+
+		options = options || {};
+		options.agent = options.agent || 'code';
+
 		var handle = this.handles.w;
 
 		handle.calcMinMax();
-		return handle.moveToRight(attemptedDelta);
+		return handle.moveToRight(attemptedDelta, options);
 	};
 
 	/**
@@ -107,11 +130,15 @@ define(function (require, exports, module) {
 	 * @method contractToLeft
 	 * @param attemptedDelta {+Number}
 	 */
-	exports.contractToLeft = function contractToLeft(attemptedDelta) {
+	exports.contractToLeft = function contractToLeft(attemptedDelta, options) {
+
+		options = options || {};
+		options.agent = options.agent || 'code';
+
 		var handle = this.handles.e;
 
 		handle.calcMinMax();
-		return handle.moveToLeft(attemptedDelta);
+		return handle.moveToLeft(attemptedDelta, options);
 	};
 
 	/**
@@ -123,11 +150,15 @@ define(function (require, exports, module) {
 	 *  -------
 	 *
 	 */
-	exports.contractToBottom = function contractToBottom(attemptedDelta) {
+	exports.contractToBottom = function contractToBottom(attemptedDelta, options) {
+
+		options = options || {};
+		options.agent = options.agent || 'code';
+
 		var handle = this.handles.n;
 
 		handle.calcMinMax();
-		return handle.moveToBottom(attemptedDelta);
+		return handle.moveToBottom(attemptedDelta, options);
 	};
 
 	/**
@@ -140,10 +171,14 @@ define(function (require, exports, module) {
 	 *   ^^^^^
 	 *
 	 */
-	exports.contractToTop = function contractToTop(attemptedDelta) {
+	exports.contractToTop = function contractToTop(attemptedDelta, options) {
+
+		options = options || {};
+		options.agent = options.agent || 'code';
+
 		var handle = this.handles.s;
 
 		handle.calcMinMax();
-		return handle.moveToTop(attemptedDelta);
+		return handle.moveToTop(attemptedDelta, options);
 	};
 });

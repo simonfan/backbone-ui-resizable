@@ -93,7 +93,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle/track.js",
-            "line": 7,
+            "line": 9,
             "description": "All handles should track these events.",
             "itemtype": "method",
             "name": "all",
@@ -101,7 +101,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle/track.js",
-            "line": 17,
+            "line": 30,
             "description": "North-related handles should track these movements:\n- move-y",
             "itemtype": "method",
             "name": "n",
@@ -109,7 +109,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle/track.js",
-            "line": 42,
+            "line": 72,
             "description": "South-related handles should track these movements:\n- move-y",
             "itemtype": "method",
             "name": "s",
@@ -117,7 +117,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle/track.js",
-            "line": 59,
+            "line": 107,
             "description": "West-related handles should track these movements:\n- move-x",
             "itemtype": "method",
             "name": "w",
@@ -125,7 +125,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle/track.js",
-            "line": 82,
+            "line": 147,
             "description": "East-related handles should track these movements:\n- move-x",
             "itemtype": "method",
             "name": "e",
@@ -142,13 +142,18 @@
                     "name": "attemptedDelta",
                     "description": "",
                     "type": "+Number"
+                },
+                {
+                    "name": "options",
+                    "description": "\n    options will be passed straight to handle.moveToLeft,\n    which will pass options on to event data",
+                    "type": "Obejct"
                 }
             ],
             "class": ""
         },
         {
             "file": "src/__backbone-ui-resizable/actions.js",
-            "line": 24,
+            "line": 31,
             "description": "Expands the view by moving the right handle\ntowards the right direction while maintaing\nthe left handle at a fixed position.\n  --------\n  |    ->|\n  |    ->|\n  |    ->|\n  --------",
             "itemtype": "method",
             "name": "expandToRight",
@@ -163,19 +168,19 @@
         },
         {
             "file": "src/__backbone-ui-resizable/actions.js",
-            "line": 44,
+            "line": 55,
             "description": "-------\n  |^^^^^|\n  |     |\n  |     |\n  -------",
             "class": ""
         },
         {
             "file": "src/__backbone-ui-resizable/actions.js",
-            "line": 60,
+            "line": 75,
             "description": "-------\n  |     |\n  |     |\n  |vvvvv|\n  -------",
             "class": ""
         },
         {
             "file": "src/__backbone-ui-resizable/actions.js",
-            "line": 77,
+            "line": 96,
             "description": "Contracts the view by moving the left handle\ntowards the right direction while maintaining\nthe right handle at a fixed position.\n  --------\n->|      |\n->|      |\n->|      |\n  --------",
             "itemtype": "method",
             "name": "contractToRight",
@@ -190,7 +195,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/actions.js",
-            "line": 97,
+            "line": 120,
             "description": "Contracts the view by moving the right handle\ntowards the left direction while maintaing the\nleft handle at a fixed position.\n  --------\n  |      |<-\n  |      |<-\n  |      |<-\n  --------",
             "itemtype": "method",
             "name": "contractToLeft",
@@ -205,13 +210,13 @@
         },
         {
             "file": "src/__backbone-ui-resizable/actions.js",
-            "line": 117,
+            "line": 144,
             "description": "vvvvv\n  -------\n  |     |\n  |     |\n  |     |\n  -------",
             "class": ""
         },
         {
             "file": "src/__backbone-ui-resizable/actions.js",
-            "line": 133,
+            "line": 164,
             "description": "-------\n  |     |\n  |     |\n  |     |\n  -------\n   ^^^^^",
             "class": ""
         },
@@ -332,19 +337,19 @@
     "warnings": [
         {
             "message": "Missing item type\n-------\n  |^^^^^|\n  |     |\n  |     |\n  -------",
-            "line": " src/__backbone-ui-resizable/actions.js:44"
+            "line": " src/__backbone-ui-resizable/actions.js:55"
         },
         {
             "message": "Missing item type\n-------\n  |     |\n  |     |\n  |vvvvv|\n  -------",
-            "line": " src/__backbone-ui-resizable/actions.js:60"
+            "line": " src/__backbone-ui-resizable/actions.js:75"
         },
         {
             "message": "Missing item type\nvvvvv\n  -------\n  |     |\n  |     |\n  |     |\n  -------",
-            "line": " src/__backbone-ui-resizable/actions.js:117"
+            "line": " src/__backbone-ui-resizable/actions.js:144"
         },
         {
             "message": "Missing item type\n-------\n  |     |\n  |     |\n  |     |\n  -------\n   ^^^^^",
-            "line": " src/__backbone-ui-resizable/actions.js:133"
+            "line": " src/__backbone-ui-resizable/actions.js:164"
         }
     ]
 }

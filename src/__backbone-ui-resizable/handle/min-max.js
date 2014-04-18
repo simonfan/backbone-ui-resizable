@@ -56,7 +56,8 @@ define(function (require, exports, module) {
 		var resizableMaxY = resizableModel.get('maxY') || 0;
 
 
-		var currentY = this.model.get('top');
+		var currentY = this.model.get('top'),
+			currentBottomY = currentY + this.thickness;
 
 		this.model.set({
 			// the minimum Y for SOUTH handles is
@@ -68,7 +69,7 @@ define(function (require, exports, module) {
 			// minimum value among the
 			// 1- position at which the resizable object reaches its maximum height
 			// 2- position at which the resizable object reaches its maximum Y position
-			maxY: helpers.min(currentY + maxBottomDelta, resizableMaxY) + this.thickness
+			maxY: helpers.min(currentBottomY + maxBottomDelta, resizableMaxY + this.outer)
 		});
 	};
 
@@ -134,7 +135,8 @@ define(function (require, exports, module) {
 		var resizableMaxX = resizableModel.get('maxX');
 
 
-		var currentX = this.model.get('left');
+		var currentX = this.model.get('left'),
+			currentRightX = currentX + this.thickness;
 
 		this.model.set({
 			// the minimum X for EAST handles is
@@ -146,7 +148,7 @@ define(function (require, exports, module) {
 			// minimum value among the
 			// 1- position at which the resizable object reaches its maximum width
 			// 2- position at which the resizable object reaches its maximum X boundary
-			maxX: helpers.min(currentX + maxRightDelta, resizableMaxX) + this.thickness
+			maxX: helpers.min(currentRightX + maxRightDelta, resizableMaxX + this.outer)
 		});
 	};
 

@@ -1,14 +1,14 @@
 {
   "name": "backbone-ui-resizable",
   "main": "built/backbone-ui-resizable.js",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "Some module...",
   "dependencies": {
-    "jquery-ui": "~1.10.4",
     "lodash": "~2.4.1",
-    "backbone-ui-draggable": "0.2.2",
+    "backbone-ui-draggable": "0.3.4",
     "lowercase-backbone": "*",
-    "no": "0.1.0"
+    "no": "0.1.0",
+    "jquery-ui": "~1.10.4"
   },
   "devDependencies": {
     "requirejs": "*",
