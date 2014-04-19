@@ -26,13 +26,20 @@
 
 	<style type="text/css">
 
+		#control {
+			width: 20%;
+			float: left;
+		}
+
 		#canvas {
 			position: relative;
 
 			background-color: yellow;
 
-			height: 1000px;
-			width: 100%;
+			height: 680px;
+			width: 80%;
+
+			left: 20%;
 		}
 
 
@@ -51,6 +58,8 @@
 			position: absolute;
 			top: 0;
 			left: 0;
+
+			cursor: pointer;
 		}
 
 		.handle {
@@ -58,13 +67,104 @@
 			height: 20px;
 			width: 20px;
 
-			opacity: 0.3;
-
-
-			cursor: pointer;
+			opacity: 0.1;
 
 			background-color: black;
 		}
+
+
+		.handle-n {
+			cursor: n-resize;
+		}
+
+		.handle-s {
+			cursor: s-resize;
+		}
+
+		.handle-w {
+			cursor: w-resize;
+		}
+
+		.handle-e {
+			cursor: e-resize;
+		}
+
+		.handle-nw {
+			cursor: nw-resize;
+		}
+
+		.handle-ne {
+			cursor: ne-resize;
+		}
+
+		.handle-sw {
+			cursor: sw-resize;
+		}
+
+		.handle-se {
+			cursor: se-resize;
+		}
+
+
+		/* limits */
+
+		.limit {
+			background-color: rgba(0, 0, 0, 0.1);
+
+			padding: 10px 10px 10px 10px;
+
+			position: absolute;
+		}
+
+		.horizontal {
+			width: 400px;
+			height: 30px;
+		}
+
+		.vertical {
+			width: 100px;
+			height: 200px;
+		}
+
+		#minTop {
+			border-bottom: 3px dashed black;
+		}
+
+		#maxTop {
+			border-top: 3px dashed black;
+		}
+
+		#minBottom {
+			border-bottom: 3px dashed black;
+		}
+
+		#maxBottom {
+			border-top: 3px dashed black;
+		}
+
+		#minLeft {
+			border-right: 3px dashed black;
+		}
+
+		#maxLeft {
+			border-left: 3px dashed black;
+
+			padding-top: 100px;
+		}
+
+		#minRight {
+			border-right: 3px dashed black;
+
+			padding-top: 200px;
+		}
+
+		#maxRight {
+			border-left: 3px dashed black;
+
+			padding-top: 300px;
+		}
+
+
 	</style>
 
 	<!-- jquery-ui -->
@@ -76,68 +176,107 @@
 
 	<a href="../index.html">Menu</a>
 
+
+
+	<div id="control">
+		<button data-action="contractToTop">Contract to top</button><br>
+		<button data-action="contractToBottom">Contract to bottom</button><br>
+		<button data-action="contractToRight">Contract to right</button><br>
+		<button data-action="contractToLeft">Contract to left</button><br>
+
+		<br>
+
+		<button data-action="expandToTop">Expand to top</button><br>
+		<button data-action="expandToBottom">Expand to bottom</button><br>
+		<button data-action="expandToRight">Expand to right</button><br>
+		<button data-action="expandToLeft">Expand to left</button><br>
+
+		<br>
+
+		<button data-action="moveToTop">Move to top</button><br>
+		<button data-action="moveToBottom">Move to bottom</button><br>
+		<button data-action="moveToRight">Move to right</button><br>
+		<button data-action="moveToLeft">Move to left</button><br>
+
+		<br>
+
+		action: <span data-attribute="action"></span><br>
+		delta: <span data-attribute="delta"></span><br>
+		axis: <span data-attribute="axis"></span><br>
+		agent: <span data-attribute="agent"></span><br>
+		handle: <span data-attribute="handle"></span><br>
+	</div>
+
+
+
 	<div id="canvas">
 
-		<div id="boundaries"></div>
 
-		<div id="control">
-			<button data-action="contractToTop">Contract to top</button><br>
-			<button data-action="contractToBottom">Contract to bottom</button><br>
-			<button data-action="contractToRight">Contract to right</button><br>
-			<button data-action="contractToLeft">Contract to left</button><br>
 
-			<br>
 
-			<button data-action="expandToTop">Expand to top</button><br>
-			<button data-action="expandToBottom">Expand to bottom</button><br>
-			<button data-action="expandToRight">Expand to right</button><br>
-			<button data-action="expandToLeft">Expand to left</button><br>
+		<!-- top -->
+		<div id="minTop" class="limit horizontal">
+			minTop: <input type="text" data-attribute="minTop"><br>
+			enable: <input type="checkbox" value="enable">
+		</div>
+		<div id="maxTop" class="limit horizontal">
+			maxTop: <input type="text" data-attribute="maxTop"><br>
+			enable: <input type="checkbox" value="enable">
+		</div>
 
-			<br>
+		<!-- bottom -->
+		<div id="minBottom" class="limit horizontal">
+			minBottom: <input type="text" data-attribute="minBottom"><br>
+			enable: <input type="checkbox" value="enable">
+		</div>
+		<div id="maxBottom" class="limit horizontal">
+			maxBottom: <input type="text" data-attribute="maxBottom"><br>
+			enable: <input type="checkbox" value="enable">
+		</div>
 
-			<button data-action="moveToTop">Move to top</button><br>
-			<button data-action="moveToBottom">Move to bottom</button><br>
-			<button data-action="moveToRight">Move to right</button><br>
-			<button data-action="moveToLeft">Move to left</button><br>
+		<!-- left -->
+		<div id="minLeft" class="limit vertical">
+			minLeft: <input type="text" data-attribute="minLeft"><br>
+			enable: <input type="checkbox" value="enable">
+		</div>
+		<div id="maxLeft" class="limit vertical">
+			maxLeft: <input type="text" data-attribute="maxLeft"><br>
+			enable: <input type="checkbox" value="enable">
+		</div>
 
-			<br>
 
-			action: <span data-attribute="action"></span><br>
-			delta: <span data-attribute="delta"></span><br>
-			axis: <span data-attribute="axis"></span><br>
-			agent: <span data-attribute="agent"></span><br>
-			handle: <span data-attribute="handle"></span><br>
+		<!-- right -->
+		<div id="minRight" class="limit vertical">
+			minRight: <input type="text" data-attribute="minRight"><br>
+			enable: <input type="checkbox" value="enable">
+		</div>
+		<div id="maxRight" class="limit vertical">
+			maxRight: <input type="text" data-attribute="maxRight"><br>
+			enable: <input type="checkbox" value="enable">
 		</div>
 
 
 
 		<div id="resizable">
 
+			<b>POSITION</b><br>
+			left: <input type="text" data-attribute="left"><br>
+			right: <input type="text" data-attribute="right"><br>
+			top: <input type="text" data-attribute="top"><br>
+			bottom: <input type="text" data-attribute="bottom"><br>
+
+			<br>
+			<b>WIDTH</b><br>
 			min-width: <input type="text" data-attribute="min-width"><br>
 			width: <input type="text" data-attribute="width"><br>
 			max-width: <input type="text" data-attribute="max-width"><br>
 
 			<br>
-
+			<b>HEIGHT</b><br>
 			min-height: <input type="text" data-attribute="min-height"><br>
 			height: <input type="text" data-attribute="height"><br>
 			max-height: <input type="text" data-attribute="max-height"><br>
 
-			<br>
-
-			min-left: <input type="text" data-attribute="min-left"><br>
-			max-left: <input type="text" data-attribute="max-left"><br>
-			left: <input type="text" data-attribute="left"><br>
-			min-right: <input type="text" data-attribute="min-right"><br>
-			max-right: <input type="text" data-attribute="max-right"><br>
-
-			<br>
-
-			min-top: <input type="text" data-attribute="min-top"><br>
-			max-top: <input type="text" data-attribute="max-top"><br>
-			top: <input type="text" data-attribute="top"><br>
-			min-bottom: <input type="text" data-attribute="min-bottom"><br>
-			max-bottom: <input type="text" data-attribute="max-bottom"><br>
 		</div>
 
 	</div>

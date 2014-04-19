@@ -1,6 +1,8 @@
 define(function (require, exports, module) {
 	'use strict';
 
+	var _ = require('lodash');
+
 	exports.min = function min(v1, v2) {
 		if (isNaN(v1)) {
 			return v2;
@@ -32,5 +34,15 @@ define(function (require, exports, module) {
 		} else {
 			return res;
 		}
+	};
+
+	exports.numberifyProperties = function numberifyProperties(props, obj) {
+		var res = {};
+
+		_.each(props, function (p) {
+			res[p] = parseInt(obj[p], 10);
+		});
+
+		return res;
 	};
 });
