@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__backbone-ui-resizable/actions.js - backbone-ui-resizable</title>
+    <title>src/__backbone-ui-resizable/animations.js - backbone-ui-resizable</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,7 +82,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__backbone-ui-resizable/actions.js</h1>
+                        <h1 class="file-heading">File: src/__backbone-ui-resizable/animations.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -99,20 +99,18 @@ define(function (require, exports, module) {
 	 *   |&lt;-    |
 	 *   --------
 	 *
-	 * @method expandToLeft
+	 * @method aExpandToLeft
 	 * @param attemptedDelta {+Number}
 	 * @param options {Obejct}
 	 *     options will be passed straight to handle.moveToLeft,
 	 *     which will pass options on to event data
 	 */
-	exports.expandToLeft = function expandToLeft(attemptedDelta, options) {
+	exports.aExpandToLeft = function aExpandToLeft(attemptedDelta, options) {
 
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
 
 		var handle = this.handles.w;
-
-		console.log(attemptedDelta);
 
 		handle.calcMinMax();
 		return handle.moveToLeft(attemptedDelta, options);
@@ -128,10 +126,10 @@ define(function (require, exports, module) {
 	 *   |    -&gt;|
 	 *   --------
 	 *
-	 * @method expandToRight
+	 * @method aExpandToRight
 	 * @param attemptedDelta {+Number}
 	 */
-	exports.expandToRight = function expandToRight(attemptedDelta, options) {
+	exports.aExpandToRight = function aExpandToRight(attemptedDelta, options) {
 
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
@@ -151,7 +149,7 @@ define(function (require, exports, module) {
 	 *  -------
 	 *
 	 */
-	exports.expandToTop = function expandToTop(attemptedDelta, options) {
+	exports.aExpandToTop = function aExpandToTop(attemptedDelta, options) {
 
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
@@ -171,7 +169,7 @@ define(function (require, exports, module) {
 	 *  -------
 	 *
 	 */
-	exports.expandToBottom = function expandToBottom(attemptedDelta, options) {
+	exports.aExpandToBottom = function aExpandToBottom(attemptedDelta, options) {
 
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
@@ -193,10 +191,10 @@ define(function (require, exports, module) {
 	 * -&gt;|      |
 	 *   --------
 	 *
-	 * @method contractToRight
+	 * @method aContractToRight
 	 * @param attemptedDelta {+Number}
 	 */
-	exports.contractToRight = function contractToRight(attemptedDelta, options) {
+	exports.aContractToRight = function aContractToRight(attemptedDelta, options) {
 
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
@@ -217,10 +215,10 @@ define(function (require, exports, module) {
 	 *   |      |&lt;-
 	 *   --------
 	 *
-	 * @method contractToLeft
+	 * @method aContractToLeft
 	 * @param attemptedDelta {+Number}
 	 */
-	exports.contractToLeft = function contractToLeft(attemptedDelta, options) {
+	exports.aContractToLeft = function aContractToLeft(attemptedDelta, options) {
 
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
@@ -240,7 +238,7 @@ define(function (require, exports, module) {
 	 *  -------
 	 *
 	 */
-	exports.contractToBottom = function contractToBottom(attemptedDelta, options) {
+	exports.aContractToBottom = function aContractToBottom(attemptedDelta, options) {
 
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
@@ -261,7 +259,7 @@ define(function (require, exports, module) {
 	 *   ^^^^^
 	 *
 	 */
-	exports.contractToTop = function contractToTop(attemptedDelta, options) {
+	exports.aContractToTop = function aContractToTop(attemptedDelta, options) {
 
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;

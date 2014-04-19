@@ -19,7 +19,8 @@ define(function (require, exports, module) {
 
 	// internal
 	var buildHandles = require('./__backbone-ui-resizable/build-handles'),
-		handleBuilder = require('./__backbone-ui-resizable/handle/index');
+		handleBuilder = require('./__backbone-ui-resizable/handle/index'),
+		helpers = require('./__backbone-ui-resizable/handle/helpers');
 
 
 	/**
@@ -121,16 +122,16 @@ define(function (require, exports, module) {
 		},
 
 		stringifiers: {
-			height: stringifyPositionalValue,
-			minHeight: stringifyPositionalValue,
-			maxHeight: stringifyPositionalValue,
+			height: helpers.stringifyPositionalValue,
+			minHeight: helpers.stringifyPositionalValue,
+			maxHeight: helpers.stringifyPositionalValue,
 
-			width: stringifyPositionalValue,
-			minWidth: stringifyPositionalValue,
-			maxWidth: stringifyPositionalValue,
+			width: helpers.stringifyPositionalValue,
+			minWidth: helpers.stringifyPositionalValue,
+			maxWidth: helpers.stringifyPositionalValue,
 
-			left: stringifyPositionalValue,
-			top: stringifyPositionalValue
+			left: helpers.stringifyPositionalValue,
+			top: helpers.stringifyPositionalValue
 		},
 
 		map: {

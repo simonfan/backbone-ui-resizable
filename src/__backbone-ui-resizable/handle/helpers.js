@@ -27,7 +27,7 @@ define(function (require, exports, module) {
 
 
 	exports.numberify = function numberify(v) {
-		var res = parseInt(v, 10);
+		var res = parseFloat(v);
 
 		if (isNaN(res)) {
 			throw new Error(v + ' not number');
@@ -40,9 +40,22 @@ define(function (require, exports, module) {
 		var res = {};
 
 		_.each(props, function (p) {
-			res[p] = parseInt(obj[p], 10);
+			res[p] = parseFloat(obj[p]);
 		});
 
 		return res;
+	};
+
+
+	/**
+	 * Just adds 'px' string to numerical values.
+	 *
+	 * @method stringifyPositionalValue
+	 * @private
+	 */
+	var isNumber = /^-?\d*(\.\d+)?$/;
+	exports.stringifyPositionalValue = function stringifyPositionalValue(v) {
+		// [1] check if it is a isNumber
+		return isNumber.test(v) ? v + 'px' : v;
 	};
 });

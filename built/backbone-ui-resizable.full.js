@@ -136,7 +136,7 @@ define('__backbone-ui-resizable/handle/helpers',['require','exports','module','l
 
 
 	exports.numberify = function numberify(v) {
-		var res = parseInt(v, 10);
+		var res = parseFloat(v);
 
 		if (isNaN(res)) {
 			throw new Error(v + ' not number');
@@ -149,10 +149,23 @@ define('__backbone-ui-resizable/handle/helpers',['require','exports','module','l
 		var res = {};
 
 		_.each(props, function (p) {
-			res[p] = parseInt(obj[p], 10);
+			res[p] = parseFloat(obj[p]);
 		});
 
 		return res;
+	};
+
+
+	/**
+	 * Just adds 'px' string to numerical values.
+	 *
+	 * @method stringifyPositionalValue
+	 * @private
+	 */
+	var isNumber = /^-?\d*(\.\d+)?$/;
+	exports.stringifyPositionalValue = function stringifyPositionalValue(v) {
+		// [1] check if it is a isNumber
+		return isNumber.test(v) ? v + 'px' : v;
 	};
 });
 
@@ -885,6 +898,8 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 
 		var handle = this.handles.w;
 
+		console.log(attemptedDelta);
+
 		handle.calcMinMax();
 		return handle.moveToLeft(attemptedDelta, options);
 	};
@@ -1054,7 +1069,7 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
  * @module backbone-ui-resizable
  */
 
-define('backbone-ui-resizable',['require','exports','module','lowercase-backbone','backbone-ui-draggable','jquery','lodash','./__backbone-ui-resizable/build-handles','./__backbone-ui-resizable/handle/index','./__backbone-ui-resizable/actions'],function (require, exports, module) {
+define('backbone-ui-resizable',['require','exports','module','lowercase-backbone','backbone-ui-draggable','jquery','lodash','./__backbone-ui-resizable/build-handles','./__backbone-ui-resizable/handle/index','./__backbone-ui-resizable/handle/helpers','./__backbone-ui-resizable/actions'],function (require, exports, module) {
 	
 
 	var backbone = require('lowercase-backbone'),
@@ -1065,7 +1080,8 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 
 	// internal
 	var buildHandles = require('./__backbone-ui-resizable/build-handles'),
-		handleBuilder = require('./__backbone-ui-resizable/handle/index');
+		handleBuilder = require('./__backbone-ui-resizable/handle/index'),
+		helpers = require('./__backbone-ui-resizable/handle/helpers');
 
 
 	/**
@@ -1167,16 +1183,16 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 		},
 
 		stringifiers: {
-			height: stringifyPositionalValue,
-			minHeight: stringifyPositionalValue,
-			maxHeight: stringifyPositionalValue,
+			height: helpers.stringifyPositionalValue,
+			minHeight: helpers.stringifyPositionalValue,
+			maxHeight: helpers.stringifyPositionalValue,
 
-			width: stringifyPositionalValue,
-			minWidth: stringifyPositionalValue,
-			maxWidth: stringifyPositionalValue,
+			width: helpers.stringifyPositionalValue,
+			minWidth: helpers.stringifyPositionalValue,
+			maxWidth: helpers.stringifyPositionalValue,
 
-			left: stringifyPositionalValue,
-			top: stringifyPositionalValue
+			left: helpers.stringifyPositionalValue,
+			top: helpers.stringifyPositionalValue
 		},
 
 		map: {

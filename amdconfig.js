@@ -23,7 +23,11 @@ require.config({
 		'requirejs-text': '../bower_components/requirejs-text/text',
 		subject: '../bower_components/subject/built/subject',
 		'backbone-ui-draggable': '../bower_components/backbone-ui-draggable/built/backbone-ui-draggable',
-		no: '../bower_components/no/built/no'
+		no: '../bower_components/no/built/no',
+		containers: '../bower_components/containers/built/containers',
+		itr: '../bower_components/itr/built/itr',
+		deep: '../bower_components/deep/built/deep',
+		'object-query': '../bower_components/object-query/built/object-query'
 	},
 	shim: {
 		backbone: {
