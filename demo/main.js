@@ -1,11 +1,28 @@
-define(['backbone-ui-resizable', 'jquery', 'model-dock'],
-function (resizable            ,  $      ,  modelDock  ) {
+define(['backbone-ui-resizable', 'jquery', 'model-dock', './resizable-model.js', './limits.js'],
+function (resizable            ,  $      ,  modelDock  ,  resizableModel       ,  limits      ) {
 
 
 
 
 	var squareBuilder = resizable.extend({
-	//	handles: 'w,e',
+
+		initialize: function initialize(options) {
+			resizable.prototype.initialize.call(this, options);
+
+			this.on('resize move', function rightAndBottom() {
+
+				var model = this.model;
+
+				var right = model.get('left') + model.get('width'),
+					bottom = model.get('top') + model.get('height');
+
+				model.set({
+					right: right,
+					bottom: bottom
+				})
+
+			}, this);
+		},
 
 		map: {
 			'height': ['->css:height', '[data-attribute="height"]'],
@@ -34,42 +51,11 @@ function (resizable            ,  $      ,  modelDock  ) {
 			minBottom: '[data-attribute="min-bottom"]',
 			maxBottom: '[data-attribute="max-bottom"]',
 		},
-
-		handleResize: function handleResize(e, ui, movement) {
-			this.set(movement.data());
-		}
 	})
 
 	window.square = squareBuilder({
 		el: $('#resizable'),
-		model: new Backbone.Model({
-		//	width: '50%',
-
-			minHeight: 200,
-			height: 200,
-			maxHeight: 400,
-
-			minWidth: 200,
-			width: 400,
-			maxWidth: 700,
-
-
-			left: 250,
-
-			minLeft: 200,
-			maxLeft: 400,
-
-			minRight: 400,
-			maxRight: 800,
-
-			top: 200,
-
-			minTop: 150,
-			maxTop: 400,
-
-			minBottom: 500,
-			maxBottom: 750
-		})
+		model: resizableModel
 	});
 
 
@@ -80,7 +66,7 @@ function (resizable            ,  $      ,  modelDock  ) {
 
 			this.listenTo(square, 'resize', function (square, eventData) {
 
-				console.log(eventData);
+//				console.log(eventData);
 
 				this.model.set(eventData);
 
