@@ -167,6 +167,7 @@ define(function (require, exports, module) {
 
 	// define proto
 	resizable.proto(require('./__backbone-ui-resizable/actions'));
+	resizable.proto(require('./__backbone-ui-resizable/animations'));
 	resizable.proto(require('./__backbone-ui-resizable/enable-disable'));
 	resizable.proto(require('./__backbone-ui-resizable/build-handle'));
 

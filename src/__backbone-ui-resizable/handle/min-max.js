@@ -49,7 +49,6 @@ define(function (require, exports, module) {
 			maxTop: helpers.min(
 				no(currentY)
 					.add(maxBottomDelta)
-					.subtract(this.outer)
 					.value(),
 				no(resizableMaxTop)
 					.subtract(this.outer)

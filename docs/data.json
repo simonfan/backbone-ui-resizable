@@ -258,7 +258,7 @@
                 },
                 {
                     "name": "options",
-                    "description": "\n    options will be passed straight to handle.moveToLeft,\n    which will pass options on to event data",
+                    "description": "\n    options will be passed straight to handle.animateToLeft,\n    which will pass options on to event data",
                     "type": "Obejct"
                 }
             ],

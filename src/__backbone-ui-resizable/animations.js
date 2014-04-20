@@ -14,7 +14,7 @@ define(function (require, exports, module) {
 	 * @method aExpandToLeft
 	 * @param attemptedDelta {+Number}
 	 * @param options {Obejct}
-	 *     options will be passed straight to handle.moveToLeft,
+	 *     options will be passed straight to handle.animateToLeft,
 	 *     which will pass options on to event data
 	 */
 	exports.aExpandToLeft = function aExpandToLeft(attemptedDelta, options) {
@@ -25,7 +25,7 @@ define(function (require, exports, module) {
 		var handle = this.handles.w;
 
 		handle.calcMinMax();
-		return handle.moveToLeft(attemptedDelta, options);
+		return handle.animateToLeft(attemptedDelta, options);
 	};
 
 	/**
@@ -49,7 +49,7 @@ define(function (require, exports, module) {
 		var handle = this.handles.e;
 
 		handle.calcMinMax();
-		return handle.moveToRight(attemptedDelta, options);
+		return handle.animateToRight(attemptedDelta, options);
 	};
 
 	/**
@@ -69,7 +69,7 @@ define(function (require, exports, module) {
 		var handle = this.handles.n;
 
 		handle.calcMinMax();
-		return handle.moveToTop(attemptedDelta, options);
+		return handle.animateToTop(attemptedDelta, options);
 	};
 
 	/**
@@ -89,7 +89,7 @@ define(function (require, exports, module) {
 		var handle = this.handles.s;
 
 		handle.calcMinMax();
-		return handle.moveToBottom(attemptedDelta, options);
+		return handle.animateToBottom(attemptedDelta, options);
 	};
 
 
@@ -114,7 +114,7 @@ define(function (require, exports, module) {
 		var handle = this.handles.w;
 
 		handle.calcMinMax();
-		return handle.moveToRight(attemptedDelta, options);
+		return handle.animateToRight(attemptedDelta, options);
 	};
 
 	/**
@@ -138,7 +138,7 @@ define(function (require, exports, module) {
 		var handle = this.handles.e;
 
 		handle.calcMinMax();
-		return handle.moveToLeft(attemptedDelta, options);
+		return handle.animateToLeft(attemptedDelta, options);
 	};
 
 	/**
@@ -158,7 +158,7 @@ define(function (require, exports, module) {
 		var handle = this.handles.n;
 
 		handle.calcMinMax();
-		return handle.moveToBottom(attemptedDelta, options);
+		return handle.animateToBottom(attemptedDelta, options);
 	};
 
 	/**
@@ -179,6 +179,6 @@ define(function (require, exports, module) {
 		var handle = this.handles.s;
 
 		handle.calcMinMax();
-		return handle.moveToTop(attemptedDelta, options);
+		return handle.animateToTop(attemptedDelta, options);
 	};
 });
