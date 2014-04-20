@@ -107,8 +107,6 @@ define(function (require, exports, module) {
 					.value()
 			)
 		});
-
-		console.log(this.model.get('maxBottom'))
 	};
 
 

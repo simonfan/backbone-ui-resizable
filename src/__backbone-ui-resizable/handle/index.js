@@ -6,7 +6,7 @@ define(function (require, exports, module) {
 	var draggable = require('backbone-ui-draggable'),
 		_ = require('lodash');
 
-	var _update = require('./update'),
+	var _updatePosition = require('./update-position'),
 		_track = require('./track'),
 		_minmax = require('./min-max');
 
@@ -58,27 +58,32 @@ define(function (require, exports, module) {
 			// cache sizes
 			this.thickness = options.thickness;
 
-
-			// setStyles
-			this.setStyles();
-
 			// calculate ratio point
 			this.ratio = options.ratio;
 			this.outer = options.thickness * this.ratio;
 			this.inner = options.thickness - this.outer;
 
-			// [1] place the handle
-			// set throttle for update
-			this.update = _.throttle(_.bind(_update[this.direction], this), 20);
 
+			// [1] set the updatePosition method
+			this.updatePosition = _.throttle(_.bind(_updatePosition[this.direction], this), 20);
+
+
+			// [2] setStyles
+			// [2.0] general styles
+			this.setStyles();
+
+			// [2.1] place the handle
 			// initialize handle position
 			this.initializePosition(options);
 
-			// [2] set correct trackers for hte handle
+			// [3] set correct trackers for hte handle
 			this.track();
 
-			// [3] when movements starts, calculate the min and maxes.
+			// [4] when movements starts, calculate the min and maxes.
 			this.on('movestart', this.calcMinMax);
+
+			// [5] enable!
+			this.enableHandle();
 		},
 
 		/**
@@ -135,9 +140,14 @@ define(function (require, exports, module) {
 				of: this.resizable.$el
 			});
 
-			this.model.set($el.position());
+			var pos = $el.position();
 
-			this.update();
+			this.model.set({
+				top: parseFloat(pos.top),
+				left: parseFloat(pos.left)
+			});
+
+			this.updatePosition();
 		},
 
 		/**
@@ -176,4 +186,7 @@ define(function (require, exports, module) {
 			width: '->css:width',
 		})
 	});
+
+	// proto
+	handle.proto(require('./enable-disable'));
 });

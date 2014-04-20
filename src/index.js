@@ -18,8 +18,7 @@ define(function (require, exports, module) {
 
 
 	// internal
-	var buildHandles = require('./__backbone-ui-resizable/build-handles'),
-		handleBuilder = require('./__backbone-ui-resizable/handle/index'),
+	var handleBuilder = require('./__backbone-ui-resizable/handle/index'),
 		helpers = require('./__backbone-ui-resizable/handle/helpers');
 
 
@@ -68,6 +67,11 @@ define(function (require, exports, module) {
 			// canvas
 			this.$canvas = options.canvas || this.canvas || $(window);
 
+			// disable the draggable
+			if (!options.enableDraggable) {
+				this.disableDraggable();
+			}
+
 			var data = _.extend({
 				minWidth: 2 * this.handleOptions.thickness,
 				minHeight: 2 * this.handleOptions.thickness,
@@ -80,14 +84,26 @@ define(function (require, exports, module) {
 			// set initial position
 			this.model.set(data);
 
+
+
+			/////////////
+			// HANDLES //
+			this.handleOptions = _.extend(this.handleOptions, _.pick(options, ['clss', 'ratio', 'thickness']));
+
 			// get the options for the handle
-			var handleOptions = _.defaults(
-				_.pick(options, ['directions', 'clss', 'ratio', 'thickness']),
-				this.handleOptions
-			);
+			var directions = options.handles || this.handles;
+			directions = _.isArray(directions) ? directions : directions.split(',');
 
 			// build all handles
-			buildHandles.call(this, handleOptions);
+			// and overwrite defautl handles prop.
+			this.handles = {};
+			_.each(directions, function (direction) {
+
+				// build the handle
+				this.handles[direction] = this.buildHandle(direction, this.handleOptions);
+
+			}, this);
+
 		},
 
 		/**
@@ -97,6 +113,8 @@ define(function (require, exports, module) {
 		 * @type Function
 		 */
 		handleBuilder: handleBuilder,
+
+		handles: 'n,s,w,e,nw,ne,sw,se',
 
 		/**
 		 * Options to be passed to handleBuilder
@@ -115,7 +133,6 @@ define(function (require, exports, module) {
 		 *         The thickness of the handle in pixels.
 		 */
 		handleOptions: {
-			directions: 'n,s,w,e,nw,ne,sw,se',
 			clss: 'handle',
 			ratio: 0.2,
 			thickness: 30,
@@ -150,5 +167,7 @@ define(function (require, exports, module) {
 
 	// define proto
 	resizable.proto(require('./__backbone-ui-resizable/actions'));
+	resizable.proto(require('./__backbone-ui-resizable/enable-disable'));
+	resizable.proto(require('./__backbone-ui-resizable/build-handle'));
 
 });

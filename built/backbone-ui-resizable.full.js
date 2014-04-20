@@ -1,112 +1,3 @@
-define('__backbone-ui-resizable/build-handles',['require','exports','module','jquery','lodash'],function (require, exports, module) {
-	
-
-	var $ = require('jquery'),
-		_ = require('lodash');
-
-	/**
-	 * Builds a SINGLE $el for a direction handle.
-	 *
-	 * @method buildHandle$El
-	 * @private
-	 */
-	function buildHandle$El(direction, options) {
-		var clss = options.clss;
-
-		var $handle = $('<div></div>');
-
-		$handle
-			.addClass(clss)
-			.addClass(clss + '-' + direction);
-
-		return $handle.insertAfter(this.$el);
-	}
-
-
-	/**
-	 * Builds multiple handles for multiple directions.
-	 *
-	 * @method buildHandle$Els
-	 * @private
-	 */
-	function buildHandle$Els(directions, options) {
-
-		if (_.isArray(directions)) {
-
-			// array of directions
-			var $directions = _.map(directions, function (direction) {
-				return buildHandle$El.call(this, direction, options);
-			}, this);
-
-			return _.zipObject(directions, $directions);
-
-		} else if (_.isObject(directions)) {
-
-			// hash of direction: $handle/$handle-selector
-			return _.mapValues(directions, function ($handle, direction) {
-
-				$handle = _.isObject($handle) ? $handle : this.$el.find($handle);
-
-				return ($handle.length !== 0) ? $handle : buildHandle$El.call(this, direction, options);
-
-			}, this);
-
-		} else if (_.isString(directions)) {
-
-			// string of comma-separated directions
-			// trim
-			directions = directions.replace(' ', '');
-			// split
-			directions = directions.split(',');
-
-			return buildHandle$Els.call(this, directions, options);
-		}
-
-	}
-
-	/**
-	 * Takes the $els for the handles and builds the handle object over them
-	 * using this.handleBuilder builder.
-	 *
-	 * @method buildHandleObjects
-	 * @private
-	 */
-	function buildHandleObjects($handles, options) {
-		// $handles : {direction: $el}
-
-		return _.mapValues($handles, function ($el, direction) {
-
-			return this.handleBuilder(_.extend({}, options, {
-				el: $el,
-				direction: direction,
-				resizable: this,
-				thickness: _.isNumber(options.thickness) ? options.thickness : options.thickness[direction],
-				ratio: _.isNumber(options.ratio) ? options.ratio : options.ratio[direction],
-
-				canvas: this.$canvas,
-			}));
-
-		}, this);
-	}
-
-	/**
-	 * The action caller.
-	 *
-	 * @method buildHandles
-	 * @private
-	 */
-	module.exports = function buildHandles(options) {
-
-		var directions = options.directions;
-
-		// get $handle jquery objects
-		var $handles = buildHandle$Els.call(this, options.directions, options);
-
-		// get the handle objects
-		this.handles = buildHandleObjects.call(this, $handles, options);
-	};
-});
-
 define('__backbone-ui-resizable/handle/helpers',['require','exports','module','lodash'],function (require, exports, module) {
 	
 
@@ -169,7 +60,7 @@ define('__backbone-ui-resizable/handle/helpers',['require','exports','module','l
 	};
 });
 
-define('__backbone-ui-resizable/handle/update',['require','exports','module','./helpers','no'],function (require, exports, module) {
+define('__backbone-ui-resizable/handle/update-position',['require','exports','module','./helpers','no'],function (require, exports, module) {
 	
 
 	var helpers = require('./helpers'),
@@ -290,7 +181,7 @@ define('__backbone-ui-resizable/handle/track',['require','exports','module','lod
 		})
 
 		// move handles together
-		this.listenTo(resizable.model, 'change', this.update);
+		this.listenTo(resizable.model, 'change', this.updatePosition);
 	};
 
 	/**
@@ -574,8 +465,6 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','n
 					.value()
 			)
 		});
-
-		console.log(this.model.get('maxBottom'))
 	};
 
 
@@ -692,7 +581,31 @@ define('__backbone-ui-resizable/handle/min-max',['require','exports','module','n
 
 });
 
-define('__backbone-ui-resizable/handle/index',['require','exports','module','jquery-ui','backbone-ui-draggable','lodash','./update','./track','./min-max'],function (require, exports, module) {
+define('__backbone-ui-resizable/handle/enable-disable',['require','exports','module'],function (require, exports, module) {
+	
+
+	exports.disableHandle = function disableHandle() {
+
+		this.disableDraggable();
+		this.$el
+			.addClass(this.resizable.handleOptions.clss + '-disabled')
+			.removeClass(this.resizable.handleOptions.clss + '-enabled');
+
+		return this;
+	};
+
+	exports.enableHandle = function enableHandle(direction, options) {
+
+		this.enableDraggable();
+		this.$el
+			.addClass(this.resizable.handleOptions.clss + '-enabled')
+			.removeClass(this.resizable.handleOptions.clss + '-disabled');
+
+		return this;
+	};
+});
+
+define('__backbone-ui-resizable/handle/index',['require','exports','module','jquery-ui','backbone-ui-draggable','lodash','./update-position','./track','./min-max','./enable-disable'],function (require, exports, module) {
 	
 
 	require('jquery-ui');
@@ -700,7 +613,7 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','jqu
 	var draggable = require('backbone-ui-draggable'),
 		_ = require('lodash');
 
-	var _update = require('./update'),
+	var _updatePosition = require('./update-position'),
 		_track = require('./track'),
 		_minmax = require('./min-max');
 
@@ -752,27 +665,32 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','jqu
 			// cache sizes
 			this.thickness = options.thickness;
 
-
-			// setStyles
-			this.setStyles();
-
 			// calculate ratio point
 			this.ratio = options.ratio;
 			this.outer = options.thickness * this.ratio;
 			this.inner = options.thickness - this.outer;
 
-			// [1] place the handle
-			// set throttle for update
-			this.update = _.throttle(_.bind(_update[this.direction], this), 20);
 
+			// [1] set the updatePosition method
+			this.updatePosition = _.throttle(_.bind(_updatePosition[this.direction], this), 20);
+
+
+			// [2] setStyles
+			// [2.0] general styles
+			this.setStyles();
+
+			// [2.1] place the handle
 			// initialize handle position
 			this.initializePosition(options);
 
-			// [2] set correct trackers for hte handle
+			// [3] set correct trackers for hte handle
 			this.track();
 
-			// [3] when movements starts, calculate the min and maxes.
+			// [4] when movements starts, calculate the min and maxes.
 			this.on('movestart', this.calcMinMax);
+
+			// [5] enable!
+			this.enableHandle();
 		},
 
 		/**
@@ -829,9 +747,14 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','jqu
 				of: this.resizable.$el
 			});
 
-			this.model.set($el.position());
+			var pos = $el.position();
 
-			this.update();
+			this.model.set({
+				top: parseFloat(pos.top),
+				left: parseFloat(pos.left)
+			});
+
+			this.updatePosition();
 		},
 
 		/**
@@ -870,6 +793,9 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','jqu
 			width: '->css:width',
 		})
 	});
+
+	// proto
+	handle.proto(require('./enable-disable'));
 });
 
 define('__backbone-ui-resizable/actions',['require','exports','module'],function (require, exports, module) {
@@ -897,8 +823,6 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 		options.agent = options.agent || 'code';
 
 		var handle = this.handles.w;
-
-		console.log(attemptedDelta);
 
 		handle.calcMinMax();
 		return handle.moveToLeft(attemptedDelta, options);
@@ -1059,6 +983,123 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 	};
 });
 
+define('__backbone-ui-resizable/enable-disable',['require','exports','module'],function (require, exports, module) {
+	
+
+	exports.disableResizable = function disableResizable() {
+		_.each(this.handles, function (handleObj, direction) {
+			handleObj.disableHandle();
+		}, this);
+
+
+		this.$el
+			.addClass(this.resizableClass + '-disabled')
+			.removeClass(this.resizableClass + '-enabled');
+
+		return this;
+	};
+
+	exports.enableResizable = function enableResizable(options) {
+
+		_.each(this.handles, function (handleObj, direction) {
+			handleObj.enableHandle();
+		}, this);
+
+
+		this.$el
+			.addClass(this.resizableClass + '-enabled')
+			.removeClass(this.resizableClass + '-disabled');
+
+		return this;
+	};
+
+	exports.disableHandle = function disableHandle(direction) {
+		var handleObj = this.handles[direction];
+
+		if (handleObj) {
+			handleObj.disableHandle();
+		}
+
+		return this;
+	};
+
+	exports.enableHandle = function enableHandle(direction, options) {
+		var handleObj = this.handles[direction];
+
+		if (handleObj) {
+			handleObj.enableHandle();
+		} else {
+			this.handles[direction] = this.buildHandle(direction, options);
+		}
+
+		return this;
+	};
+});
+
+define('__backbone-ui-resizable/build-handle',['require','exports','module','jquery','lodash'],function (require, exports, module) {
+	
+
+	var $ = require('jquery'),
+		_ = require('lodash');
+
+
+
+
+	/**
+	 * Builds a SINGLE $el for a direction handle.
+	 *
+	 * @method buildHandle$El
+	 * @private
+	 */
+	exports.buildHandle$El = function buildHandle$El(direction, options) {
+		var clss = options.clss;
+
+		var $handle = $('<div></div>');
+
+		$handle
+			.addClass(clss)
+			.addClass(clss + '-' + direction);
+
+		return $handle.insertAfter(this.$el);
+	}
+
+
+	/**
+	 * Builds a single handle and returns it.
+	 * Takes care of creating the $el, if necessary.
+	 *
+	 * @method buildHandle
+	 * @param direction {String}
+	 * @param options {Object}
+	 */
+	exports.buildHandle = function buildHandle(direction, options) {
+
+		options = options || {};
+
+		_.defaults(options, this.handleOptions);
+
+		var ratio = options.ratio,
+			thickness = options.thickness;
+
+		var builderOptions = _.extend({}, options, {
+			el: this.buildHandle$El(direction, options),
+			resizable: this,
+			direction: direction,
+
+
+			// ratio and thickness may be set for each
+			// isolated handle.
+			ratio: _.isObject(ratio) ? ratio[direction] : ratio,
+			thickness: _.isObject(thickness) ? thickness[direction] : thickness
+		});
+
+		// [4] build the handle object
+		var handleObj = this.handleBuilder(builderOptions);
+
+		return handleObj;
+	};
+});
+
 //     backbone-ui-resizable
 //     (c) simonfan
 //     backbone-ui-resizable is licensed under the MIT terms.
@@ -1069,7 +1110,7 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
  * @module backbone-ui-resizable
  */
 
-define('backbone-ui-resizable',['require','exports','module','lowercase-backbone','backbone-ui-draggable','jquery','lodash','./__backbone-ui-resizable/build-handles','./__backbone-ui-resizable/handle/index','./__backbone-ui-resizable/handle/helpers','./__backbone-ui-resizable/actions'],function (require, exports, module) {
+define('backbone-ui-resizable',['require','exports','module','lowercase-backbone','backbone-ui-draggable','jquery','lodash','./__backbone-ui-resizable/handle/index','./__backbone-ui-resizable/handle/helpers','./__backbone-ui-resizable/actions','./__backbone-ui-resizable/enable-disable','./__backbone-ui-resizable/build-handle'],function (require, exports, module) {
 	
 
 	var backbone = require('lowercase-backbone'),
@@ -1079,8 +1120,7 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 
 
 	// internal
-	var buildHandles = require('./__backbone-ui-resizable/build-handles'),
-		handleBuilder = require('./__backbone-ui-resizable/handle/index'),
+	var handleBuilder = require('./__backbone-ui-resizable/handle/index'),
 		helpers = require('./__backbone-ui-resizable/handle/helpers');
 
 
@@ -1129,6 +1169,11 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 			// canvas
 			this.$canvas = options.canvas || this.canvas || $(window);
 
+			// disable the draggable
+			if (!options.enableDraggable) {
+				this.disableDraggable();
+			}
+
 			var data = _.extend({
 				minWidth: 2 * this.handleOptions.thickness,
 				minHeight: 2 * this.handleOptions.thickness,
@@ -1141,14 +1186,26 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 			// set initial position
 			this.model.set(data);
 
+
+
+			/////////////
+			// HANDLES //
+			this.handleOptions = _.extend(this.handleOptions, _.pick(options, ['clss', 'ratio', 'thickness']));
+
 			// get the options for the handle
-			var handleOptions = _.defaults(
-				_.pick(options, ['directions', 'clss', 'ratio', 'thickness']),
-				this.handleOptions
-			);
+			var directions = options.handles || this.handles;
+			directions = _.isArray(directions) ? directions : directions.split(',');
 
 			// build all handles
-			buildHandles.call(this, handleOptions);
+			// and overwrite defautl handles prop.
+			this.handles = {};
+			_.each(directions, function (direction) {
+
+				// build the handle
+				this.handles[direction] = this.buildHandle(direction, this.handleOptions);
+
+			}, this);
+
 		},
 
 		/**
@@ -1158,6 +1215,8 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 		 * @type Function
 		 */
 		handleBuilder: handleBuilder,
+
+		handles: 'n,s,w,e,nw,ne,sw,se',
 
 		/**
 		 * Options to be passed to handleBuilder
@@ -1176,7 +1235,6 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 		 *         The thickness of the handle in pixels.
 		 */
 		handleOptions: {
-			directions: 'n,s,w,e,nw,ne,sw,se',
 			clss: 'handle',
 			ratio: 0.2,
 			thickness: 30,
@@ -1211,6 +1269,8 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 
 	// define proto
 	resizable.proto(require('./__backbone-ui-resizable/actions'));
+	resizable.proto(require('./__backbone-ui-resizable/enable-disable'));
+	resizable.proto(require('./__backbone-ui-resizable/build-handle'));
 
 });
 

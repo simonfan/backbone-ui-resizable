@@ -24,7 +24,7 @@ define(function (require, exports, module) {
 		})
 
 		// move handles together
-		this.listenTo(resizable.model, 'change', this.update);
+		this.listenTo(resizable.model, 'change', this.updatePosition);
 	};
 
 	/**

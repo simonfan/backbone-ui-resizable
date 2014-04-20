@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__backbone-ui-resizable/build-handles.js - backbone-ui-resizable</title>
+    <title>src/__backbone-ui-resizable/build-handle.js - backbone-ui-resizable</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,7 +82,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__backbone-ui-resizable/build-handles.js</h1>
+                        <h1 class="file-heading">File: src/__backbone-ui-resizable/build-handle.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -92,13 +92,16 @@ define(function (require, exports, module) {
 	var $ = require(&#x27;jquery&#x27;),
 		_ = require(&#x27;lodash&#x27;);
 
+
+
+
 	/**
 	 * Builds a SINGLE $el for a direction handle.
 	 *
 	 * @method buildHandle$El
 	 * @private
 	 */
-	function buildHandle$El(direction, options) {
+	exports.buildHandle$El = function buildHandle$El(direction, options) {
 		var clss = options.clss;
 
 		var $handle = $(&#x27;&lt;div&gt;&lt;/div&gt;&#x27;);
@@ -112,86 +115,38 @@ define(function (require, exports, module) {
 
 
 	/**
-	 * Builds multiple handles for multiple directions.
+	 * Builds a single handle and returns it.
+	 * Takes care of creating the $el, if necessary.
 	 *
-	 * @method buildHandle$Els
-	 * @private
+	 * @method buildHandle
+	 * @param direction {String}
+	 * @param options {Object}
 	 */
-	function buildHandle$Els(directions, options) {
+	exports.buildHandle = function buildHandle(direction, options) {
 
-		if (_.isArray(directions)) {
+		options = options || {};
 
-			// array of directions
-			var $directions = _.map(directions, function (direction) {
-				return buildHandle$El.call(this, direction, options);
-			}, this);
+		_.defaults(options, this.handleOptions);
 
-			return _.zipObject(directions, $directions);
+		var ratio = options.ratio,
+			thickness = options.thickness;
 
-		} else if (_.isObject(directions)) {
+		var builderOptions = _.extend({}, options, {
+			el: this.buildHandle$El(direction, options),
+			resizable: this,
+			direction: direction,
 
-			// hash of direction: $handle/$handle-selector
-			return _.mapValues(directions, function ($handle, direction) {
 
-				$handle = _.isObject($handle) ? $handle : this.$el.find($handle);
+			// ratio and thickness may be set for each
+			// isolated handle.
+			ratio: _.isObject(ratio) ? ratio[direction] : ratio,
+			thickness: _.isObject(thickness) ? thickness[direction] : thickness
+		});
 
-				return ($handle.length !== 0) ? $handle : buildHandle$El.call(this, direction, options);
+		// [4] build the handle object
+		var handleObj = this.handleBuilder(builderOptions);
 
-			}, this);
-
-		} else if (_.isString(directions)) {
-
-			// string of comma-separated directions
-			// trim
-			directions = directions.replace(&#x27; &#x27;, &#x27;&#x27;);
-			// split
-			directions = directions.split(&#x27;,&#x27;);
-
-			return buildHandle$Els.call(this, directions, options);
-		}
-
-	}
-
-	/**
-	 * Takes the $els for the handles and builds the handle object over them
-	 * using this.handleBuilder builder.
-	 *
-	 * @method buildHandleObjects
-	 * @private
-	 */
-	function buildHandleObjects($handles, options) {
-		// $handles : {direction: $el}
-
-		return _.mapValues($handles, function ($el, direction) {
-
-			return this.handleBuilder(_.extend({}, options, {
-				el: $el,
-				direction: direction,
-				resizable: this,
-				thickness: _.isNumber(options.thickness) ? options.thickness : options.thickness[direction],
-				ratio: _.isNumber(options.ratio) ? options.ratio : options.ratio[direction],
-
-				canvas: this.$canvas,
-			}));
-
-		}, this);
-	}
-
-	/**
-	 * The action caller.
-	 *
-	 * @method buildHandles
-	 * @private
-	 */
-	module.exports = function buildHandles(options) {
-
-		var directions = options.directions;
-
-		// get $handle jquery objects
-		var $handles = buildHandle$Els.call(this, options.directions, options);
-
-		// get the handle objects
-		this.handles = buildHandleObjects.call(this, $handles, options);
+		return handleObj;
 	};
 });
 
