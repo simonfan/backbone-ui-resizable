@@ -46,6 +46,13 @@
             "fors": {},
             "namespaces": {}
         },
+        "src/__backbone-ui-resizable/enable-disable.js": {
+            "name": "src/__backbone-ui-resizable/enable-disable.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src/index.js": {
             "name": "src/index.js",
             "modules": {
@@ -364,6 +371,56 @@
             "class": ""
         },
         {
+            "file": "src/__backbone-ui-resizable/enable-disable.js",
+            "line": 4,
+            "description": "Sets up the enabling and disabling system.",
+            "itemtype": "method",
+            "name": "_initializeResizableEnableDisable",
+            "access": "private",
+            "tagname": "",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/enable-disable.js",
+            "line": 47,
+            "description": "Returns whether the resizable capabilities are enabled.",
+            "itemtype": "method",
+            "name": "resizableEnabled",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/enable-disable.js",
+            "line": 56,
+            "description": "Sets the resizable-status to 'disabled'",
+            "itemtype": "method",
+            "name": "disableResizable",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/enable-disable.js",
+            "line": 68,
+            "description": "Sets the resizable-status to 'enabled'",
+            "itemtype": "method",
+            "name": "enableResizable",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/enable-disable.js",
+            "line": 79,
+            "description": "Disables a single handle",
+            "itemtype": "method",
+            "name": "disableHandle",
+            "class": ""
+        },
+        {
+            "file": "src/__backbone-ui-resizable/enable-disable.js",
+            "line": 94,
+            "description": "Enables a single handle",
+            "itemtype": "method",
+            "name": "disableHandle",
+            "class": ""
+        },
+        {
             "file": "src/index.js",
             "line": 25,
             "description": "Just adds 'px' string to numerical values.",
@@ -401,7 +458,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 109,
+            "line": 112,
             "description": "The builder that returns a handle object instance.",
             "itemtype": "property",
             "name": "handleBuilder",
@@ -411,7 +468,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 119,
+            "line": 122,
             "description": "Options to be passed to handleBuilder",
             "itemtype": "property",
             "name": "directions {String|Array|Object}\n        String: string of comma separated directions\n        Array: array of directions\n        Object: hash keyed by directions and valued by handle-selectors or $handles",

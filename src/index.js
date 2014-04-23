@@ -104,6 +104,10 @@ define(function (require, exports, module) {
 
 			}, this);
 
+
+
+			// set enabling system
+			this._initializeResizableEnableDisable();
 		},
 
 		/**
