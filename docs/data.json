@@ -391,7 +391,7 @@
         {
             "file": "src/__backbone-ui-resizable/enable-disable.js",
             "line": 56,
-            "description": "Sets the resizable-status to 'disabled'",
+            "description": "Sets the resizableStatus to 'disabled'",
             "itemtype": "method",
             "name": "disableResizable",
             "class": ""
@@ -399,7 +399,7 @@
         {
             "file": "src/__backbone-ui-resizable/enable-disable.js",
             "line": 68,
-            "description": "Sets the resizable-status to 'enabled'",
+            "description": "Sets the resizableStatus to 'enabled'",
             "itemtype": "method",
             "name": "enableResizable",
             "class": ""

@@ -99,7 +99,7 @@ define(function (require, exports, module) {
 
 
 		// listen to enable and disable option changes
-		this.listenTo(this.model, &#x27;change:resizable-status&#x27;, function (model) {
+		this.listenTo(this.model, &#x27;change:resizableStatus&#x27;, function (model) {
 
 			if (this.resizableEnabled()) {
 				// is enabled
@@ -138,29 +138,29 @@ define(function (require, exports, module) {
 	 * @method resizableEnabled
 	 */
 	exports.resizableEnabled = function resizableEnabled() {
-		return this.model.get(&#x27;resizable-status&#x27;) === &#x27;enabled&#x27;;
+		return this.model.get(&#x27;resizableStatus&#x27;) === &#x27;enabled&#x27;;
 	};
 
 	/**
-	 * Sets the resizable-status to &#x27;disabled&#x27;
+	 * Sets the resizableStatus to &#x27;disabled&#x27;
 	 *
 	 * @method disableResizable
 	 */
 	exports.disableResizable = function disableResizable() {
 
-		this.model.set(&#x27;resizable-status&#x27;, &#x27;disabled&#x27;);
+		this.model.set(&#x27;resizableStatus&#x27;, &#x27;disabled&#x27;);
 
 		return this;
 	};
 
 	/**
-	 * Sets the resizable-status to &#x27;enabled&#x27;
+	 * Sets the resizableStatus to &#x27;enabled&#x27;
 	 *
 	 * @method enableResizable
 	 */
 	exports.enableResizable = function enableResizable(options) {
 
-		this.model.set(&#x27;resizable-status&#x27;, &#x27;enabled&#x27;);
+		this.model.set(&#x27;resizableStatus&#x27;, &#x27;enabled&#x27;);
 		return this;
 	};
 

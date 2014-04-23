@@ -49,8 +49,8 @@ function (resizable            ,  $      ,  modelDock  ,  resizableModel       ,
 			minBottom: '[data-attribute="min-bottom"]',
 			maxBottom: '[data-attribute="max-bottom"]',
 
-			'draggable-status': '[data-attribute="draggable-status"]',
-			'resizable-status': '[data-attribute="resizable-status"]'
+			'draggableStatus': '[data-attribute="draggableStatus"]',
+			'resizableStatus': '[data-attribute="resizableStatus"]'
 		},
 	})
 
