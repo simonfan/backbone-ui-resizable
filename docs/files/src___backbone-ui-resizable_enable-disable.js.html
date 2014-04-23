@@ -99,7 +99,7 @@ define(function (require, exports, module) {
 
 
 		// listen to enable and disable option changes
-		this.listenTo(model, &#x27;change:resizable-status&#x27;, function (model) {
+		this.listenTo(this.model, &#x27;change:resizable-status&#x27;, function (model) {
 
 			if (this.resizableEnabled()) {
 				// is enabled

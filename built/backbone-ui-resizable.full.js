@@ -1180,7 +1180,7 @@ define('__backbone-ui-resizable/enable-disable',['require','exports','module'],f
 
 
 		// listen to enable and disable option changes
-		this.listenTo(model, 'change:resizable-status', function (model) {
+		this.listenTo(this.model, 'change:resizable-status', function (model) {
 
 			if (this.resizableEnabled()) {
 				// is enabled
@@ -1450,7 +1450,8 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 
 
 
-
+			// set enabling system
+			this._initializeResizableEnableDisable();
 		},
 
 		/**

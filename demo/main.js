@@ -32,11 +32,9 @@ function (resizable            ,  $      ,  modelDock  ,  resizableModel       ,
 
 			minWidth: '[data-attribute="min-width"]',
 			maxWidth: '[data-attribute="max-width"]',
-			realMaxWidth: '[data-attribute="real-max-width"]',
 
 			minHeight: '[data-attribute="min-height"]',
 			maxHeight: '[data-attribute="max-height"]',
-			realMaxHeight: '[data-attribute="real-max-height"]',
 
 			'bottom': '[data-attribute="bottom"]',
 			'right': '[data-attribute="right"]',
@@ -50,6 +48,9 @@ function (resizable            ,  $      ,  modelDock  ,  resizableModel       ,
 			maxTop: '[data-attribute="max-top"]',
 			minBottom: '[data-attribute="min-bottom"]',
 			maxBottom: '[data-attribute="max-bottom"]',
+
+			'draggable-status': '[data-attribute="draggable-status"]',
+			'resizable-status': '[data-attribute="resizable-status"]'
 		},
 	})
 

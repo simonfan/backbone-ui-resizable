@@ -458,7 +458,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 112,
+            "line": 113,
             "description": "The builder that returns a handle object instance.",
             "itemtype": "property",
             "name": "handleBuilder",
@@ -468,7 +468,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 122,
+            "line": 123,
             "description": "Options to be passed to handleBuilder",
             "itemtype": "property",
             "name": "directions {String|Array|Object}\n        String: string of comma separated directions\n        Array: array of directions\n        Object: hash keyed by directions and valued by handle-selectors or $handles",
