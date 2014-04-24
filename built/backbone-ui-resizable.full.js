@@ -756,7 +756,7 @@ define('__backbone-ui-resizable/actions/index',['require','exports','module'],fu
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		return this.moveW(-1 * attemptedDelta, options);
+		return Math.abs(this.moveW(-1 * attemptedDelta, options));
 	};
 
 	/**
@@ -777,7 +777,7 @@ define('__backbone-ui-resizable/actions/index',['require','exports','module'],fu
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		return this.moveE(attemptedDelta, options);
+		return Math.abs(this.moveE(attemptedDelta, options));
 	};
 
 	/**
@@ -794,7 +794,7 @@ define('__backbone-ui-resizable/actions/index',['require','exports','module'],fu
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		return this.moveN(-1 * attemptedDelta, options);
+		return Math.abs(this.moveN(-1 * attemptedDelta, options));
 	};
 
 	/**
@@ -811,7 +811,7 @@ define('__backbone-ui-resizable/actions/index',['require','exports','module'],fu
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		return this.moveS(attemptedDelta, options);
+		return Math.abs(this.moveS(attemptedDelta, options));
 	};
 
 
@@ -833,7 +833,7 @@ define('__backbone-ui-resizable/actions/index',['require','exports','module'],fu
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		return this.moveW(attemptedDelta, options);
+		return Math.abs(this.moveW(attemptedDelta, options));
 	};
 
 	/**
@@ -854,7 +854,7 @@ define('__backbone-ui-resizable/actions/index',['require','exports','module'],fu
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		return this.moveE(-1 * attemptedDelta, options);
+		return Math.abs(this.moveE(-1 * attemptedDelta, options));
 	};
 
 	/**
@@ -871,7 +871,7 @@ define('__backbone-ui-resizable/actions/index',['require','exports','module'],fu
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		return this.moveN(attemptedDelta, options);
+		return Math.abs(this.moveN(attemptedDelta, options));
 	};
 
 	/**
@@ -889,7 +889,7 @@ define('__backbone-ui-resizable/actions/index',['require','exports','module'],fu
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		return this.moveS(-1 * attemptedDelta, options);
+		return Math.abs(this.moveS(-1 * attemptedDelta, options));
 	};
 });
 

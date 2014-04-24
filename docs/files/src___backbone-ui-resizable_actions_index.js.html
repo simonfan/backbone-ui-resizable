@@ -110,7 +110,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
 
-		return this.moveW(-1 * attemptedDelta, options);
+		return Math.abs(this.moveW(-1 * attemptedDelta, options));
 	};
 
 	/**
@@ -131,7 +131,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
 
-		return this.moveE(attemptedDelta, options);
+		return Math.abs(this.moveE(attemptedDelta, options));
 	};
 
 	/**
@@ -148,7 +148,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
 
-		return this.moveN(-1 * attemptedDelta, options);
+		return Math.abs(this.moveN(-1 * attemptedDelta, options));
 	};
 
 	/**
@@ -165,7 +165,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
 
-		return this.moveS(attemptedDelta, options);
+		return Math.abs(this.moveS(attemptedDelta, options));
 	};
 
 
@@ -187,7 +187,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
 
-		return this.moveW(attemptedDelta, options);
+		return Math.abs(this.moveW(attemptedDelta, options));
 	};
 
 	/**
@@ -208,7 +208,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
 
-		return this.moveE(-1 * attemptedDelta, options);
+		return Math.abs(this.moveE(-1 * attemptedDelta, options));
 	};
 
 	/**
@@ -225,7 +225,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
 
-		return this.moveN(attemptedDelta, options);
+		return Math.abs(this.moveN(attemptedDelta, options));
 	};
 
 	/**
@@ -243,7 +243,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || &#x27;code&#x27;;
 
-		return this.moveS(-1 * attemptedDelta, options);
+		return Math.abs(this.moveS(-1 * attemptedDelta, options));
 	};
 });
 
