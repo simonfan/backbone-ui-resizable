@@ -63,7 +63,7 @@ define(function (require, exports, module) {
 
 
 			// [1] set the updatePosition method
-			this.updatePosition = _.throttle(_.bind(_updatePosition[this.direction], this), 20);
+			this.updatePosition = _.bind(_updatePosition[this.direction], this);
 
 
 			// [2] setStyles
@@ -74,14 +74,23 @@ define(function (require, exports, module) {
 			// initialize handle position
 			this.updatePosition();
 
-
-			// move handles together
-			this.listenTo(this.resizable.model, 'change', this.updatePosition);
-				// [4] when movements starts, calculate the min and maxes.
-			//	this.on('movestart', this.calcMinMax);
-
 			// [5] enable!
 			this.enableHandle();
+
+
+			this.resizable.listenTo(this, 'movestart', function () {
+				this.trigger('resizestart', this);
+			});
+
+			// UPDATE handle positions whenever the movement stops!
+			// ONLY WHEN MOVEMENT STOPS
+			this.resizable.listenTo(this, 'movestop', function () {
+				this.trigger('resizestop', this);
+
+				_.each(this.handles, function (handle) {
+					handle.updatePosition();
+				});
+			});
 		},
 
 		/**

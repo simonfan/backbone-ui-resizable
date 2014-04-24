@@ -46,7 +46,7 @@ define(function (require, exports, module) {
 			delta = this.deltaN(attemptedDelta, options.force);
 
 		model.set({
-			top: no(model.get('top')).add(delta).value(),
+			top: model.get('top') + delta,
 			height: no(model.get('height')).subtract(delta).value()
 		});
 

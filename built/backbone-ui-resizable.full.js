@@ -249,7 +249,7 @@ define('__backbone-ui-resizable/handle/base',['require','exports','module','jque
 
 
 			// [1] set the updatePosition method
-			this.updatePosition = _.throttle(_.bind(_updatePosition[this.direction], this), 20);
+			this.updatePosition = _.bind(_updatePosition[this.direction], this);
 
 
 			// [2] setStyles
@@ -260,14 +260,23 @@ define('__backbone-ui-resizable/handle/base',['require','exports','module','jque
 			// initialize handle position
 			this.updatePosition();
 
-
-			// move handles together
-			this.listenTo(this.resizable.model, 'change', this.updatePosition);
-				// [4] when movements starts, calculate the min and maxes.
-			//	this.on('movestart', this.calcMinMax);
-
 			// [5] enable!
 			this.enableHandle();
+
+
+			this.resizable.listenTo(this, 'movestart', function () {
+				this.trigger('resizestart', this);
+			});
+
+			// UPDATE handle positions whenever the movement stops!
+			// ONLY WHEN MOVEMENT STOPS
+			this.resizable.listenTo(this, 'movestop', function () {
+				this.trigger('resizestop', this);
+
+				_.each(this.handles, function (handle) {
+					handle.updatePosition();
+				});
+			});
 		},
 
 		/**
@@ -326,24 +335,37 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','./b
 	function nY(delta, options) {
 		var remainder = this.resizable.moveN(delta, options);
 
-		return delta - remainder;
+
+		// ALWAYS RETURN 0, as the handle is
+		// positioned relative to the resizable object,
+		// and thus it must not modify its own position
+		return 0;
 	}
 
 	function sY(delta, options) {
 		var remainder = this.resizable.moveS(delta, options);
 
+		// IF there is a remainder,
+		// return the difference, so that the handle
+		// cannot move beyond the resizable's boundaries
 		return delta - remainder;
 	}
 
 	function wX(delta, options) {
 		var remainder = this.resizable.moveW(delta, options);
 
-		return delta - remainder;
+		// ALWAYS RETURN 0, as the handle is
+		// positioned relative to the resizable object,
+		// and thus it must not modify its own position
+		return 0;
 	}
 
 	function eX(delta, options) {
 		var remainder = this.resizable.moveE(delta, options);
 
+		// IF there is a remainder,
+		// return the difference, so that the handle
+		// cannot move beyond the resizable's boundaries
 		return delta - remainder;
 	}
 
@@ -709,7 +731,7 @@ define('__backbone-ui-resizable/actions/n',['require','exports','module','lodash
 			delta = this.deltaN(attemptedDelta, options.force);
 
 		model.set({
-			top: no(model.get('top')).add(delta).value(),
+			top: model.get('top') + delta,
 			height: no(model.get('height')).subtract(delta).value()
 		});
 

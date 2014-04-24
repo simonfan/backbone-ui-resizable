@@ -6,24 +6,37 @@ define(function (require, exports, module) {
 	function nY(delta, options) {
 		var remainder = this.resizable.moveN(delta, options);
 
-		return delta - remainder;
+
+		// ALWAYS RETURN 0, as the handle is
+		// positioned relative to the resizable object,
+		// and thus it must not modify its own position
+		return 0;
 	}
 
 	function sY(delta, options) {
 		var remainder = this.resizable.moveS(delta, options);
 
+		// IF there is a remainder,
+		// return the difference, so that the handle
+		// cannot move beyond the resizable's boundaries
 		return delta - remainder;
 	}
 
 	function wX(delta, options) {
 		var remainder = this.resizable.moveW(delta, options);
 
-		return delta - remainder;
+		// ALWAYS RETURN 0, as the handle is
+		// positioned relative to the resizable object,
+		// and thus it must not modify its own position
+		return 0;
 	}
 
 	function eX(delta, options) {
 		var remainder = this.resizable.moveE(delta, options);
 
+		// IF there is a remainder,
+		// return the difference, so that the handle
+		// cannot move beyond the resizable's boundaries
 		return delta - remainder;
 	}
 
