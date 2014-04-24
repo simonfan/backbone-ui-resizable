@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__backbone-ui-resizable/build-handle.js - backbone-ui-resizable</title>
+    <title>src/__backbone-ui-resizable/helpers.js - backbone-ui-resizable</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,70 +82,89 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__backbone-ui-resizable/build-handle.js</h1>
+                        <h1 class="file-heading">File: src/__backbone-ui-resizable/helpers.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var $ = require(&#x27;jquery&#x27;),
-		_ = require(&#x27;lodash&#x27;);
+	var _ = require(&#x27;lodash&#x27;);
 
 
-	/**
-	 * Builds a SINGLE $el for a direction handle.
-	 *
-	 * @method buildHandle$El
-	 * @private
-	 */
-	exports.buildHandle$El = function buildHandle$El(direction, options) {
-		var clss = options.clss;
-
-		var $handle = $(&#x27;&lt;div&gt;&lt;/div&gt;&#x27;);
-
-		$handle
-			.addClass(clss)
-			.addClass(clss + &#x27;-&#x27; + direction);
-
-		return $handle.appendTo(this.$el);
+	function notNaN(v) {
+		return !isNaN(v);
 	}
 
+	exports.min = function min(v1, v2) {
+		if (isNaN(v1)) {
+			return v2;
+		} else if (isNaN(v2)) {
+			return v1;
+		} else {
 
-	/**
-	 * Builds a single handle and returns it.
-	 * Takes care of creating the $el, if necessary.
-	 *
-	 * @method buildHandle
-	 * @param direction {String}
-	 * @param options {Object}
-	 */
-	exports.buildHandle = function buildHandle(direction, options) {
+			return v1 &lt; v2 ? v1 : v2;
+		}
+	};
 
-		options = options || {};
+	exports.max = function max(v1, v2) {
+		if (isNaN(v1)) {
+			return v2;
+		} else if (isNaN(v2)) {
+			return v1;
+		} else {
+			return v1 &gt; v2 ? v1 : v2;
+		}
 
-		_.defaults(options, this.handleOptions);
-
-		var ratio = options.ratio,
-			thickness = options.thickness;
-
-		var builderOptions = _.extend({}, options, {
-			el: this.buildHandle$El(direction, options),
-			resizable: this,
-			direction: direction,
+	};
 
 
-			// ratio and thickness may be set for each
-			// isolated handle.
-			ratio: _.isObject(ratio) ? ratio[direction] : ratio,
-			thickness: _.isObject(thickness) ? thickness[direction] : thickness
+	exports.numberify = function numberify(v) {
+		var res = parseFloat(v);
+
+		if (isNaN(res)) {
+			throw new Error(v + &#x27; not number&#x27;);
+		} else {
+			return res;
+		}
+	};
+
+	exports.numberifyProperties = function numberifyProperties(props, obj) {
+		var res = {};
+
+		_.each(props, function (p) {
+			res[p] = parseFloat(obj[p]);
 		});
 
-		// [4] build the handle object
-		var handleObj = this.handleBuilder[direction](builderOptions);
+		return res;
+	};
 
 
-		return handleObj;
+
+	exports.fitValueWithin = function fitValueWithin(value, min, max) {
+
+		if (!isNaN(min)) {
+			value = value &gt; min ? value : min;
+		}
+
+		if (!isNaN(max)) {
+			value = value &lt; max ? value : max;
+		}
+
+		return value;
+	};
+
+
+	/**
+	 * Just adds &#x27;px&#x27; string to numerical values.
+	 *
+	 * @method stringifyPositionalValue
+	 * @private
+	 */
+	var isNumber = /^-?\d*(\.\d+)?$/;
+	exports.stringifyPositionalValue = function stringifyPositionalValue(v) {
+		// [1] check if it is a isNumber
+		return isNumber.test(v) ? v + &#x27;px&#x27; : v;
 	};
 });
 

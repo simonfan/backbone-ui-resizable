@@ -47,6 +47,21 @@ define('__backbone-ui-resizable/handle/helpers',['require','exports','module','l
 	};
 
 
+
+	exports.fitValueWithin = function fitValueWithin(value, min, max) {
+
+		if (!isNaN(min)) {
+			value = value > min ? value : min;
+		}
+
+		if (!isNaN(max)) {
+			value = value < max ? value : max;
+		}
+
+		return value;
+	};
+
+
 	/**
 	 * Just adds 'px' string to numerical values.
 	 *
@@ -66,516 +81,81 @@ define('__backbone-ui-resizable/handle/update-position',['require','exports','mo
 	var helpers = require('./helpers'),
 		no = require('no');
 
-	function positionN(offset) {
-		var top = no(this.resizable.model.get('top')).add(offset);
+	function positionN() {
+		this.model.set('top', -1 * this.outer);
+	}
+
+	function positionS() {
+
+		var top = no(this.resizable.model.get('height')).subtract(this.inner);
 
 		this.model.set('top', top.value());
 	}
 
-	function positionS(offset) {
-
-		var top = no(this.resizable.model.get('top'));
-
-		top.add(this.resizable.model.get('height'))
-			.add(offset);
-
-		this.model.set('top', top.value());
+	function positionW() {
+		this.model.set('left', -1 * this.outer);
 	}
 
-	function positionW(offset) {
-		var left = no(this.resizable.model.get('left'));
+	function positionE() {
 
-		this.model.set('left', left.add(offset).value());
-	}
-
-	function positionE(offset) {
-
-		var left = no(this.resizable.model.get('left'));
-
-		left.add(this.resizable.model.get('width'))
-			.add(offset);
+		var left = no(this.resizable.model.get('width')).subtract(this.inner);
 
 		this.model.set('left', left.value());
 	}
 
 	function sizeX() {
-		this.model.set('width', no(this.resizable.model.get('width')).value());
+		this.model.set('width', no(this.resizable.model.get('width')).add(2 * this.outer).value());
 	}
 
 	function sizeY() {
-		this.model.set('height', no(this.resizable.model.get('height')).value());
+		this.model.set('height', no(this.resizable.model.get('height')).add(2 * this.outer).value());
 	}
 
 
 
 
 	exports.n = function updateN() {
-		positionN.call(this, -1 * this.outer);
-		positionW.call(this, 0);
+		positionN.call(this);
+		positionW.call(this);
 		sizeX.call(this);
 	};
 
 	exports.s = function updateS() {
-		positionS.call(this, -1 * this.inner);
-		positionW.call(this, 0);
+		positionS.call(this);
+		positionW.call(this);
 		sizeX.call(this);
 	};
 
 	exports.w = function updateW() {
-		positionW.call(this, -1 * this.outer);
-		positionN.call(this, 0);
+		positionW.call(this);
+		positionN.call(this);
 		sizeY.call(this);
 	};
 
 	exports.e = function updateE() {
-		positionE.call(this, -1 * this.inner);
-		positionN.call(this, 0);
+		positionE.call(this);
+		positionN.call(this);
 		sizeY.call(this);
 	};
 
 	exports.nw = function updateNW() {
-		positionN.call(this, -1 * this.outer);
-		positionW.call(this, -1 * this.outer);
+		positionN.call(this);
+		positionW.call(this);
 	};
 
 	exports.ne = function updateNE() {
-		positionN.call(this, -1 * this.outer);
-		positionE.call(this, -1 * this.inner);
+		positionN.call(this);
+		positionE.call(this);
 	};
 
 	exports.sw = function updateSW() {
-		positionS.call(this, -1 * this.inner);
-		positionW.call(this, -1 * this.outer);
+		positionS.call(this);
+		positionW.call(this);
 	};
 
 	exports.se = function updateSE() {
-		positionS.call(this, -1 * this.inner);
-		positionE.call(this, -1 * this.inner);
-	};
-
-});
-
-define('__backbone-ui-resizable/handle/track',['require','exports','module','lodash','./helpers'],function (require, exports, module) {
-
-	
-
-	var _ = require('lodash');
-
-	var h = require('./helpers');
-
-	/**
-	 * All handles should track these events.
-	 *
-	 * @method all
-	 */
-	exports.all = function trackAll() {
-		var resizable = this.resizable
-
-		// resizestart, resizestop
-		resizable.listenTo(this, 'movestart', function () {
-			this.trigger('resizestart', resizable);
-		});
-
-		resizable.listenTo(this, 'movestop', function () {
-			this.trigger('resizestop', resizable);
-		})
-
-		// move handles together
-		this.listenTo(resizable.model, 'change', this.updatePosition);
-	};
-
-	/**
-	 * North-related handles should track these movements:
-	 * - move-y
-	 *
-	 * @method n
-	 */
-	exports.n = function trackN() {
-
-
-		var resizable = this.resizable,
-			direction = this.direction;
-
-		resizable.listenTo(this, 'move-y', function (handleObj, edata) {
-
-			// 'this' refers to the resizable object.
-			var model = this.model;
-
-			var delta = h.numberify(edata.delta),
-				height = h.numberify(model.get('height')),
-				top = h.numberify(model.get('top'));
-
-			model.set({
-				height: height - delta,
-				top: top + delta
-			});
-
-			// trigger events
-			if (!edata.silent) {
-
-				var action = delta > 0 ? 'contract' : 'expand';
-
-				edata = _.assign({
-					action: action,
-					handle: direction
-				}, edata);
-
-				this.trigger('resize', this, edata)
-					.trigger('resize-y', this, edata)
-					// action events
-					.trigger(action, this, edata)
-					.trigger(action + 'y', this, edata);
-			}
-
-		}, resizable);
-	};
-
-	/**
-	 * South-related handles should track these movements:
-	 * - move-y
-	 *
-	 * @method s
-	 */
-	exports.s = function trackS() {
-		var resizable = this.resizable,
-			direction = this.direction;
-
-		resizable.listenTo(this, 'move-y', function (handleObj, edata) {
-			// 'this' refers to the resizable object.
-
-			var model = this.model;
-
-			var height = h.numberify(model.get('height')) + h.numberify(edata.delta);
-
-			model.set('height', height);
-
-			// trigger events
-			if (!edata.silent) {
-
-				var action = edata.delta > 0 ? 'expand' : 'contract';
-
-				edata = _.assign({
-					action: action,
-					handle: direction
-				}, edata);
-
-				this.trigger('resize', this, edata)
-					.trigger('resize-y', this, edata)
-					// action events
-					.trigger(action, this, edata)
-					.trigger(action + 'y', this, edata);
-			}
-
-		}, resizable);
-	};
-
-	/**
-	 * West-related handles should track these movements:
-	 * - move-x
-	 *
-	 * @method w
-	 */
-	exports.w = function trackW() {
-		var resizable = this.resizable,
-			direction = this.direction;
-
-		resizable.listenTo(this, 'move-x', function (handleObj, edata) {
-			// 'this' refers to the resizable object.
-			var model = this.model;
-
-			var delta = h.numberify(edata.delta);
-
-			var width = h.numberify(model.get('width')),
-				left = h.numberify(model.get('left'));
-
-			model.set({
-				width: width - delta,
-				left: left + delta
-			});
-
-			// trigger events
-			if (!edata.silent) {
-
-				var action = delta > 0 ? 'contract' : 'expand';
-
-				edata = _.assign({
-					action: action,
-					handle: direction
-				}, edata);
-
-				this.trigger('resize', this, edata)
-					.trigger('resize-x', this, edata)
-					// action events
-					.trigger(action, this, edata)
-					.trigger(action + 'x', this, edata);
-			}
-
-		}, resizable);
-	};
-
-	/**
-	 * East-related handles should track these movements:
-	 * - move-x
-	 *
-	 * @method e
-	 */
-	exports.e = function trackE() {
-		var resizable = this.resizable,
-			direction = this.direction;
-
-		resizable.listenTo(this, 'move-x', function (handleObj, edata) {
-			// 'this' refers to the resizable object.
-
-			var model = this.model;
-
-			var width = h.numberify(model.get('width')) + h.numberify(edata.delta);
-
-			model.set('width', width);
-
-
-			// trigger events
-			// we are sure delta is not 0, as that was dealt with at the
-			// draggable object
-			if (!edata.silent) {
-
-				var action = edata.delta > 0 ? 'expand' : 'contract';
-
-				edata = _.assign({
-					action: action,
-					handle: direction
-				}, edata);
-
-				this.trigger('resize', this, edata)
-					.trigger('resize-x', this, edata)
-					// action events
-					.trigger(action, this, edata)
-					.trigger(action + 'x', this, edata);
-			}
-
-		}, resizable);
-	};
-});
-
-define('__backbone-ui-resizable/handle/min-max',['require','exports','module','no','./helpers'],function (require, exports, module) {
-	
-
-	var no = require('no');
-
-	var helpers = require('./helpers');
-
-	// Y
-	exports.n = function nMinMax() {
-
-		var resizableModel = this.resizable.model;
-
-		var height = resizableModel.get('height'),
-			minHeight = resizableModel.get('minHeight'),
-			maxHeight = resizableModel.get('maxHeight');
-
-			// the highest possible delta towards the top
-		var maxTopDelta = maxHeight - height,
-			// the highest possible delta towards the bottom
-			maxBottomDelta = height - minHeight;
-
-
-			// the minimum Y set on resizableModel
-		var resizableMinTop = resizableModel.get('minTop') || 0,
-
-			resizableMaxTop = resizableModel.get('maxTop');
-
-
-		var currentY = this.model.get('top');
-
-		this.model.set({
-			// the minimum Y for NORTH handles is the
-			// maximum value among the
-			// 1- position at which the resizable object reaches its maximum height
-			// 2- position at which the resizable object reaches its minimum Y position
-			minTop: helpers.max(
-				no(currentY)
-					.subtract(maxTopDelta)
-					.subtract(this.outer)
-					.value(),
-				no(resizableMinTop)
-					.subtract(this.outer)
-					.value()
-			),
-
-			// the maximum Y for NORTH handles is
-			// simply the position at which the resizable object
-			// reaches its minimum height
-			maxTop: helpers.min(
-				no(currentY)
-					.add(maxBottomDelta)
-					.value(),
-				no(resizableMaxTop)
-					.subtract(this.outer)
-					.value()
-			),
-		});
-	};
-
-	exports.s = function sMinMax() {
-
-		var resizableModel = this.resizable.model;
-
-		var height = resizableModel.get('height'),
-			minHeight = resizableModel.get('minHeight'),
-			maxHeight = resizableModel.get('maxHeight');
-
-			// the highest possible delta towards the top
-		var maxTopDelta = height - minHeight,
-			// the highest possible delta towards the bottom
-			maxBottomDelta = maxHeight - height;
-
-
-		var resizableMinBottom = resizableModel.get('minBottom'),
-			// the maximum Y set on resizableModel
-			resizableMaxBottom = resizableModel.get('maxBottom');
-
-
-		var currentY = this.model.get('top');
-
-		this.model.set({
-			// the minimum Y for SOUTH handles is
-			// simply the position at which the resizable object
-			// reaches its minimum height
-			minBottom: helpers.max(
-				no(currentY)
-					.subtract(maxTopDelta)
-					.add(this.thickness)
-					.value(),
-				no(resizableMinBottom)
-					.add(this.outer)
-					.value()
-			),
-
-			// the maximum Y for SOUTH handles is the
-			// minimum value among the
-			// 1- position at which the resizable object reaches its maximum height
-			// 2- position at which the resizable object reaches its maximum Y position
-			maxBottom: helpers.min(
-				no(currentY)
-					.add(maxBottomDelta)
-					.add(this.thickness)
-					.value(),
-				no(resizableMaxBottom)
-					.add(this.outer)
-					.value()
-			)
-		});
-	};
-
-
-
-
-
-
-	// X
-	exports.w = function wMinMax() {
-
-		var resizableModel = this.resizable.model;
-
-		var width = resizableModel.get('width'),
-			minWidth = resizableModel.get('minWidth'),
-			maxWidth = resizableModel.get('maxWidth');
-
-			// the highest possible delta towards the left
-		var maxLeftDelta = maxWidth - width,
-			// the highest possible delta towards the right
-			maxRightDelta = width - minWidth;
-
-
-			// the minimum X set on resizableModel
-		var resizableMinLeft = resizableModel.get('minLeft') || 0,
-
-			resizableMaxLeft = resizableModel.get('maxLeft');
-
-			// the current X position of the handle
-		var currentLeft = this.model.get('left');
-
-		this.model.set({
-			// the minimum X for WEST handles is the
-			// maximum value among the
-			// 1- position at which the resizable object reaches its maximum width
-			// 2- position at which the resizable object reaches its minimum X boundary
-			// LESS the handle portion that is out.
-			minLeft: helpers.max(
-				no(currentLeft)
-					.subtract(maxLeftDelta)
-					.subtract(this.outer)
-					.value(),
-				no(resizableMinLeft)
-					.subtract(this.outer)
-					.value()
-			),
-
-			// the maximum X for WEST handles is
-			// simply the position at which the resizable object
-			// reaches its minimum width
-			maxLeft: helpers.min(
-				no(currentLeft)
-					.add(maxRightDelta)
-					.subtract(this.outer)
-					.value(),
-				no(resizableMaxLeft)
-					.subtract(this.outer)
-					.value()
-			)
-		});
-	};
-
-
-
-
-	exports.e = function eMinMax() {
-
-		var resizableModel = this.resizable.model;
-
-		var width = resizableModel.get('width'),
-			minWidth = resizableModel.get('minWidth'),
-			maxWidth = resizableModel.get('maxWidth');
-
-			// the highest possible delta towards the left
-		var maxLeftDelta = width - minWidth,
-			// the highest possible delta towards the right
-			maxRightDelta = maxWidth - width;
-
-		var resizableMinRight = resizableModel.get('minRight'),
-			// the maximum X set on resizableModel
-			resizableMaxRight = resizableModel.get('maxRight');
-
-
-		var currentLeft = this.model.get('left');
-
-		this.model.set({
-			// the minimum X for EAST handles is
-			// simply the position at which the resizable object
-			// reaches its minimum width
-			minRight: helpers.max(
-				no(currentLeft)
-					.subtract(maxLeftDelta)
-					.add(this.thickness)
-					.value(),
-				no(resizableMinRight)
-					.add(this.outer)
-					.value()
-			),
-
-			// the maximum X for EAST handles is the
-			// minimum value among the
-			// 1- position at which the resizable object reaches its maximum width
-			// 2- position at which the resizable object reaches its maximum X boundary
-			maxRight: helpers.min(
-				no(currentLeft)
-					.add(this.thickness)
-					.add(maxRightDelta)
-					.value(),
-				no(resizableMaxRight)
-					.add(this.outer)
-					.value()
-			)
-		});
+		positionS.call(this);
+		positionE.call(this);
 	};
 
 });
@@ -604,7 +184,7 @@ define('__backbone-ui-resizable/handle/enable-disable',['require','exports','mod
 	};
 });
 
-define('__backbone-ui-resizable/handle/index',['require','exports','module','jquery-ui','backbone-ui-draggable','lodash','./update-position','./track','./min-max','./enable-disable'],function (require, exports, module) {
+define('__backbone-ui-resizable/handle/base',['require','exports','module','jquery-ui','backbone-ui-draggable','lodash','./update-position','./enable-disable'],function (require, exports, module) {
 	
 
 	require('jquery-ui');
@@ -612,9 +192,7 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','jqu
 	var draggable = require('backbone-ui-draggable'),
 		_ = require('lodash');
 
-	var _updatePosition = require('./update-position'),
-		_track = require('./track'),
-		_minmax = require('./min-max');
+	var _updatePosition = require('./update-position');
 
 	var positions = {
 		// horizontal vertical
@@ -680,13 +258,13 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','jqu
 
 			// [2.1] place the handle
 			// initialize handle position
-			this.initializePosition(options);
+			this.updatePosition();
 
-			// [3] set correct trackers for hte handle
-			this.track();
 
-			// [4] when movements starts, calculate the min and maxes.
-			this.on('movestart', this.calcMinMax);
+			// move handles together
+			this.listenTo(this.resizable.model, 'change', this.updatePosition);
+				// [4] when movements starts, calculate the min and maxes.
+			//	this.on('movestart', this.calcMinMax);
 
 			// [5] enable!
 			this.enableHandle();
@@ -730,63 +308,6 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','jqu
 			this.$el.css(styles);
 		},
 
-		/**
-		 * Places the handle at its initial position,
-		 * at the right place given the direction.
-		 *
-		 * @method initializePosition
-		 */
-		initializePosition: function initializePosition(options) {
-			var $el = this.$el;
-
-			$el.position({
-				// horizontal vertical
-				my: 'center center',
-				at: positions[this.direction],
-				of: this.resizable.$el
-			});
-
-			var pos = $el.position();
-
-			this.model.set({
-				top: parseFloat(pos.top),
-				left: parseFloat(pos.left)
-			});
-
-			this.updatePosition();
-		},
-
-		/**
-		 * Links up movement from the handle to the resizable object.
-		 *
-		 * @method track
-		 */
-		track: function track() {
-			_.each(this.direction, function (d) {
-
-				_track[d].call(this);
-
-			}, this);
-
-
-			_track.all.call(this);
-		},
-
-		/**
-		 * Calculates the minimum and maximum positions for the handle
-		 * taking into account settings of min and max of the resizable object.
-		 *
-		 * @method calcMinMax
-		 *
-		 */
-		calcMinMax: function calcMinMax() {
-			_.each(this.direction, function (d) {
-
-				_minmax[d].call(this);
-
-			}, this);
-		},
-
 		map: _.extend(draggable.prototype.map, {
 			height: '->css:height',
 			width: '->css:width',
@@ -797,7 +318,421 @@ define('__backbone-ui-resizable/handle/index',['require','exports','module','jqu
 	handle.proto(require('./enable-disable'));
 });
 
-define('__backbone-ui-resizable/actions',['require','exports','module'],function (require, exports, module) {
+define('__backbone-ui-resizable/handle/index',['require','exports','module','./base'],function (require, exports, module) {
+	
+
+	var baseHandle = require('./base');
+
+	function nY(delta, options) {
+		var remainder = this.resizable.moveN(delta, options);
+
+		return delta - remainder;
+	}
+
+	function sY(delta, options) {
+		var remainder = this.resizable.moveS(delta, options);
+
+		return delta - remainder;
+	}
+
+	function wX(delta, options) {
+		var remainder = this.resizable.moveW(delta, options);
+
+		return delta - remainder;
+	}
+
+	function eX(delta, options) {
+		var remainder = this.resizable.moveE(delta, options);
+
+		return delta - remainder;
+	}
+
+
+	var n = { beforeMoveY: nY },
+		s = { beforeMoveY: sY },
+		w = { beforeMoveX: wX },
+		e = { beforeMoveX: eX };
+
+
+
+	exports.n = baseHandle.extend(n);
+
+	exports.s = baseHandle.extend(s);
+
+	exports.w = baseHandle.extend(w);
+
+	exports.e = baseHandle.extend(e);
+
+	exports.nw = baseHandle.extend(n).extend(w);
+
+	exports.ne = baseHandle.extend(n).extend(e);
+
+	exports.sw = baseHandle.extend(s).extend(w);
+
+	exports.se = baseHandle.extend(s).extend(e);
+});
+
+define('__backbone-ui-resizable/helpers',['require','exports','module','lodash'],function (require, exports, module) {
+	
+
+	var _ = require('lodash');
+
+
+	function notNaN(v) {
+		return !isNaN(v);
+	}
+
+	exports.min = function min(v1, v2) {
+		if (isNaN(v1)) {
+			return v2;
+		} else if (isNaN(v2)) {
+			return v1;
+		} else {
+
+			return v1 < v2 ? v1 : v2;
+		}
+	};
+
+	exports.max = function max(v1, v2) {
+		if (isNaN(v1)) {
+			return v2;
+		} else if (isNaN(v2)) {
+			return v1;
+		} else {
+			return v1 > v2 ? v1 : v2;
+		}
+
+	};
+
+
+	exports.numberify = function numberify(v) {
+		var res = parseFloat(v);
+
+		if (isNaN(res)) {
+			throw new Error(v + ' not number');
+		} else {
+			return res;
+		}
+	};
+
+	exports.numberifyProperties = function numberifyProperties(props, obj) {
+		var res = {};
+
+		_.each(props, function (p) {
+			res[p] = parseFloat(obj[p]);
+		});
+
+		return res;
+	};
+
+
+
+	exports.fitValueWithin = function fitValueWithin(value, min, max) {
+
+		if (!isNaN(min)) {
+			value = value > min ? value : min;
+		}
+
+		if (!isNaN(max)) {
+			value = value < max ? value : max;
+		}
+
+		return value;
+	};
+
+
+	/**
+	 * Just adds 'px' string to numerical values.
+	 *
+	 * @method stringifyPositionalValue
+	 * @private
+	 */
+	var isNumber = /^-?\d*(\.\d+)?$/;
+	exports.stringifyPositionalValue = function stringifyPositionalValue(v) {
+		// [1] check if it is a isNumber
+		return isNumber.test(v) ? v + 'px' : v;
+	};
+});
+
+define('__backbone-ui-resizable/actions/e',['require','exports','module','lodash','no','../helpers'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		no = require('no');
+
+	var helpers = require('../helpers');
+
+	exports.deltaE = function deltaE(attempted, force) {
+
+		if (force) {
+			return attempted;
+		}
+
+		var m = this.model;
+
+		var w = m.get('width'),
+			minW = m.get('minWidth'),
+			maxW = m.get('maxWidth');
+
+		var r = no(m.get('left')).add(w).value(),
+			minR = m.get('minRight'),
+			maxR = m.get('maxRight');
+
+
+			// maximum delta towards WEST (-)
+		var maxWDelta = helpers.max(
+				no(minW).subtract(w).value(),
+				no(minR).subtract(r).value()
+			),
+			// maximum delta towards EAST (+)
+			maxEDelta = helpers.min(
+				no(maxW).subtract(w).value(),
+				no(maxR).subtract(r).value()
+			);
+
+		return helpers.fitValueWithin(attempted, maxWDelta, maxEDelta);
+	};
+
+	exports.moveE = function moveE(attemptedDelta, options) {
+		options = options || {};
+
+		var model = this.model,
+			delta = this.deltaE(attemptedDelta, options.force);
+
+		model.set('width', no(model.get('width')).add(delta).value());
+
+		// events
+		if (!options.silent && delta !== 0) {
+
+			var eventData = _.assign({
+				axis: 'x',
+				delta: -1 * delta,
+				action: delta > 0 ? 'expand' : 'contract',
+				handle: 'e',
+
+			}, options);
+
+			this.trigger('resize', this, eventData)
+				.trigger('resize-x', this, eventData)
+		}
+
+		return attemptedDelta - delta;
+	};
+});
+
+define('__backbone-ui-resizable/actions/w',['require','exports','module','lodash','no','../helpers'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		no = require('no');
+
+	var helpers = require('../helpers');
+
+	exports.deltaW = function deltaW(attempted, force) {
+
+
+
+		if (force) {
+			return attempted;
+		}
+
+
+		var m = this.model;
+
+		var w = m.get('width'),
+			minW = m.get('minWidth'),
+			maxW = m.get('maxWidth');
+
+		var l = m.get('left'),
+			minL = m.get('minLeft'),
+			maxL = m.get('maxLeft');
+
+
+			// maximum delta towards WEST (-)
+		var maxWDelta = helpers.max(
+				no(w).subtract(maxW).value(),
+				no(minL).subtract(l).value()
+			),
+			// maximum delta towards EAST (+)
+			maxEDelta = helpers.min(
+				no(w).subtract(minW).value(),
+				no(maxL).subtract(l).value()
+			);
+
+		return helpers.fitValueWithin(attempted, maxWDelta, maxEDelta);
+	};
+
+	exports.moveW = function moveW(attemptedDelta, options) {
+		options = options || {};
+
+		var model = this.model,
+			delta = this.deltaW(attemptedDelta, options.force);
+
+		model.set({
+			left: no(model.get('left')).add(delta).value(),
+			width: no(model.get('width')).subtract(delta).value()
+		});
+
+		// events
+		if (!options.silent && delta !== 0) {
+
+			var eventData = _.assign({
+				axis: 'x',
+				delta: -1 * delta,
+				action: delta > 0 ? 'contract' : 'expand',
+				handle: 'w',
+
+			}, options);
+
+			this.trigger('resize', this, eventData)
+				.trigger('resize-x', this, eventData)
+		}
+
+		return attemptedDelta - delta;
+	};
+});
+
+define('__backbone-ui-resizable/actions/s',['require','exports','module','lodash','no','../helpers'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		no = require('no');
+
+	var helpers = require('../helpers');
+
+	exports.deltaS = function deltaS(attempted, force) {
+
+
+
+		if (force) {
+			return attempted;
+		}
+
+
+		var m = this.model;
+
+		var h = m.get('height'),
+			minH = m.get('minHeight'),
+			maxH = m.get('maxHeight');
+
+		var b = no(m.get('top')).add(h).value(),
+			minB = m.get('minBottom'),
+			maxB = m.get('maxBottom');
+
+
+			// maximum delta towards NORTH (-)
+		var maxNDelta = helpers.max(
+				no(minH).subtract(h).value(),
+				no(minB).subtract(b).value()
+			),
+			// maximum delta towards SOUTH (+)
+			maxSDelta = helpers.min(
+				no(maxH).subtract(h).value(),
+				no(maxB).subtract(b).value()
+			);
+
+		return helpers.fitValueWithin(attempted, maxNDelta, maxSDelta);
+	};
+
+	exports.moveS = function moveS(attemptedDelta, options) {
+		options = options || {};
+
+		var model = this.model,
+			delta = this.deltaS(attemptedDelta, options.force);
+
+		model.set('height', no(model.get('height')).add(delta).value());
+
+		// events
+		if (!options.silent && delta !== 0) {
+
+			var eventData = _.assign({
+				axis: 'y',
+				delta: delta,
+				action: delta > 0 ? 'expand' : 'contract',
+				handle: 's',
+
+			}, options);
+
+			this.trigger('resize', this, eventData)
+				.trigger('resize-y', this, eventData)
+		}
+
+		return attemptedDelta - delta;
+	};
+});
+
+define('__backbone-ui-resizable/actions/n',['require','exports','module','lodash','no','../helpers'],function (require, exports, module) {
+	
+
+	var _ = require('lodash'),
+		no = require('no');
+
+	var helpers = require('../helpers');
+
+	exports.deltaN = function deltaN(attempted, force) {
+
+
+		if (force) {
+			return attempted;
+		}
+
+
+		var m = this.model;
+
+		var h = m.get('height'),
+			minH = m.get('minHeight'),
+			maxH = m.get('maxHeight');
+
+		var t = m.get('top'),
+			minT = m.get('minTop'),
+			maxT = m.get('maxTop');
+
+
+			// maximum delta towards NORTH (-)
+		var maxNDelta = helpers.max(
+				no(h).subtract(maxH).value(),
+				no(minT).subtract(t).value()
+			),
+			// maximum delta towards SOUTH (+)
+			maxSDelta = helpers.min(
+				no(h).subtract(minH).value(),
+				no(maxT).subtract(t).value()
+			);
+
+		return helpers.fitValueWithin(attempted, maxNDelta, maxSDelta);
+	};
+
+	exports.moveN = function moveN(attemptedDelta, options) {
+		options = options || {};
+
+		var model = this.model,
+			delta = this.deltaN(attemptedDelta, options.force);
+
+		model.set({
+			top: no(model.get('top')).add(delta).value(),
+			height: no(model.get('height')).subtract(delta).value()
+		});
+
+		// events
+		if (!options.silent && delta !== 0) {
+
+			var eventData = _.assign({
+				axis: 'x',
+				delta: -1 * delta,
+				action: delta > 0 ? 'contract' : 'expand',
+				handle: 'n',
+
+			}, options);
+
+			this.trigger('resize', this, eventData)
+				.trigger('resize-y', this, eventData)
+		}
+
+		return attemptedDelta - delta;
+	};
+});
+
+define('__backbone-ui-resizable/actions/index',['require','exports','module'],function (require, exports, module) {
 	
 
 	/**
@@ -821,10 +756,7 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.w;
-
-		handle.calcMinMax();
-		return handle.moveToLeft(attemptedDelta, options);
+		return this.moveW(-1 * attemptedDelta, options);
 	};
 
 	/**
@@ -845,10 +777,7 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.e;
-
-		handle.calcMinMax();
-		return handle.moveToRight(attemptedDelta, options);
+		return this.moveE(attemptedDelta, options);
 	};
 
 	/**
@@ -865,10 +794,7 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.n;
-
-		handle.calcMinMax();
-		return handle.moveToTop(attemptedDelta, options);
+		return this.moveN(-1 * attemptedDelta, options);
 	};
 
 	/**
@@ -885,10 +811,7 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.s;
-
-		handle.calcMinMax();
-		return handle.moveToBottom(attemptedDelta, options);
+		return this.moveS(attemptedDelta, options);
 	};
 
 
@@ -910,10 +833,7 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.w;
-
-		handle.calcMinMax();
-		return handle.moveToRight(attemptedDelta, options);
+		return this.moveW(attemptedDelta, options);
 	};
 
 	/**
@@ -934,10 +854,7 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.e;
-
-		handle.calcMinMax();
-		return handle.moveToLeft(attemptedDelta, options);
+		return this.moveE(-1 * attemptedDelta, options);
 	};
 
 	/**
@@ -954,10 +871,7 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.n;
-
-		handle.calcMinMax();
-		return handle.moveToBottom(attemptedDelta, options);
+		return this.moveN(attemptedDelta, options);
 	};
 
 	/**
@@ -975,15 +889,75 @@ define('__backbone-ui-resizable/actions',['require','exports','module'],function
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.s;
-
-		handle.calcMinMax();
-		return handle.moveToTop(attemptedDelta, options);
+		return this.moveS(-1 * attemptedDelta, options);
 	};
 });
 
 define('__backbone-ui-resizable/animations',['require','exports','module'],function (require, exports, module) {
 	
+
+	/**
+	 *
+	 *
+	 * @private
+	 * @param options
+	 *
+	 */
+	function createAnimation(_options) {
+
+		return function (attemptedDelta, options) {
+
+			// [0] set up options
+			options = options || {};
+
+			// [1] delta should be in accordance to the positionDeltaMultiplier
+			attemptedDelta = _options.positionDeltaMultiplier * attemptedDelta;
+
+
+			// [1.2] delta > 0 = contraction
+			//       delta < 0 = expansion
+			var delta = this[_options.delta](attemptedDelta, options.force);
+
+
+			// [4] get current position
+			var start = parseFloat(this.model.get(_options.dimension));
+
+
+			// [5] build animation object
+			//     delta > 0 = contraction
+			//     delta < 0 = expansion
+			var animation = {};
+			animation[_options.dimension] = start + _options.dimensionDeltaMultiplier * Math.abs(delta);
+
+
+
+			// [6] set new step function
+			var originalStep = options.step;
+			options.step = _.bind(function (now, tween) {
+
+				var lastDelta = Math.abs(now - start);
+
+				// 'this' refers to the resizable object
+				this[_options.move](_options.positionDeltaMultiplier * lastDelta, { force: true });
+
+				// change start
+				start = now;
+
+
+				if (originalStep) {
+					return originalStep.apply(this.$el, arguments);
+				}
+
+			}, this);
+
+			// [7] GO!
+			this.$el.animate(animation, options);
+
+			// return remainder
+			return attemptedDelta - delta;
+		}
+	}
+
 
 	/**
 	 * Expands the view by moving the left handle
@@ -995,86 +969,20 @@ define('__backbone-ui-resizable/animations',['require','exports','module'],funct
 	 *   |<-    |
 	 *   --------
 	 *
-	 * @method aExpandToLeft
+	 * @method aExpandToW
 	 * @param attemptedDelta {+Number}
 	 * @param options {Obejct}
 	 *     options will be passed straight to handle.animateToLeft,
 	 *     which will pass options on to event data
 	 */
-	exports.aExpandToLeft = function aExpandToLeft(attemptedDelta, options) {
+	exports.aExpandToW = createAnimation({
+		delta: 'deltaW',
+		move: 'moveW',
+		dimension: 'width',
+		positionDeltaMultiplier: -1,
+		dimensionDeltaMultiplier: 1,
+	});
 
-		options = options || {};
-		options.agent = options.agent || 'code';
-
-		var handle = this.handles.w;
-
-		handle.calcMinMax();
-		return handle.animateToLeft(attemptedDelta, options);
-	};
-
-	/**
-	 * Expands the view by moving the right handle
-	 * towards the right direction while maintaing
-	 * the left handle at a fixed position.
-	 *   --------
-	 *   |    ->|
-	 *   |    ->|
-	 *   |    ->|
-	 *   --------
-	 *
-	 * @method aExpandToRight
-	 * @param attemptedDelta {+Number}
-	 */
-	exports.aExpandToRight = function aExpandToRight(attemptedDelta, options) {
-
-		options = options || {};
-		options.agent = options.agent || 'code';
-
-		var handle = this.handles.e;
-
-		handle.calcMinMax();
-		return handle.animateToRight(attemptedDelta, options);
-	};
-
-	/**
-	 *
-	 *  -------
-	 *  |^^^^^|
-	 *  |     |
-	 *  |     |
-	 *  -------
-	 *
-	 */
-	exports.aExpandToTop = function aExpandToTop(attemptedDelta, options) {
-
-		options = options || {};
-		options.agent = options.agent || 'code';
-
-		var handle = this.handles.n;
-
-		handle.calcMinMax();
-		return handle.animateToTop(attemptedDelta, options);
-	};
-
-	/**
-	 *
-	 *  -------
-	 *  |     |
-	 *  |     |
-	 *  |vvvvv|
-	 *  -------
-	 *
-	 */
-	exports.aExpandToBottom = function aExpandToBottom(attemptedDelta, options) {
-
-		options = options || {};
-		options.agent = options.agent || 'code';
-
-		var handle = this.handles.s;
-
-		handle.calcMinMax();
-		return handle.animateToBottom(attemptedDelta, options);
-	};
 
 
 	/**
@@ -1087,19 +995,37 @@ define('__backbone-ui-resizable/animations',['require','exports','module'],funct
 	 * ->|      |
 	 *   --------
 	 *
-	 * @method aContractToRight
+	 * @method aContractToE
 	 * @param attemptedDelta {+Number}
 	 */
-	exports.aContractToRight = function aContractToRight(attemptedDelta, options) {
+	exports.aContractToE = createAnimation({
+		delta: 'deltaW',
+		move: 'moveW',
+		dimension: 'width',
+		positionDeltaMultiplier: 1,
+		dimensionDeltaMultiplier: -1
+	});
 
-		options = options || {};
-		options.agent = options.agent || 'code';
-
-		var handle = this.handles.w;
-
-		handle.calcMinMax();
-		return handle.animateToRight(attemptedDelta, options);
-	};
+	/**
+	 * Expands the view by moving the right handle
+	 * towards the right direction while maintaing
+	 * the left handle at a fixed position.
+	 *   --------
+	 *   |    ->|
+	 *   |    ->|
+	 *   |    ->|
+	 *   --------
+	 *
+	 * @method aExpandToE
+	 * @param attemptedDelta {+Number}
+	 */
+	exports.aExpandToE = createAnimation({
+		delta: 'deltaE',
+		move: 'moveE',
+		dimension: 'width',
+		positionDeltaMultiplier: 1,
+		dimensionDeltaMultiplier: 1,
+	});
 
 	/**
 	 * Contracts the view by moving the right handle
@@ -1111,19 +1037,35 @@ define('__backbone-ui-resizable/animations',['require','exports','module'],funct
 	 *   |      |<-
 	 *   --------
 	 *
-	 * @method aContractToLeft
+	 * @method aContractToW
 	 * @param attemptedDelta {+Number}
 	 */
-	exports.aContractToLeft = function aContractToLeft(attemptedDelta, options) {
+	exports.aContractToW = createAnimation({
+		delta: 'deltaE',
+		move: 'moveE',
+		dimension: 'width',
+		positionDeltaMultiplier: -1,
+		dimensionDeltaMultiplier: -1
+	})
 
-		options = options || {};
-		options.agent = options.agent || 'code';
+	/**
+	 *
+	 *  -------
+	 *  |^^^^^|
+	 *  |     |
+	 *  |     |
+	 *  -------
+	 *
+	 */
+	exports.aExpandToN = createAnimation({
+		delta: 'deltaN',
+		move: 'moveN',
+		dimension: 'height',
+		positionDeltaMultiplier: -1,
+		dimensionDeltaMultiplier: 1,
+	});
 
-		var handle = this.handles.e;
 
-		handle.calcMinMax();
-		return handle.animateToLeft(attemptedDelta, options);
-	};
 
 	/**
 	 *   vvvvv
@@ -1134,16 +1076,30 @@ define('__backbone-ui-resizable/animations',['require','exports','module'],funct
 	 *  -------
 	 *
 	 */
-	exports.aContractToBottom = function aContractToBottom(attemptedDelta, options) {
+	exports.aContractToS = createAnimation({
+		delta: 'deltaN',
+		move: 'moveN',
+		dimension: 'height',
+		positionDeltaMultiplier: 1,
+		dimensionDeltaMultiplier: -1,
+	});
 
-		options = options || {};
-		options.agent = options.agent || 'code';
-
-		var handle = this.handles.n;
-
-		handle.calcMinMax();
-		return handle.animateToBottom(attemptedDelta, options);
-	};
+	/**
+	 *
+	 *  -------
+	 *  |     |
+	 *  |     |
+	 *  |vvvvv|
+	 *  -------
+	 *
+	 */
+	exports.aExpandToS = createAnimation({
+		delta: 'deltaS',
+		move: 'moveS',
+		dimension: 'height',
+		positionDeltaMultiplier: 1,
+		dimensionDeltaMultiplier: 1,
+	});
 
 	/**
 	 *
@@ -1155,16 +1111,13 @@ define('__backbone-ui-resizable/animations',['require','exports','module'],funct
 	 *   ^^^^^
 	 *
 	 */
-	exports.aContractToTop = function aContractToTop(attemptedDelta, options) {
-
-		options = options || {};
-		options.agent = options.agent || 'code';
-
-		var handle = this.handles.s;
-
-		handle.calcMinMax();
-		return handle.animateToTop(attemptedDelta, options);
-	};
+	exports.aContractToN = createAnimation({
+		delta: 'deltaS',
+		move: 'moveS',
+		dimension: 'height',
+		positionDeltaMultiplier: -1,
+		dimensionDeltaMultiplier: -1,
+	})
 });
 
 define('__backbone-ui-resizable/enable-disable',['require','exports','module'],function (require, exports, module) {
@@ -1285,8 +1238,6 @@ define('__backbone-ui-resizable/build-handle',['require','exports','module','jqu
 		_ = require('lodash');
 
 
-
-
 	/**
 	 * Builds a SINGLE $el for a direction handle.
 	 *
@@ -1302,7 +1253,7 @@ define('__backbone-ui-resizable/build-handle',['require','exports','module','jqu
 			.addClass(clss)
 			.addClass(clss + '-' + direction);
 
-		return $handle.insertAfter(this.$el);
+		return $handle.appendTo(this.$el);
 	}
 
 
@@ -1336,7 +1287,8 @@ define('__backbone-ui-resizable/build-handle',['require','exports','module','jqu
 		});
 
 		// [4] build the handle object
-		var handleObj = this.handleBuilder(builderOptions);
+		var handleObj = this.handleBuilder[direction](builderOptions);
+
 
 		return handleObj;
 	};
@@ -1352,7 +1304,7 @@ define('__backbone-ui-resizable/build-handle',['require','exports','module','jqu
  * @module backbone-ui-resizable
  */
 
-define('backbone-ui-resizable',['require','exports','module','lowercase-backbone','backbone-ui-draggable','jquery','lodash','./__backbone-ui-resizable/handle/index','./__backbone-ui-resizable/handle/helpers','./__backbone-ui-resizable/actions','./__backbone-ui-resizable/animations','./__backbone-ui-resizable/enable-disable','./__backbone-ui-resizable/build-handle'],function (require, exports, module) {
+define('backbone-ui-resizable',['require','exports','module','lowercase-backbone','backbone-ui-draggable','jquery','lodash','./__backbone-ui-resizable/handle/index','./__backbone-ui-resizable/handle/helpers','./__backbone-ui-resizable/actions/e','./__backbone-ui-resizable/actions/w','./__backbone-ui-resizable/actions/s','./__backbone-ui-resizable/actions/n','./__backbone-ui-resizable/actions/index','./__backbone-ui-resizable/animations','./__backbone-ui-resizable/enable-disable','./__backbone-ui-resizable/build-handle'],function (require, exports, module) {
 	
 
 	var backbone = require('lowercase-backbone'),
@@ -1514,8 +1466,17 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 	});
 
 	// define proto
-	resizable.proto(require('./__backbone-ui-resizable/actions'));
-	resizable.proto(require('./__backbone-ui-resizable/animations'));
+	resizable
+		.proto(require('./__backbone-ui-resizable/actions/e'))
+		.proto(require('./__backbone-ui-resizable/actions/w'))
+		.proto(require('./__backbone-ui-resizable/actions/s'))
+		.proto(require('./__backbone-ui-resizable/actions/n'))
+		.proto(require('./__backbone-ui-resizable/actions/index'));
+
+
+	resizable
+		.proto(require('./__backbone-ui-resizable/animations'));
+
 	resizable.proto(require('./__backbone-ui-resizable/enable-disable'));
 	resizable.proto(require('./__backbone-ui-resizable/build-handle'));
 

@@ -170,8 +170,17 @@ define(function (require, exports, module) {
 	});
 
 	// define proto
-	resizable.proto(require('./__backbone-ui-resizable/actions'));
-	resizable.proto(require('./__backbone-ui-resizable/animations'));
+	resizable
+		.proto(require('./__backbone-ui-resizable/actions/e'))
+		.proto(require('./__backbone-ui-resizable/actions/w'))
+		.proto(require('./__backbone-ui-resizable/actions/s'))
+		.proto(require('./__backbone-ui-resizable/actions/n'))
+		.proto(require('./__backbone-ui-resizable/actions/index'));
+
+
+	resizable
+		.proto(require('./__backbone-ui-resizable/animations'));
+
 	resizable.proto(require('./__backbone-ui-resizable/enable-disable'));
 	resizable.proto(require('./__backbone-ui-resizable/build-handle'));
 

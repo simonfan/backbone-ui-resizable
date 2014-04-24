@@ -22,10 +22,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.w;
-
-		handle.calcMinMax();
-		return handle.moveToLeft(attemptedDelta, options);
+		return this.moveW(-1 * attemptedDelta, options);
 	};
 
 	/**
@@ -46,10 +43,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.e;
-
-		handle.calcMinMax();
-		return handle.moveToRight(attemptedDelta, options);
+		return this.moveE(attemptedDelta, options);
 	};
 
 	/**
@@ -66,10 +60,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.n;
-
-		handle.calcMinMax();
-		return handle.moveToTop(attemptedDelta, options);
+		return this.moveN(-1 * attemptedDelta, options);
 	};
 
 	/**
@@ -86,10 +77,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.s;
-
-		handle.calcMinMax();
-		return handle.moveToBottom(attemptedDelta, options);
+		return this.moveS(attemptedDelta, options);
 	};
 
 
@@ -111,10 +99,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.w;
-
-		handle.calcMinMax();
-		return handle.moveToRight(attemptedDelta, options);
+		return this.moveW(attemptedDelta, options);
 	};
 
 	/**
@@ -135,10 +120,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.e;
-
-		handle.calcMinMax();
-		return handle.moveToLeft(attemptedDelta, options);
+		return this.moveE(-1 * attemptedDelta, options);
 	};
 
 	/**
@@ -155,10 +137,7 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.n;
-
-		handle.calcMinMax();
-		return handle.moveToBottom(attemptedDelta, options);
+		return this.moveN(attemptedDelta, options);
 	};
 
 	/**
@@ -176,9 +155,6 @@ define(function (require, exports, module) {
 		options = options || {};
 		options.agent = options.agent || 'code';
 
-		var handle = this.handles.s;
-
-		handle.calcMinMax();
-		return handle.moveToTop(attemptedDelta, options);
+		return this.moveS(-1 * attemptedDelta, options);
 	};
 });

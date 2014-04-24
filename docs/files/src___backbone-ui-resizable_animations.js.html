@@ -90,6 +90,69 @@ define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
 	/**
+	 *
+	 *
+	 * @private
+	 * @param options
+	 *
+	 */
+	function createAnimation(_options) {
+
+		return function (attemptedDelta, options) {
+
+			// [0] set up options
+			options = options || {};
+
+			// [1] delta should be in accordance to the positionDeltaMultiplier
+			attemptedDelta = _options.positionDeltaMultiplier * attemptedDelta;
+
+
+			// [1.2] delta &gt; 0 = contraction
+			//       delta &lt; 0 = expansion
+			var delta = this[_options.delta](attemptedDelta, options.force);
+
+
+			// [4] get current position
+			var start = parseFloat(this.model.get(_options.dimension));
+
+
+			// [5] build animation object
+			//     delta &gt; 0 = contraction
+			//     delta &lt; 0 = expansion
+			var animation = {};
+			animation[_options.dimension] = start + _options.dimensionDeltaMultiplier * Math.abs(delta);
+
+
+
+			// [6] set new step function
+			var originalStep = options.step;
+			options.step = _.bind(function (now, tween) {
+
+				var lastDelta = Math.abs(now - start);
+
+				// &#x27;this&#x27; refers to the resizable object
+				this[_options.move](_options.positionDeltaMultiplier * lastDelta, { force: true });
+
+				// change start
+				start = now;
+
+
+				if (originalStep) {
+					return originalStep.apply(this.$el, arguments);
+				}
+
+			}, this);
+
+			// [7] GO!
+			this.$el.animate(animation, options);
+
+			// return remainder
+			return attemptedDelta - delta;
+		}
+	}
+
+
+	/**
 	 * Expands the view by moving the left handle
 	 * towards the left direction while maintaing
 	 * the right handle at a fixed position.
@@ -99,86 +162,20 @@ define(function (require, exports, module) {
 	 *   |&lt;-    |
 	 *   --------
 	 *
-	 * @method aExpandToLeft
+	 * @method aExpandToW
 	 * @param attemptedDelta {+Number}
 	 * @param options {Obejct}
 	 *     options will be passed straight to handle.animateToLeft,
 	 *     which will pass options on to event data
 	 */
-	exports.aExpandToLeft = function aExpandToLeft(attemptedDelta, options) {
+	exports.aExpandToW = createAnimation({
+		delta: &#x27;deltaW&#x27;,
+		move: &#x27;moveW&#x27;,
+		dimension: &#x27;width&#x27;,
+		positionDeltaMultiplier: -1,
+		dimensionDeltaMultiplier: 1,
+	});
 
-		options = options || {};
-		options.agent = options.agent || &#x27;code&#x27;;
-
-		var handle = this.handles.w;
-
-		handle.calcMinMax();
-		return handle.animateToLeft(attemptedDelta, options);
-	};
-
-	/**
-	 * Expands the view by moving the right handle
-	 * towards the right direction while maintaing
-	 * the left handle at a fixed position.
-	 *   --------
-	 *   |    -&gt;|
-	 *   |    -&gt;|
-	 *   |    -&gt;|
-	 *   --------
-	 *
-	 * @method aExpandToRight
-	 * @param attemptedDelta {+Number}
-	 */
-	exports.aExpandToRight = function aExpandToRight(attemptedDelta, options) {
-
-		options = options || {};
-		options.agent = options.agent || &#x27;code&#x27;;
-
-		var handle = this.handles.e;
-
-		handle.calcMinMax();
-		return handle.animateToRight(attemptedDelta, options);
-	};
-
-	/**
-	 *
-	 *  -------
-	 *  |^^^^^|
-	 *  |     |
-	 *  |     |
-	 *  -------
-	 *
-	 */
-	exports.aExpandToTop = function aExpandToTop(attemptedDelta, options) {
-
-		options = options || {};
-		options.agent = options.agent || &#x27;code&#x27;;
-
-		var handle = this.handles.n;
-
-		handle.calcMinMax();
-		return handle.animateToTop(attemptedDelta, options);
-	};
-
-	/**
-	 *
-	 *  -------
-	 *  |     |
-	 *  |     |
-	 *  |vvvvv|
-	 *  -------
-	 *
-	 */
-	exports.aExpandToBottom = function aExpandToBottom(attemptedDelta, options) {
-
-		options = options || {};
-		options.agent = options.agent || &#x27;code&#x27;;
-
-		var handle = this.handles.s;
-
-		handle.calcMinMax();
-		return handle.animateToBottom(attemptedDelta, options);
-	};
 
 
 	/**
@@ -191,19 +188,37 @@ define(function (require, exports, module) {
 	 * -&gt;|      |
 	 *   --------
 	 *
-	 * @method aContractToRight
+	 * @method aContractToE
 	 * @param attemptedDelta {+Number}
 	 */
-	exports.aContractToRight = function aContractToRight(attemptedDelta, options) {
+	exports.aContractToE = createAnimation({
+		delta: &#x27;deltaW&#x27;,
+		move: &#x27;moveW&#x27;,
+		dimension: &#x27;width&#x27;,
+		positionDeltaMultiplier: 1,
+		dimensionDeltaMultiplier: -1
+	});
 
-		options = options || {};
-		options.agent = options.agent || &#x27;code&#x27;;
-
-		var handle = this.handles.w;
-
-		handle.calcMinMax();
-		return handle.animateToRight(attemptedDelta, options);
-	};
+	/**
+	 * Expands the view by moving the right handle
+	 * towards the right direction while maintaing
+	 * the left handle at a fixed position.
+	 *   --------
+	 *   |    -&gt;|
+	 *   |    -&gt;|
+	 *   |    -&gt;|
+	 *   --------
+	 *
+	 * @method aExpandToE
+	 * @param attemptedDelta {+Number}
+	 */
+	exports.aExpandToE = createAnimation({
+		delta: &#x27;deltaE&#x27;,
+		move: &#x27;moveE&#x27;,
+		dimension: &#x27;width&#x27;,
+		positionDeltaMultiplier: 1,
+		dimensionDeltaMultiplier: 1,
+	});
 
 	/**
 	 * Contracts the view by moving the right handle
@@ -215,19 +230,35 @@ define(function (require, exports, module) {
 	 *   |      |&lt;-
 	 *   --------
 	 *
-	 * @method aContractToLeft
+	 * @method aContractToW
 	 * @param attemptedDelta {+Number}
 	 */
-	exports.aContractToLeft = function aContractToLeft(attemptedDelta, options) {
+	exports.aContractToW = createAnimation({
+		delta: &#x27;deltaE&#x27;,
+		move: &#x27;moveE&#x27;,
+		dimension: &#x27;width&#x27;,
+		positionDeltaMultiplier: -1,
+		dimensionDeltaMultiplier: -1
+	})
 
-		options = options || {};
-		options.agent = options.agent || &#x27;code&#x27;;
+	/**
+	 *
+	 *  -------
+	 *  |^^^^^|
+	 *  |     |
+	 *  |     |
+	 *  -------
+	 *
+	 */
+	exports.aExpandToN = createAnimation({
+		delta: &#x27;deltaN&#x27;,
+		move: &#x27;moveN&#x27;,
+		dimension: &#x27;height&#x27;,
+		positionDeltaMultiplier: -1,
+		dimensionDeltaMultiplier: 1,
+	});
 
-		var handle = this.handles.e;
 
-		handle.calcMinMax();
-		return handle.animateToLeft(attemptedDelta, options);
-	};
 
 	/**
 	 *   vvvvv
@@ -238,16 +269,30 @@ define(function (require, exports, module) {
 	 *  -------
 	 *
 	 */
-	exports.aContractToBottom = function aContractToBottom(attemptedDelta, options) {
+	exports.aContractToS = createAnimation({
+		delta: &#x27;deltaN&#x27;,
+		move: &#x27;moveN&#x27;,
+		dimension: &#x27;height&#x27;,
+		positionDeltaMultiplier: 1,
+		dimensionDeltaMultiplier: -1,
+	});
 
-		options = options || {};
-		options.agent = options.agent || &#x27;code&#x27;;
-
-		var handle = this.handles.n;
-
-		handle.calcMinMax();
-		return handle.animateToBottom(attemptedDelta, options);
-	};
+	/**
+	 *
+	 *  -------
+	 *  |     |
+	 *  |     |
+	 *  |vvvvv|
+	 *  -------
+	 *
+	 */
+	exports.aExpandToS = createAnimation({
+		delta: &#x27;deltaS&#x27;,
+		move: &#x27;moveS&#x27;,
+		dimension: &#x27;height&#x27;,
+		positionDeltaMultiplier: 1,
+		dimensionDeltaMultiplier: 1,
+	});
 
 	/**
 	 *
@@ -259,16 +304,13 @@ define(function (require, exports, module) {
 	 *   ^^^^^
 	 *
 	 */
-	exports.aContractToTop = function aContractToTop(attemptedDelta, options) {
-
-		options = options || {};
-		options.agent = options.agent || &#x27;code&#x27;;
-
-		var handle = this.handles.s;
-
-		handle.calcMinMax();
-		return handle.animateToTop(attemptedDelta, options);
-	};
+	exports.aContractToN = createAnimation({
+		delta: &#x27;deltaS&#x27;,
+		move: &#x27;moveS&#x27;,
+		dimension: &#x27;height&#x27;,
+		positionDeltaMultiplier: -1,
+		dimensionDeltaMultiplier: -1,
+	})
 });
 
     </pre>

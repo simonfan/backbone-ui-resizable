@@ -3,6 +3,11 @@ define(function (require, exports, module) {
 
 	var _ = require('lodash');
 
+
+	function notNaN(v) {
+		return !isNaN(v);
+	}
+
 	exports.min = function min(v1, v2) {
 		if (isNaN(v1)) {
 			return v2;

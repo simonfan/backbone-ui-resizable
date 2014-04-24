@@ -5,8 +5,6 @@ define(function (require, exports, module) {
 		_ = require('lodash');
 
 
-
-
 	/**
 	 * Builds a SINGLE $el for a direction handle.
 	 *
@@ -22,7 +20,7 @@ define(function (require, exports, module) {
 			.addClass(clss)
 			.addClass(clss + '-' + direction);
 
-		return $handle.insertAfter(this.$el);
+		return $handle.appendTo(this.$el);
 	}
 
 
@@ -56,7 +54,8 @@ define(function (require, exports, module) {
 		});
 
 		// [4] build the handle object
-		var handleObj = this.handleBuilder(builderOptions);
+		var handleObj = this.handleBuilder[direction](builderOptions);
+
 
 		return handleObj;
 	};

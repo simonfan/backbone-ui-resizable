@@ -135,6 +135,21 @@ define(function (require, exports, module) {
 	};
 
 
+
+	exports.fitValueWithin = function fitValueWithin(value, min, max) {
+
+		if (!isNaN(min)) {
+			value = value &gt; min ? value : min;
+		}
+
+		if (!isNaN(max)) {
+			value = value &lt; max ? value : max;
+		}
+
+		return value;
+	};
+
+
 	/**
 	 * Just adds &#x27;px&#x27; string to numerical values.
 	 *

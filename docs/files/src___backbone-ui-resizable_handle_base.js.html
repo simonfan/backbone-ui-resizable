@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__backbone-ui-resizable/handle/index.js - backbone-ui-resizable</title>
+    <title>src/__backbone-ui-resizable/handle/base.js - backbone-ui-resizable</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,7 +82,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__backbone-ui-resizable/handle/index.js</h1>
+                        <h1 class="file-heading">File: src/__backbone-ui-resizable/handle/base.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -94,9 +94,7 @@ define(function (require, exports, module) {
 	var draggable = require(&#x27;backbone-ui-draggable&#x27;),
 		_ = require(&#x27;lodash&#x27;);
 
-	var _updatePosition = require(&#x27;./update-position&#x27;),
-		_track = require(&#x27;./track&#x27;),
-		_minmax = require(&#x27;./min-max&#x27;);
+	var _updatePosition = require(&#x27;./update-position&#x27;);
 
 	var positions = {
 		// horizontal vertical
@@ -162,13 +160,13 @@ define(function (require, exports, module) {
 
 			// [2.1] place the handle
 			// initialize handle position
-			this.initializePosition(options);
+			this.updatePosition();
 
-			// [3] set correct trackers for hte handle
-			this.track();
 
-			// [4] when movements starts, calculate the min and maxes.
-			this.on(&#x27;movestart&#x27;, this.calcMinMax);
+			// move handles together
+			this.listenTo(this.resizable.model, &#x27;change&#x27;, this.updatePosition);
+				// [4] when movements starts, calculate the min and maxes.
+			//	this.on(&#x27;movestart&#x27;, this.calcMinMax);
 
 			// [5] enable!
 			this.enableHandle();
@@ -210,63 +208,6 @@ define(function (require, exports, module) {
 			}
 
 			this.$el.css(styles);
-		},
-
-		/**
-		 * Places the handle at its initial position,
-		 * at the right place given the direction.
-		 *
-		 * @method initializePosition
-		 */
-		initializePosition: function initializePosition(options) {
-			var $el = this.$el;
-
-			$el.position({
-				// horizontal vertical
-				my: &#x27;center center&#x27;,
-				at: positions[this.direction],
-				of: this.resizable.$el
-			});
-
-			var pos = $el.position();
-
-			this.model.set({
-				top: parseFloat(pos.top),
-				left: parseFloat(pos.left)
-			});
-
-			this.updatePosition();
-		},
-
-		/**
-		 * Links up movement from the handle to the resizable object.
-		 *
-		 * @method track
-		 */
-		track: function track() {
-			_.each(this.direction, function (d) {
-
-				_track[d].call(this);
-
-			}, this);
-
-
-			_track.all.call(this);
-		},
-
-		/**
-		 * Calculates the minimum and maximum positions for the handle
-		 * taking into account settings of min and max of the resizable object.
-		 *
-		 * @method calcMinMax
-		 *
-		 */
-		calcMinMax: function calcMinMax() {
-			_.each(this.direction, function (d) {
-
-				_minmax[d].call(this);
-
-			}, this);
 		},
 
 		map: _.extend(draggable.prototype.map, {

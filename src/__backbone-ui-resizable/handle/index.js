@@ -1,192 +1,53 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	require('jquery-ui');
+	var baseHandle = require('./base');
 
-	var draggable = require('backbone-ui-draggable'),
-		_ = require('lodash');
+	function nY(delta, options) {
+		var remainder = this.resizable.moveN(delta, options);
 
-	var _updatePosition = require('./update-position'),
-		_track = require('./track'),
-		_minmax = require('./min-max');
+		return delta - remainder;
+	}
 
-	var positions = {
-		// horizontal vertical
-		n: 'left top',
-		s: 'left bottom',
-		w: 'left top',
-		e: 'right top',
+	function sY(delta, options) {
+		var remainder = this.resizable.moveS(delta, options);
 
-		nw: 'left top',
-		ne: 'right top',
-		sw: 'left bottom',
-		se: 'right bottom'
-	},
-	axis = {
-		// horizontal vertical
-		n: 'y',
-		s: 'y',
-		w: 'x',
-		e: 'x',
+		return delta - remainder;
+	}
 
-		nw: 'xy',
-		ne: 'xy',
-		sw: 'xy',
-		se: 'xy'
-	};
+	function wX(delta, options) {
+		var remainder = this.resizable.moveW(delta, options);
+
+		return delta - remainder;
+	}
+
+	function eX(delta, options) {
+		var remainder = this.resizable.moveE(delta, options);
+
+		return delta - remainder;
+	}
 
 
-	var handle = module.exports = draggable.extend({
-		initialize: function (options) {
-			draggable.prototype.initialize.call(this, options);
-
-			this.initializeResizableHandle(options);
-		},
-
-		initializeResizableHandle: function initializeResizableHandle(options) {
-
-			// [0] get variables
-			// the resizable
-			this.resizable = options.resizable;
-
-			// set direction
-			this.direction = options.direction;
-
-			// set axis.
-			this.axis = axis[this.direction];
-
-			// cache sizes
-			this.thickness = options.thickness;
-
-			// calculate ratio point
-			this.ratio = options.ratio;
-			this.outer = options.thickness * this.ratio;
-			this.inner = options.thickness - this.outer;
+	var n = { beforeMoveY: nY },
+		s = { beforeMoveY: sY },
+		w = { beforeMoveX: wX },
+		e = { beforeMoveX: eX };
 
 
-			// [1] set the updatePosition method
-			this.updatePosition = _.throttle(_.bind(_updatePosition[this.direction], this), 20);
 
+	exports.n = baseHandle.extend(n);
 
-			// [2] setStyles
-			// [2.0] general styles
-			this.setStyles();
+	exports.s = baseHandle.extend(s);
 
-			// [2.1] place the handle
-			// initialize handle position
-			this.initializePosition(options);
+	exports.w = baseHandle.extend(w);
 
-			// [3] set correct trackers for hte handle
-			this.track();
+	exports.e = baseHandle.extend(e);
 
-			// [4] when movements starts, calculate the min and maxes.
-			this.on('movestart', this.calcMinMax);
+	exports.nw = baseHandle.extend(n).extend(w);
 
-			// [5] enable!
-			this.enableHandle();
-		},
+	exports.ne = baseHandle.extend(n).extend(e);
 
-		/**
-		 * Sets the styles needed for this type of direction handle.
-		 *
-		 * @method setStyles
-		 * @private
-		 */
-		setStyles: function setStyles() {
+	exports.sw = baseHandle.extend(s).extend(w);
 
-			var axis = this.axis,
-				styles;
-
-			if (axis.length > 1) {
-				// xy / yx
-				styles = {
-					zIndex: 100,
-					width: this.thickness,
-					height: this.thickness
-				};
-			} else if (axis === 'x') {
-				// horizontal sliding directions
-				styles = {
-					zIndex: 99,
-					width: this.thickness,
-					height: this.resizable.model.get('width'),
-				};
-
-			} else if (axis === 'y') {
-				// vertical sliding direction
-				styles = {
-					zIndex: 99,
-					width: this.resizable.model.get('height'),
-					height: this.thickness
-				};
-			}
-
-			this.$el.css(styles);
-		},
-
-		/**
-		 * Places the handle at its initial position,
-		 * at the right place given the direction.
-		 *
-		 * @method initializePosition
-		 */
-		initializePosition: function initializePosition(options) {
-			var $el = this.$el;
-
-			$el.position({
-				// horizontal vertical
-				my: 'center center',
-				at: positions[this.direction],
-				of: this.resizable.$el
-			});
-
-			var pos = $el.position();
-
-			this.model.set({
-				top: parseFloat(pos.top),
-				left: parseFloat(pos.left)
-			});
-
-			this.updatePosition();
-		},
-
-		/**
-		 * Links up movement from the handle to the resizable object.
-		 *
-		 * @method track
-		 */
-		track: function track() {
-			_.each(this.direction, function (d) {
-
-				_track[d].call(this);
-
-			}, this);
-
-
-			_track.all.call(this);
-		},
-
-		/**
-		 * Calculates the minimum and maximum positions for the handle
-		 * taking into account settings of min and max of the resizable object.
-		 *
-		 * @method calcMinMax
-		 *
-		 */
-		calcMinMax: function calcMinMax() {
-			_.each(this.direction, function (d) {
-
-				_minmax[d].call(this);
-
-			}, this);
-		},
-
-		map: _.extend(draggable.prototype.map, {
-			height: '->css:height',
-			width: '->css:width',
-		})
-	});
-
-	// proto
-	handle.proto(require('./enable-disable'));
+	exports.se = baseHandle.extend(s).extend(e);
 });
