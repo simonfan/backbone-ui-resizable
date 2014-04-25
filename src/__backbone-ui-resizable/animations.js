@@ -16,7 +16,11 @@ define(function (require, exports, module) {
 			options = options || {};
 
 			// [1] delta should be in accordance to the positionDeltaMultiplier
-			attemptedDelta = _options.positionDeltaMultiplier * attemptedDelta;
+			//     attemptedDelta should ALWAYS BE POSITIVE, as the action here is directional
+			//     e.g. 'contractToE' assumes the direction will be -1,
+			//     that is why we have the positionDeltaMultiplier
+			//     using Math.abs assures no mistakes will happen.
+			attemptedDelta = _options.positionDeltaMultiplier * Math.abs(attemptedDelta);
 
 
 			// [1.2] delta > 0 = contraction
@@ -35,8 +39,20 @@ define(function (require, exports, module) {
 			animation[_options.dimension] = start + _options.dimensionDeltaMultiplier * Math.abs(delta);
 
 
+			// [6] set complete function
+			//     to trigger resizestop
+			var originalComplete = options.complete;
+			options.complete = _.bind(function () {
 
-			// [6] set new step function
+				this.trigger('resizestop', this);
+
+				if (originalComplete) {
+					return originalComplete.apply(this.$el, arguments);
+				}
+
+			}, this);
+
+			// [7] set new step function
 			var originalStep = options.step;
 			options.step = _.bind(function (now, tween) {
 
@@ -55,7 +71,10 @@ define(function (require, exports, module) {
 
 			}, this);
 
-			// [7] GO!
+			// [8] trigger resizestart
+			this.trigger('resizestart', this);
+
+			// [9] GO!
 			this.$el.animate(animation, options);
 
 			// return remainder

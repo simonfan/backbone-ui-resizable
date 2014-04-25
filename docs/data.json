@@ -169,7 +169,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle/base.js",
-            "line": 96,
+            "line": 100,
             "description": "Sets the styles needed for this type of direction handle.",
             "itemtype": "method",
             "name": "setStyles",
@@ -202,7 +202,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/animations.js",
-            "line": 67,
+            "line": 86,
             "description": "Expands the view by moving the left handle\ntowards the left direction while maintaing\nthe right handle at a fixed position.\n  --------\n  |<-    |\n  |<-    |\n  |<-    |\n  --------",
             "itemtype": "method",
             "name": "aExpandToW",
@@ -222,7 +222,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/animations.js",
-            "line": 93,
+            "line": 112,
             "description": "Contracts the view by moving the left handle\ntowards the right direction while maintaining\nthe right handle at a fixed position.\n  --------\n->|      |\n->|      |\n->|      |\n  --------",
             "itemtype": "method",
             "name": "aContractToE",
@@ -237,7 +237,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/animations.js",
-            "line": 114,
+            "line": 133,
             "description": "Expands the view by moving the right handle\ntowards the right direction while maintaing\nthe left handle at a fixed position.\n  --------\n  |    ->|\n  |    ->|\n  |    ->|\n  --------",
             "itemtype": "method",
             "name": "aExpandToE",
@@ -252,7 +252,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/animations.js",
-            "line": 135,
+            "line": 154,
             "description": "Contracts the view by moving the right handle\ntowards the left direction while maintaing the\nleft handle at a fixed position.\n  --------\n  |      |<-\n  |      |<-\n  |      |<-\n  --------",
             "itemtype": "method",
             "name": "aContractToW",
@@ -267,25 +267,25 @@
         },
         {
             "file": "src/__backbone-ui-resizable/animations.js",
-            "line": 156,
+            "line": 175,
             "description": "-------\n  |^^^^^|\n  |     |\n  |     |\n  -------",
             "class": ""
         },
         {
             "file": "src/__backbone-ui-resizable/animations.js",
-            "line": 175,
+            "line": 194,
             "description": "vvvvv\n  -------\n  |     |\n  |     |\n  |     |\n  -------",
             "class": ""
         },
         {
             "file": "src/__backbone-ui-resizable/animations.js",
-            "line": 192,
+            "line": 211,
             "description": "-------\n  |     |\n  |     |\n  |vvvvv|\n  -------",
             "class": ""
         },
         {
             "file": "src/__backbone-ui-resizable/animations.js",
-            "line": 209,
+            "line": 228,
             "description": "-------\n  |     |\n  |     |\n  |     |\n  -------\n   ^^^^^",
             "class": ""
         },
@@ -476,19 +476,19 @@
         },
         {
             "message": "Missing item type\n-------\n  |^^^^^|\n  |     |\n  |     |\n  -------",
-            "line": " src/__backbone-ui-resizable/animations.js:156"
-        },
-        {
-            "message": "Missing item type\nvvvvv\n  -------\n  |     |\n  |     |\n  |     |\n  -------",
             "line": " src/__backbone-ui-resizable/animations.js:175"
         },
         {
+            "message": "Missing item type\nvvvvv\n  -------\n  |     |\n  |     |\n  |     |\n  -------",
+            "line": " src/__backbone-ui-resizable/animations.js:194"
+        },
+        {
             "message": "Missing item type\n-------\n  |     |\n  |     |\n  |vvvvv|\n  -------",
-            "line": " src/__backbone-ui-resizable/animations.js:192"
+            "line": " src/__backbone-ui-resizable/animations.js:211"
         },
         {
             "message": "Missing item type\n-------\n  |     |\n  |     |\n  |     |\n  -------\n   ^^^^^",
-            "line": " src/__backbone-ui-resizable/animations.js:209"
+            "line": " src/__backbone-ui-resizable/animations.js:228"
         }
     ]
 }

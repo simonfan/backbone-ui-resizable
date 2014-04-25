@@ -263,6 +263,14 @@ define('__backbone-ui-resizable/handle/base',['require','exports','module','jque
 			// [5] enable!
 			this.enableHandle();
 
+			////////////////////
+			///////////////////////
+			//////////////////////////
+			this.listenTo(this.resizable.model, 'change', this.updatePosition);
+			this.listenTo(this.resizable, 'resizestop', this.updatePosition);
+			///////////////////////////
+			////////////////////////
+			////////////////////
 
 			this.resizable.listenTo(this, 'movestart', function () {
 				this.trigger('resizestart', this);
@@ -272,10 +280,6 @@ define('__backbone-ui-resizable/handle/base',['require','exports','module','jque
 			// ONLY WHEN MOVEMENT STOPS
 			this.resizable.listenTo(this, 'movestop', function () {
 				this.trigger('resizestop', this);
-
-				_.each(this.handles, function (handle) {
-					handle.updatePosition();
-				});
 			});
 		},
 
@@ -933,7 +937,11 @@ define('__backbone-ui-resizable/animations',['require','exports','module'],funct
 			options = options || {};
 
 			// [1] delta should be in accordance to the positionDeltaMultiplier
-			attemptedDelta = _options.positionDeltaMultiplier * attemptedDelta;
+			//     attemptedDelta should ALWAYS BE POSITIVE, as the action here is directional
+			//     e.g. 'contractToE' assumes the direction will be -1,
+			//     that is why we have the positionDeltaMultiplier
+			//     using Math.abs assures no mistakes will happen.
+			attemptedDelta = _options.positionDeltaMultiplier * Math.abs(attemptedDelta);
 
 
 			// [1.2] delta > 0 = contraction
@@ -952,8 +960,20 @@ define('__backbone-ui-resizable/animations',['require','exports','module'],funct
 			animation[_options.dimension] = start + _options.dimensionDeltaMultiplier * Math.abs(delta);
 
 
+			// [6] set complete function
+			//     to trigger resizestop
+			var originalComplete = options.complete;
+			options.complete = _.bind(function () {
 
-			// [6] set new step function
+				this.trigger('resizestop', this);
+
+				if (originalComplete) {
+					return originalComplete.apply(this.$el, arguments);
+				}
+
+			}, this);
+
+			// [7] set new step function
 			var originalStep = options.step;
 			options.step = _.bind(function (now, tween) {
 
@@ -972,7 +992,10 @@ define('__backbone-ui-resizable/animations',['require','exports','module'],funct
 
 			}, this);
 
-			// [7] GO!
+			// [8] trigger resizestart
+			this.trigger('resizestart', this);
+
+			// [9] GO!
 			this.$el.animate(animation, options);
 
 			// return remainder

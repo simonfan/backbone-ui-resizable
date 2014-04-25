@@ -77,6 +77,14 @@ define(function (require, exports, module) {
 			// [5] enable!
 			this.enableHandle();
 
+			////////////////////
+			///////////////////////
+			//////////////////////////
+			this.listenTo(this.resizable.model, 'change', this.updatePosition);
+			this.listenTo(this.resizable, 'resizestop', this.updatePosition);
+			///////////////////////////
+			////////////////////////
+			////////////////////
 
 			this.resizable.listenTo(this, 'movestart', function () {
 				this.trigger('resizestart', this);
@@ -86,10 +94,6 @@ define(function (require, exports, module) {
 			// ONLY WHEN MOVEMENT STOPS
 			this.resizable.listenTo(this, 'movestop', function () {
 				this.trigger('resizestop', this);
-
-				_.each(this.handles, function (handle) {
-					handle.updatePosition();
-				});
 			});
 		},
 

@@ -1,7 +1,7 @@
 {
   "name": "backbone-ui-resizable",
   "main": "built/backbone-ui-resizable.js",
-  "version": "0.8.16",
+  "version": "0.8.17",
   "description": "Some module...",
   "dependencies": {
     "lodash": "~2.4.1",
