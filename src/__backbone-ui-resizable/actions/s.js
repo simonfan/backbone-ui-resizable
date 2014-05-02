@@ -1,8 +1,7 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var _ = require('lodash'),
-		no = require('no');
+	var _ = require('lodash');
 
 	var helpers = require('../helpers');
 
@@ -17,24 +16,25 @@ define(function (require, exports, module) {
 
 		var m = this.modeld;
 
-		var h = m.get('height'),
-			minH = m.get('minHeight'),
-			maxH = m.get('maxHeight');
+		var h = +m.get('height'),
+			minH = +m.get('minHeight'),
+			maxH = +m.get('maxHeight');
 
-		var b = no(m.get('top')).add(h).value(),
-			minB = m.get('minBottom'),
-			maxB = m.get('maxBottom');
+		var t = +m.get('top'),
+			b = t + h,
+			minB = +m.get('minBottom'),
+			maxB = +m.get('maxBottom');
 
 
 			// maximum delta towards NORTH (-)
 		var maxNDelta = helpers.max(
-				no(minH).subtract(h).value(),
-				no(minB).subtract(b).value()
+				minH - h,
+				minB - b
 			),
 			// maximum delta towards SOUTH (+)
 			maxSDelta = helpers.min(
-				no(maxH).subtract(h).value(),
-				no(maxB).subtract(b).value()
+				maxH - h,
+				maxB - b
 			);
 
 		return helpers.fitValueWithin(attempted, maxNDelta, maxSDelta);
@@ -44,9 +44,10 @@ define(function (require, exports, module) {
 		options = options || {};
 
 		var modeld = this.modeld,
-			delta = this.deltaS(attemptedDelta, options.force);
+			height = +modeld.get('height'),
+			delta = +this.deltaS(attemptedDelta, options.force);
 
-		modeld.set('height', no(modeld.get('height')).add(delta).value());
+		modeld.set('height', height + delta);
 
 		// events
 		if (!options.silent && delta !== 0) {

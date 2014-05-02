@@ -1,8 +1,7 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var _ = require('lodash'),
-		no = require('no');
+	var _ = require('lodash');
 
 	var helpers = require('../helpers');
 
@@ -15,26 +14,26 @@ define(function (require, exports, module) {
 		}
 
 
-		var m = this.modeld;
+		var m    = this.modeld;
 
-		var w = m.get('width'),
-			minW = m.get('minWidth'),
-			maxW = m.get('maxWidth');
+		var w    = +m.get('width'),
+			minW = +m.get('minWidth'),
+			maxW = +m.get('maxWidth');
 
-		var l = m.get('left'),
-			minL = m.get('minLeft'),
-			maxL = m.get('maxLeft');
+		var l    = +m.get('left'),
+			minL = +m.get('minLeft'),
+			maxL = +m.get('maxLeft');
 
 
 			// maximum delta towards WEST (-)
 		var maxWDelta = helpers.max(
-				no(w).subtract(maxW).value(),
-				no(minL).subtract(l).value()
+				w - maxW,
+				minL - l
 			),
 			// maximum delta towards EAST (+)
 			maxEDelta = helpers.min(
-				no(w).subtract(minW).value(),
-				no(maxL).subtract(l).value()
+				w - minW,
+				maxL - l
 			);
 
 		return helpers.fitValueWithin(attempted, maxWDelta, maxEDelta);
@@ -44,11 +43,13 @@ define(function (require, exports, module) {
 		options = options || {};
 
 		var modeld = this.modeld,
-			delta = this.deltaW(attemptedDelta, options.force);
+			left   = +modeld.get('left'),
+			width  = +modeld.get('width'),
+			delta  = +this.deltaW(attemptedDelta, options.force);
 
 		modeld.set({
-			left: no(modeld.get('left')).add(delta).value(),
-			width: no(modeld.get('width')).subtract(delta).value()
+			left: left + delta,
+			width: width - delta
 		});
 
 		// events

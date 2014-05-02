@@ -1,8 +1,7 @@
 define(function (require, exports, module) {
 	'use strict';
 
-	var helpers = require('./helpers'),
-		no = require('no');
+	var helpers = require('./helpers');
 
 	function positionN() {
 		this.modeld.set('top', -1 * this.outer);
@@ -10,9 +9,9 @@ define(function (require, exports, module) {
 
 	function positionS() {
 
-		var top = no(this.resizable.modeld.get('height')).subtract(this.inner);
+		var height = +this.resizable.modeld.get('height');
 
-		this.modeld.set('top', top.value());
+		this.modeld.set('top', height - this.inner);
 	}
 
 	function positionW() {
@@ -21,17 +20,20 @@ define(function (require, exports, module) {
 
 	function positionE() {
 
-		var left = no(this.resizable.modeld.get('width')).subtract(this.inner);
+		var width = +this.resizable.modeld.get('width');
 
-		this.modeld.set('left', left.value());
+		this.modeld.set('left', width - this.inner);
 	}
 
 	function sizeX() {
-		this.modeld.set('width', no(this.resizable.modeld.get('width')).add(2 * this.outer).value());
+		var width = +this.resizable.modeld.get('width');
+
+		this.modeld.set('width', width + (2 * this.outer));
 	}
 
 	function sizeY() {
-		this.modeld.set('height', no(this.resizable.modeld.get('height')).add(2 * this.outer).value());
+		var height = + this.resizable.modeld.get('height');
+		this.modeld.set('height', height + (2 * this.outer));
 	}
 
 
