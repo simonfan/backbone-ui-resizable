@@ -49,7 +49,7 @@ define(function (require, exports, module) {
 
 			backbone.view.prototype.initialize.call(this, options);
 
-			this.initializeModelDock(options);
+			this.initializeModelView(options);
 
 			this.initializeUIDraggable(options);
 
@@ -72,6 +72,8 @@ define(function (require, exports, module) {
 				this.disableDraggable();
 			}
 
+
+			// set initial data
 			var data = _.extend({
 				minWidth: 2 * this.handleOptions.thickness,
 				minHeight: 2 * this.handleOptions.thickness,
@@ -81,8 +83,7 @@ define(function (require, exports, module) {
 
 			}, this.$el.position(), options);
 
-			// set initial position
-			this.model.set(data);
+			this.modeld.set(data);
 
 
 
@@ -181,7 +182,8 @@ define(function (require, exports, module) {
 	resizable
 		.proto(require('./__backbone-ui-resizable/animations'));
 
-	resizable.proto(require('./__backbone-ui-resizable/enable-disable'));
-	resizable.proto(require('./__backbone-ui-resizable/build-handle'));
+	resizable
+		.proto(require('./__backbone-ui-resizable/enable-disable'))
+		.proto(require('./__backbone-ui-resizable/build-handle'));
 
 });

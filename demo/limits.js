@@ -1,5 +1,6 @@
-define(['backbone-ui-draggable', 'jquery', './resizable-model.js', 'lowercase-backbone', 'lodash'],
-function (draggable            ,  $      ,  resizableModel       ,  backbone           ,  _      ) {
+define(['backbone-ui-draggable', 'jquery', 'lowercase-backbone', './resizable-model.js', 'lodash'],
+
+function (draggable            ,  $      ,  backbone           ,  resizableModel       , _       ) {
 
 
 
@@ -10,10 +11,20 @@ function (draggable            ,  $      ,  resizableModel       ,  backbone    
 
 				var proxiedAttribute = options.proxiedAttribute;
 
-				this.model.on('change:value change:enable', function (model) {
+				// whnever there is a movement,
+				// change value
+				this.on('move', this.handleMove, this);
+
+
+				// whenever value is changed,
+				// set it to a position
+				this.modeld.on('change:value change:enable', function (model) {
+					// set to position
+					var position = this.toPosition(model.get('value'));
+					this.modeld.set(position);
+
 					// set the proxied value
 					// onto the resizableModel!
-
 					if (_.contains(model.get('enable'), 'enable')) {
 						resizableModel.set(proxiedAttribute, model.get('value'));
 					} else {
@@ -32,11 +43,18 @@ function (draggable            ,  $      ,  resizableModel       ,  backbone    
 
 
 					// enable
-					this.model.set('enable', ['enable']);
-					this.setValue(initialValue);
+					this.modeld.set('enable', ['enable']);
+					this.modeld.set('value', initialValue);
 				}
 			},
 
+			handleMove: function handleMove() {
+
+				var value = this.toValue(this.modeld);
+
+				this.modeld.set('value', value);
+
+			},
 
 
 			map: {
@@ -160,6 +178,7 @@ function (draggable            ,  $      ,  resizableModel       ,  backbone    
 		el: $('#maxRight'),
 		proxiedAttribute: 'maxRight'
 	});
+
 
 
 });

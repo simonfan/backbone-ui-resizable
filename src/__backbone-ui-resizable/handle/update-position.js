@@ -5,33 +5,33 @@ define(function (require, exports, module) {
 		no = require('no');
 
 	function positionN() {
-		this.model.set('top', -1 * this.outer);
+		this.modeld.set('top', -1 * this.outer);
 	}
 
 	function positionS() {
 
-		var top = no(this.resizable.model.get('height')).subtract(this.inner);
+		var top = no(this.resizable.modeld.get('height')).subtract(this.inner);
 
-		this.model.set('top', top.value());
+		this.modeld.set('top', top.value());
 	}
 
 	function positionW() {
-		this.model.set('left', -1 * this.outer);
+		this.modeld.set('left', -1 * this.outer);
 	}
 
 	function positionE() {
 
-		var left = no(this.resizable.model.get('width')).subtract(this.inner);
+		var left = no(this.resizable.modeld.get('width')).subtract(this.inner);
 
-		this.model.set('left', left.value());
+		this.modeld.set('left', left.value());
 	}
 
 	function sizeX() {
-		this.model.set('width', no(this.resizable.model.get('width')).add(2 * this.outer).value());
+		this.modeld.set('width', no(this.resizable.modeld.get('width')).add(2 * this.outer).value());
 	}
 
 	function sizeY() {
-		this.model.set('height', no(this.resizable.model.get('height')).add(2 * this.outer).value());
+		this.modeld.set('height', no(this.resizable.modeld.get('height')).add(2 * this.outer).value());
 	}
 
 

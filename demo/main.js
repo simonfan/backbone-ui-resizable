@@ -1,5 +1,5 @@
-define(['backbone-ui-resizable', 'jquery', 'model-dock', './resizable-model.js', './limits.js'],
-function (resizable            ,  $      ,  modelDock  ,  resizableModel       ,  limits      ) {
+define(['backbone-ui-resizable', 'jquery', 'bb-model-view', './resizable-model.js', './limits.js'],
+function (resizable            ,  $      ,  modelView     ,  resizableModel       ,  limits      ) {
 
 
 
@@ -11,12 +11,12 @@ function (resizable            ,  $      ,  modelDock  ,  resizableModel       ,
 
 			this.on('resize move', function rightAndBottom() {
 
-				var model = this.model;
+				var modeld = this.modeld;
 
-				var right = model.get('left') + model.get('width'),
-					bottom = model.get('top') + model.get('height');
+				var right = modeld.get('left') + modeld.get('width'),
+					bottom = modeld.get('top') + modeld.get('height');
 
-				model.set({
+				modeld.set({
 					right: right,
 					bottom: bottom
 				})
@@ -60,16 +60,16 @@ function (resizable            ,  $      ,  modelDock  ,  resizableModel       ,
 	});
 
 
-	var controlBuilder = modelDock.extend({
+	var controlBuilder = modelView.extend({
 
 		initialize: function initialize(options) {
-			modelDock.prototype.initialize.call(this, options);
+			modelView.prototype.initialize.call(this, options);
 
 			this.listenTo(square, 'resize', function (square, eventData) {
 
 //				console.log(eventData);
 
-				this.model.set(eventData);
+				this.modeld.set(eventData);
 
 			}, this);
 		},

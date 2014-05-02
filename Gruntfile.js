@@ -113,7 +113,7 @@ module.exports = function (grunt) {
 
 					// exclude these modules AND their dependencies
 					// (excluding your bower dependencies)
-					exclude: ["lodash", "lowercase-backbone", "jquery-ui", "jquery", "backbone-ui-draggable", "no"],
+					exclude: ["lodash", "lowercase-backbone", "jquery", "backbone-ui-draggable"],
 
 					// excludeShallow
 					excludeShallow: [],
@@ -145,7 +145,7 @@ module.exports = function (grunt) {
 
 					// exclude these modules AND their dependencies
 					// (excluding your bower dependencies)
-					exclude: ["lodash", "lowercase-backbone", "jquery-ui", "jquery", "backbone-ui-draggable", "no"],
+					exclude: ["lodash", "lowercase-backbone", "jquery", "backbone-ui-draggable"],
 
 					// excludeShallow
 					excludeShallow: [],

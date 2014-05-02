@@ -169,7 +169,7 @@
         },
         {
             "file": "src/__backbone-ui-resizable/handle/base.js",
-            "line": 100,
+            "line": 98,
             "description": "Sets the styles needed for this type of direction handle.",
             "itemtype": "method",
             "name": "setStyles",
@@ -417,7 +417,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 113,
+            "line": 114,
             "description": "The builder that returns a handle object instance.",
             "itemtype": "property",
             "name": "handleBuilder",
@@ -427,7 +427,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 123,
+            "line": 124,
             "description": "Options to be passed to handleBuilder",
             "itemtype": "property",
             "name": "directions {String|Array|Object}\n        String: string of comma separated directions\n        Array: array of directions\n        Object: hash keyed by directions and valued by handle-selectors or $handles",

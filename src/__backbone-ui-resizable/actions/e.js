@@ -12,7 +12,7 @@ define(function (require, exports, module) {
 			return attempted;
 		}
 
-		var m = this.model;
+		var m = this.modeld;
 
 		var w = m.get('width'),
 			minW = m.get('minWidth'),
@@ -40,10 +40,10 @@ define(function (require, exports, module) {
 	exports.moveE = function moveE(attemptedDelta, options) {
 		options = options || {};
 
-		var model = this.model,
+		var modeld = this.modeld,
 			delta = this.deltaE(attemptedDelta, options.force);
 
-		model.set('width', no(model.get('width')).add(delta).value());
+		modeld.set('width', no(modeld.get('width')).add(delta).value());
 
 		// events
 		if (!options.silent && delta !== 0) {
