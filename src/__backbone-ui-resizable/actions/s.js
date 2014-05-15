@@ -14,7 +14,7 @@ define(function (require, exports, module) {
 		}
 
 
-		var m = this.modeld;
+		var m = this.model;
 
 		var h = +m.get('height'),
 			minH = +m.get('minHeight'),
@@ -43,11 +43,11 @@ define(function (require, exports, module) {
 	exports.moveS = function moveS(attemptedDelta, options) {
 		options = options || {};
 
-		var modeld = this.modeld,
-			height = +modeld.get('height'),
+		var model = this.model,
+			height = +model.get('height'),
 			delta = +this.deltaS(attemptedDelta, options.force);
 
-		modeld.set('height', height + delta);
+		model.set('height', height + delta);
 
 		// events
 		if (!options.silent && delta !== 0) {

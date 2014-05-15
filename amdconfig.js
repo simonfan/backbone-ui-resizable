@@ -29,7 +29,8 @@ require.config({
 		'bb-dock': '../bower_components/bb-dock/built/bb-dock',
 		'bb-model-view': '../bower_components/bb-model-view/built/bb-model-view',
 		lodash: '../bower_components/lodash/dist/lodash.compat',
-		no: '../bower_components/no/built/no'
+		no: '../bower_components/no/built/no',
+		dock: '../bower_components/dock/built/dock'
 	},
 	shim: {
 		backbone: {

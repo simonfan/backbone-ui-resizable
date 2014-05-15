@@ -11,7 +11,7 @@ define(function (require, exports, module) {
 
 
 		// listen to enable and disable option changes
-		this.listenTo(this.modeld, 'change:resizableStatus', function (model) {
+		this.listenTo(this.model, 'change:resizableStatus', function (model) {
 
 			if (this.resizableEnabled()) {
 				// is enabled
@@ -50,7 +50,7 @@ define(function (require, exports, module) {
 	 * @method resizableEnabled
 	 */
 	exports.resizableEnabled = function resizableEnabled() {
-		return this.modeld.get('resizableStatus') === 'enabled';
+		return this.model.get('resizableStatus') === 'enabled';
 	};
 
 	/**
@@ -60,7 +60,7 @@ define(function (require, exports, module) {
 	 */
 	exports.disableResizable = function disableResizable() {
 
-		this.modeld.set('resizableStatus', 'disabled');
+		this.model.set('resizableStatus', 'disabled');
 
 		return this;
 	};
@@ -72,7 +72,7 @@ define(function (require, exports, module) {
 	 */
 	exports.enableResizable = function enableResizable(options) {
 
-		this.modeld.set('resizableStatus', 'enabled');
+		this.model.set('resizableStatus', 'enabled');
 		return this;
 	};
 

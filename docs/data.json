@@ -401,7 +401,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 59,
+            "line": 65,
             "description": "Holds initialization logic exclusive to resizable-dock.",
             "itemtype": "method",
             "name": "initializeUIResizable",
@@ -417,7 +417,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 114,
+            "line": 120,
             "description": "The builder that returns a handle object instance.",
             "itemtype": "property",
             "name": "handleBuilder",
@@ -427,7 +427,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 124,
+            "line": 130,
             "description": "Options to be passed to handleBuilder",
             "itemtype": "property",
             "name": "directions {String|Array|Object}\n        String: string of comma separated directions\n        Array: array of directions\n        Object: hash keyed by directions and valued by handle-selectors or $handles",

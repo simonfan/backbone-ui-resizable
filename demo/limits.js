@@ -18,10 +18,10 @@ function (draggable            ,  $      ,  backbone           ,  resizableModel
 
 				// whenever value is changed,
 				// set it to a position
-				this.modeld.on('change:value change:enable', function (model) {
+				this.model.on('change:value change:enable', function (model) {
 					// set to position
 					var position = this.toPosition(model.get('value'));
-					this.modeld.set(position);
+					this.model.set(position);
 
 					// set the proxied value
 					// onto the resizableModel!
@@ -43,16 +43,16 @@ function (draggable            ,  $      ,  backbone           ,  resizableModel
 
 
 					// enable
-					this.modeld.set('enable', ['enable']);
-					this.modeld.set('value', initialValue);
+					this.model.set('enable', ['enable']);
+					this.model.set('value', initialValue);
 				}
 			},
 
 			handleMove: function handleMove() {
 
-				var value = this.toValue(this.modeld);
+				var value = this.toValue(this.model);
 
-				this.modeld.set('value', value);
+				this.model.set('value', value);
 
 			},
 

@@ -81,36 +81,36 @@ define('__backbone-ui-resizable/handle/update-position',['require','exports','mo
 	var helpers = require('./helpers');
 
 	function positionN() {
-		this.modeld.set('top', -1 * this.outer);
+		this.model.set('top', -1 * this.outer);
 	}
 
 	function positionS() {
 
-		var height = +this.resizable.modeld.get('height');
+		var height = +this.resizable.model.get('height');
 
-		this.modeld.set('top', height - this.inner);
+		this.model.set('top', height - this.inner);
 	}
 
 	function positionW() {
-		this.modeld.set('left', -1 * this.outer);
+		this.model.set('left', -1 * this.outer);
 	}
 
 	function positionE() {
 
-		var width = +this.resizable.modeld.get('width');
+		var width = +this.resizable.model.get('width');
 
-		this.modeld.set('left', width - this.inner);
+		this.model.set('left', width - this.inner);
 	}
 
 	function sizeX() {
-		var width = +this.resizable.modeld.get('width');
+		var width = +this.resizable.model.get('width');
 
-		this.modeld.set('width', width + (2 * this.outer));
+		this.model.set('width', width + (2 * this.outer));
 	}
 
 	function sizeY() {
-		var height = + this.resizable.modeld.get('height');
-		this.modeld.set('height', height + (2 * this.outer));
+		var height = + this.resizable.model.get('height');
+		this.model.set('height', height + (2 * this.outer));
 	}
 
 
@@ -266,7 +266,7 @@ define('__backbone-ui-resizable/handle/base',['require','exports','module','back
 			////////////////////
 			///////////////////////
 			//////////////////////////
-			this.listenTo(this.resizable.modeld, 'change', this.updatePosition);
+			this.listenTo(this.resizable.model, 'change', this.updatePosition);
 			this.listenTo(this.resizable, 'resizestop', this.updatePosition);
 			///////////////////////////
 			////////////////////////
@@ -306,14 +306,14 @@ define('__backbone-ui-resizable/handle/base',['require','exports','module','back
 				styles = {
 					zIndex: 99,
 					width: this.thickness,
-					height: this.resizable.modeld.get('width'),
+					height: this.resizable.model.get('width'),
 				};
 
 			} else if (axis === 'y') {
 				// vertical sliding direction
 				styles = {
 					zIndex: 99,
-					width: this.resizable.modeld.get('height'),
+					width: this.resizable.model.get('height'),
 					height: this.thickness
 				};
 			}
@@ -493,7 +493,7 @@ define('__backbone-ui-resizable/actions/e',['require','exports','module','lodash
 			return attempted;
 		}
 
-		var m = this.modeld;
+		var m = this.model;
 
 		var w = +m.get('width'),
 			minW = +m.get('minWidth'),
@@ -526,11 +526,11 @@ define('__backbone-ui-resizable/actions/e',['require','exports','module','lodash
 	exports.moveE = function moveE(attemptedDelta, options) {
 		options = options || {};
 
-		var modeld = this.modeld,
-			width = +modeld.get('width'),
+		var model = this.model,
+			width = +model.get('width'),
 			delta = +this.deltaE(attemptedDelta, options.force);
 
-		modeld.set('width', width + delta);
+		model.set('width', width + delta);
 
 		// events
 		if (!options.silent && delta !== 0) {
@@ -567,7 +567,7 @@ define('__backbone-ui-resizable/actions/w',['require','exports','module','lodash
 		}
 
 
-		var m    = this.modeld;
+		var m    = this.model;
 
 		var w    = +m.get('width'),
 			minW = +m.get('minWidth'),
@@ -595,12 +595,12 @@ define('__backbone-ui-resizable/actions/w',['require','exports','module','lodash
 	exports.moveW = function moveW(attemptedDelta, options) {
 		options = options || {};
 
-		var modeld = this.modeld,
-			left   = +modeld.get('left'),
-			width  = +modeld.get('width'),
+		var model = this.model,
+			left   = +model.get('left'),
+			width  = +model.get('width'),
 			delta  = +this.deltaW(attemptedDelta, options.force);
 
-		modeld.set({
+		model.set({
 			left: left + delta,
 			width: width - delta
 		});
@@ -640,7 +640,7 @@ define('__backbone-ui-resizable/actions/s',['require','exports','module','lodash
 		}
 
 
-		var m = this.modeld;
+		var m = this.model;
 
 		var h = +m.get('height'),
 			minH = +m.get('minHeight'),
@@ -669,11 +669,11 @@ define('__backbone-ui-resizable/actions/s',['require','exports','module','lodash
 	exports.moveS = function moveS(attemptedDelta, options) {
 		options = options || {};
 
-		var modeld = this.modeld,
-			height = +modeld.get('height'),
+		var model = this.model,
+			height = +model.get('height'),
 			delta = +this.deltaS(attemptedDelta, options.force);
 
-		modeld.set('height', height + delta);
+		model.set('height', height + delta);
 
 		// events
 		if (!options.silent && delta !== 0) {
@@ -709,7 +709,7 @@ define('__backbone-ui-resizable/actions/n',['require','exports','module','lodash
 		}
 
 
-		var m = this.modeld;
+		var m = this.model;
 
 		var h = +m.get('height'),
 			minH = +m.get('minHeight'),
@@ -741,12 +741,12 @@ define('__backbone-ui-resizable/actions/n',['require','exports','module','lodash
 	exports.moveN = function moveN(attemptedDelta, options) {
 		options = options || {};
 
-		var modeld = this.modeld,
-			top = +modeld.get('top'),
-			height = +modeld.get('height'),
+		var model = this.model,
+			top = +model.get('top'),
+			height = +model.get('height'),
 			delta = +this.deltaN(attemptedDelta, options.force);
 
-		modeld.set({
+		model.set({
 			top: top + delta,
 			height: height - delta
 		});
@@ -962,7 +962,7 @@ define('__backbone-ui-resizable/animations',['require','exports','module'],funct
 
 
 			// [4] get current position
-			var start = parseFloat(this.modeld.get(_options.dimension));
+			var start = parseFloat(this.model.get(_options.dimension));
 
 
 			// [5] build animation object
@@ -1190,7 +1190,7 @@ define('__backbone-ui-resizable/enable-disable',['require','exports','module'],f
 
 
 		// listen to enable and disable option changes
-		this.listenTo(this.modeld, 'change:resizableStatus', function (model) {
+		this.listenTo(this.model, 'change:resizableStatus', function (model) {
 
 			if (this.resizableEnabled()) {
 				// is enabled
@@ -1229,7 +1229,7 @@ define('__backbone-ui-resizable/enable-disable',['require','exports','module'],f
 	 * @method resizableEnabled
 	 */
 	exports.resizableEnabled = function resizableEnabled() {
-		return this.modeld.get('resizableStatus') === 'enabled';
+		return this.model.get('resizableStatus') === 'enabled';
 	};
 
 	/**
@@ -1239,7 +1239,7 @@ define('__backbone-ui-resizable/enable-disable',['require','exports','module'],f
 	 */
 	exports.disableResizable = function disableResizable() {
 
-		this.modeld.set('resizableStatus', 'disabled');
+		this.model.set('resizableStatus', 'disabled');
 
 		return this;
 	};
@@ -1251,7 +1251,7 @@ define('__backbone-ui-resizable/enable-disable',['require','exports','module'],f
 	 */
 	exports.enableResizable = function enableResizable(options) {
 
-		this.modeld.set('resizableStatus', 'enabled');
+		this.model.set('resizableStatus', 'enabled');
 		return this;
 	};
 
@@ -1402,6 +1402,12 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 
 			backbone.view.prototype.initialize.call(this, options);
 
+			// if no model is passed, create a model before initializing
+			// model view
+			if (!this.model) {
+				this.model = backbone.model();
+			}
+
 			this.initializeModelView(options);
 
 			this.initializeUIDraggable(options);
@@ -1436,7 +1442,7 @@ define('backbone-ui-resizable',['require','exports','module','lowercase-backbone
 
 			}, this.$el.position(), options);
 
-			this.modeld.set(data);
+			this.model.set(data);
 
 
 

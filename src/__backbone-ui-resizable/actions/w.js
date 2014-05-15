@@ -14,7 +14,7 @@ define(function (require, exports, module) {
 		}
 
 
-		var m    = this.modeld;
+		var m    = this.model;
 
 		var w    = +m.get('width'),
 			minW = +m.get('minWidth'),
@@ -42,12 +42,12 @@ define(function (require, exports, module) {
 	exports.moveW = function moveW(attemptedDelta, options) {
 		options = options || {};
 
-		var modeld = this.modeld,
-			left   = +modeld.get('left'),
-			width  = +modeld.get('width'),
+		var model = this.model,
+			left   = +model.get('left'),
+			width  = +model.get('width'),
 			delta  = +this.deltaW(attemptedDelta, options.force);
 
-		modeld.set({
+		model.set({
 			left: left + delta,
 			width: width - delta
 		});

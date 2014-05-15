@@ -13,7 +13,7 @@ define(function (require, exports, module) {
 		}
 
 
-		var m = this.modeld;
+		var m = this.model;
 
 		var h = +m.get('height'),
 			minH = +m.get('minHeight'),
@@ -45,12 +45,12 @@ define(function (require, exports, module) {
 	exports.moveN = function moveN(attemptedDelta, options) {
 		options = options || {};
 
-		var modeld = this.modeld,
-			top = +modeld.get('top'),
-			height = +modeld.get('height'),
+		var model = this.model,
+			top = +model.get('top'),
+			height = +model.get('height'),
 			delta = +this.deltaN(attemptedDelta, options.force);
 
-		modeld.set({
+		model.set({
 			top: top + delta,
 			height: height - delta
 		});

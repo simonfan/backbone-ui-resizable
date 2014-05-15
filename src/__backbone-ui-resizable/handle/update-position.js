@@ -4,36 +4,36 @@ define(function (require, exports, module) {
 	var helpers = require('./helpers');
 
 	function positionN() {
-		this.modeld.set('top', -1 * this.outer);
+		this.model.set('top', -1 * this.outer);
 	}
 
 	function positionS() {
 
-		var height = +this.resizable.modeld.get('height');
+		var height = +this.resizable.model.get('height');
 
-		this.modeld.set('top', height - this.inner);
+		this.model.set('top', height - this.inner);
 	}
 
 	function positionW() {
-		this.modeld.set('left', -1 * this.outer);
+		this.model.set('left', -1 * this.outer);
 	}
 
 	function positionE() {
 
-		var width = +this.resizable.modeld.get('width');
+		var width = +this.resizable.model.get('width');
 
-		this.modeld.set('left', width - this.inner);
+		this.model.set('left', width - this.inner);
 	}
 
 	function sizeX() {
-		var width = +this.resizable.modeld.get('width');
+		var width = +this.resizable.model.get('width');
 
-		this.modeld.set('width', width + (2 * this.outer));
+		this.model.set('width', width + (2 * this.outer));
 	}
 
 	function sizeY() {
-		var height = + this.resizable.modeld.get('height');
-		this.modeld.set('height', height + (2 * this.outer));
+		var height = + this.resizable.model.get('height');
+		this.model.set('height', height + (2 * this.outer));
 	}
 
 

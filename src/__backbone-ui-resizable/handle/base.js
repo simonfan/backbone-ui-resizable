@@ -78,7 +78,7 @@ define(function (require, exports, module) {
 			////////////////////
 			///////////////////////
 			//////////////////////////
-			this.listenTo(this.resizable.modeld, 'change', this.updatePosition);
+			this.listenTo(this.resizable.model, 'change', this.updatePosition);
 			this.listenTo(this.resizable, 'resizestop', this.updatePosition);
 			///////////////////////////
 			////////////////////////
@@ -118,14 +118,14 @@ define(function (require, exports, module) {
 				styles = {
 					zIndex: 99,
 					width: this.thickness,
-					height: this.resizable.modeld.get('width'),
+					height: this.resizable.model.get('width'),
 				};
 
 			} else if (axis === 'y') {
 				// vertical sliding direction
 				styles = {
 					zIndex: 99,
-					width: this.resizable.modeld.get('height'),
+					width: this.resizable.model.get('height'),
 					height: this.thickness
 				};
 			}

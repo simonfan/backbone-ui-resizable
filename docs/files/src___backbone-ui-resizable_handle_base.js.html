@@ -166,7 +166,7 @@ define(function (require, exports, module) {
 			////////////////////
 			///////////////////////
 			//////////////////////////
-			this.listenTo(this.resizable.modeld, &#x27;change&#x27;, this.updatePosition);
+			this.listenTo(this.resizable.model, &#x27;change&#x27;, this.updatePosition);
 			this.listenTo(this.resizable, &#x27;resizestop&#x27;, this.updatePosition);
 			///////////////////////////
 			////////////////////////
@@ -206,14 +206,14 @@ define(function (require, exports, module) {
 				styles = {
 					zIndex: 99,
 					width: this.thickness,
-					height: this.resizable.modeld.get(&#x27;width&#x27;),
+					height: this.resizable.model.get(&#x27;width&#x27;),
 				};
 
 			} else if (axis === &#x27;y&#x27;) {
 				// vertical sliding direction
 				styles = {
 					zIndex: 99,
-					width: this.resizable.modeld.get(&#x27;height&#x27;),
+					width: this.resizable.model.get(&#x27;height&#x27;),
 					height: this.thickness
 				};
 			}
